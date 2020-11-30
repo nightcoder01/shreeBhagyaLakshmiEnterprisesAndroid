@@ -9,11 +9,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Shree BhagyaLakshmi Enterprises"
+        android:text="@string/shree_bhagyalakshmi_enterprises"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:textSize="15"/>
+        android:textSize="@dimen/_15sdp"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
