@@ -1,4 +1,4 @@
-package pathak.creations.shreebhagyalakhsmienterprises
+package pathak.creations.sbl
 
 import org.junit.Test
 

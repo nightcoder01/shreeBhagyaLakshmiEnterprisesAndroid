@@ -1,11 +1,11 @@
-package pathak.creations.shreebhagyalakhsmienterprises
+package pathak.creations.sbl
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import pathak.creations.shreebhagyalakhsmienterprises.welcome.WelcomeActivity
+import pathak.creations.sbl.welcome.WelcomeActivity
 
 class MainActivity : AppCompatActivity() {
 

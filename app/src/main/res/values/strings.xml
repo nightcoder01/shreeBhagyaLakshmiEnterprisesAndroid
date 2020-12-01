@@ -1,4 +1,15 @@
 <resources>
-    <string name="app_name">Shree BhagyaLakhsmi Enterprises</string>
+    <string name="app_name">SBL</string>
     <string name="shree_bhagyalakshmi_enterprises">Shree BhagyaLakshmi Enterprises</string>
+
+    <string name="signIn">SIGN IN</string>
+    <string name="logIn">Log In</string>
+    <string name="forgot_your_pass">Forgot your password ?</string>
+    <string name="userName">Username</string>
+    <string name="password">Password</string>
+    <string name="rememberMe">Remember me</string>
+
+    <string name="emptyEmail">Email should not be Empty.</string>
+    <string name="emptyPassword">Password should not be Empty.</string>
+    <string name="minPassword">Password length is too sort.</string>
 </resources>
