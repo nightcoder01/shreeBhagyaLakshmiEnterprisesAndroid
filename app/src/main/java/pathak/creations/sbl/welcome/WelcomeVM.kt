@@ -1,8 +1,10 @@
 package pathak.creations.sbl.welcome
 
+import android.content.Intent
 import android.view.View
 import androidx.lifecycle.ViewModel
 import br.com.ilhasoft.support.validation.Validator
+import pathak.creations.sbl.dashboard.DashBoard
 
 class WelcomeVM(
     welcomeActivity: WelcomeActivity,
@@ -18,7 +20,10 @@ class WelcomeVM(
 
 
     fun loginClick(view: View) {
-        if (validator.validate()) {}
+        if (validator.validate()) {
+
+            view.context.startActivity(Intent(view.context, DashBoard::class.java))
+        }
     }
 
 

@@ -68,7 +68,7 @@
                     android:textSize="@dimen/_13sdp"
                     app:validateEmpty="@{true}"
                     app:validateEmptyAutoDismiss="@{true}"
-                    app:validateEmptyMessage="@{@string/emptyEmail}"
+                    app:validateEmptyMessage="@{@string/emptyUsername}"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>

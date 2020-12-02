@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="pathak.creations.sbl">
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,15 +11,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="pathak.creations.sbl.MainActivity">
+        <activity
+            android:name=".dashboard.DashBoard"
+            android:label="@string/title_activity_dash_board"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="pathak.creations.sbl.welcome.WelcomeActivity"/>
-
+        <activity android:name=".welcome.WelcomeActivity" />
     </application>
 
 </manifest>
