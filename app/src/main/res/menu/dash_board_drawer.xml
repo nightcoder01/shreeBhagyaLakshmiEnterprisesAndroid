@@ -7,6 +7,10 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_home" />
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_menu_share"
             android:title="@string/menu_retailer_visit" />
         <item
             android:id="@+id/nav_gallery"
@@ -20,19 +24,24 @@
             android:id="@+id/nav_tools"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/menu_distributor_ptr" />
+
+        <item
+            android:id="@+id/nav_send"
+            android:icon="@drawable/ic_menu_send"
+            android:title="@string/menu_cart" />
     </group>
 
-    <item android:title="Communicate">
+    <!--<item android:title="Communicate">
         <menu>
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="@string/menu_share" />
+                android:title="@string/menu_home" />
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
                 android:title="@string/menu_cart" />
         </menu>
-    </item>
+    </item>-->
 
 </menu>

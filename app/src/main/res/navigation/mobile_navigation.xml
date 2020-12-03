@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="pathak.creations.sbl.dashboard.ui.home.HomeFragment"
-        android:label="@string/menu_retailer_visit"
+        android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
@@ -32,7 +32,7 @@
     <fragment
         android:id="@+id/nav_share"
         android:name="pathak.creations.sbl.dashboard.ui.share.ShareFragment"
-        android:label="@string/menu_share"
+        android:label="@string/menu_retailer_visit"
         tools:layout="@layout/fragment_share" />
 
     <fragment

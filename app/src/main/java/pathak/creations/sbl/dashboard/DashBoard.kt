@@ -13,6 +13,7 @@ import com.google.android.material.navigation.NavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.view.Menu
+import android.view.MenuItem
 import pathak.creations.sbl.R
 
 class DashBoard : AppCompatActivity() {
@@ -52,6 +53,11 @@ class DashBoard : AppCompatActivity() {
         // Inflate the menu; this adds items to the action bar if it is present.
 
         menuInflater.inflate(R.menu.dash_board, menu)
+
+      // var setting =  menu.findItem(R.id.action_settings)
+
+
+
         return true
     }
 

@@ -18,11 +18,12 @@
     <string name="since_1972">since 1972</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
 
     <string name="menu_retailer_visit">Retailer Visit</string>
     <string name="menu_sales_order">Sales Order</string>
     <string name="menu_retailer_master">Retailer Master</string>
     <string name="menu_distributor_ptr">Distributor PTR</string>
-    <string name="menu_share">Share</string>
+    <string name="menu_home">Home</string>
     <string name="menu_cart">Cart</string>
 </resources>
