@@ -14,7 +14,7 @@
         <activity
             android:name=".dashboard.DashBoard"
             android:label="@string/title_activity_dash_board"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
