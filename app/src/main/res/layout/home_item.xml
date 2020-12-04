@@ -22,9 +22,31 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/dummy_image"
             >
 
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/dummy_image"
+                android:alpha=".50"
+                />
+
+
+            <TextView
+                android:id="@+id/tvText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Visited\n137"
+                android:lineSpacingMultiplier="1.5"
+                android:gravity="center"
+                android:textSize="@dimen/_15sdp"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

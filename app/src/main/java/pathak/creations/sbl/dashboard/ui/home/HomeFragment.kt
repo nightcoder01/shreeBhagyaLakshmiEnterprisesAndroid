@@ -8,13 +8,16 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import pathak.creations.sbl.R
 
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
+
+    var list : ArrayList<String> = ArrayList()
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,7 +33,17 @@ class HomeFragment : Fragment() {
 
 
 
-        rvHome.adapter = HomeAdapter()
+        list.clear()
+        list.add("Orders")
+        list.add("Customers")
+        list.add("Visited\n137")
+        list.add("Ordered\n83")
+        list.add("Pending\n83")
+        list.add("Zero Sale\n61")
+        list.add("Total Item\n65")
+        list.add("Total Sale\n₹212188.34")
+
+        rvHome.adapter = HomeAdapter(list)
 
 
 

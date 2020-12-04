@@ -5,9 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.home_item.view.*
 import pathak.creations.sbl.R
 
-class HomeAdapter : RecyclerView.Adapter<HomeAdapter.MyViewHolder>() {
+class HomeAdapter(var list: ArrayList<String>) : RecyclerView.Adapter<HomeAdapter.MyViewHolder>() {
 
     lateinit var context: Context
 
@@ -18,12 +19,13 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.MyViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return 8
+        return list.size
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        
 
+
+        holder.itemView.tvText.text = list[position]
 
     }
 
