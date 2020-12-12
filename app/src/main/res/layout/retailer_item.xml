@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="@dimen/_80sdp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textSize="@dimen/_11sdp" />
+
+
+    <TextView
+        android:id="@+id/tvDistributor"
+        android:layout_width="@dimen/_200sdp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+
+        android:textSize="@dimen/_11sdp" />
+
+    <TextView
+        android:id="@+id/tvBeat"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+
+        android:textAlignment="center"
+        android:textSize="@dimen/_11sdp" />
+
+    <TextView
+        android:id="@+id/tvRetailer"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+
+        android:textAlignment="center"
+        android:textSize="@dimen/_11sdp" />
+
+    <TextView
+        android:id="@+id/tvRemarks"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+
+        android:textAlignment="center"
+        android:textSize="@dimen/_11sdp" />
+
+
+    <TextView
+        android:id="@+id/tvAction"
+        android:layout_width="@dimen/_60sdp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+
+        android:textAlignment="center"
+        android:textSize="@dimen/_11sdp" />
+
+
+    <LinearLayout
+        android:id="@+id/llAction"
+        android:layout_width="@dimen/_60sdp"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+
+        android:layout_gravity="top"
+        android:gravity="center"
+        >
+
+        <ImageView
+            android:id="@+id/ivEdit"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_edit"
+            android:tint="@color/colorAccent"
+            android:layout_margin="@dimen/_3sdp"
+            />
+
+        <ImageView
+            android:id="@+id/ivDelete"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_delete"
+            android:tint="@color/red"
+            android:layout_margin="@dimen/_3sdp"
+            />
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

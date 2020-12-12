@@ -31,13 +31,36 @@
 
     <fragment
         android:id="@+id/nav_share"
-        android:name="pathak.creations.sbl.dashboard.ui.share.ShareFragment"
+        android:name="pathak.creations.sbl.dashboard.ui.share.RetailerVisit"
         android:label="@string/menu_retailer_visit"
-        tools:layout="@layout/fragment_share" />
+        tools:layout="@layout/retailer_visit" >
+        <action
+            android:id="@+id/action_add_visit"
+            app:destination="@id/sendFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+        <action
+            android:id="@+id/action_edit_visit"
+            app:destination="@id/editRetailerVisit"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+    </fragment>
+
 
     <fragment
-        android:id="@+id/nav_send"
+        android:id="@+id/sendFragment"
         android:name="pathak.creations.sbl.dashboard.ui.send.SendFragment"
-        android:label="@string/menu_cart"
-        tools:layout="@layout/fragment_send" />
+        android:label="Add Retailer Visit" />
+
+    <fragment
+        android:id="@+id/editRetailerVisit"
+        android:name="pathak.creations.sbl.dashboard.ui.share.EditRetailerVisit"
+        android:label="Edit Retailer Visit" />
+
 </navigation>
