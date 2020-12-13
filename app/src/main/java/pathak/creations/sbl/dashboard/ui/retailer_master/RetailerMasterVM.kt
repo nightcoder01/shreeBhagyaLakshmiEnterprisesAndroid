@@ -1,4 +1,4 @@
-package pathak.creations.sbl.dashboard.ui.share
+package pathak.creations.sbl.dashboard.ui.retailer_master
 
 import android.app.DatePickerDialog
 import android.util.Log
@@ -8,17 +8,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.util.*
 
-class RetailerVisitVM : ViewModel() {
+class RetailerMasterVM : ViewModel() {
 
+    private val _text = MutableLiveData<String>().apply {
+        value = ""
+    }
+    val text: LiveData<String> = _text
 
-
-     var _date = MutableLiveData<String>().apply {
+    var _date = MutableLiveData<String>().apply {
         value = "DD/MM/YYYY"
     }
     val dateValue: LiveData<String> = _date
-
-
-
 
 
 
@@ -49,6 +49,7 @@ class RetailerVisitVM : ViewModel() {
         dpd.show()
 
     }
+
 
 
 }

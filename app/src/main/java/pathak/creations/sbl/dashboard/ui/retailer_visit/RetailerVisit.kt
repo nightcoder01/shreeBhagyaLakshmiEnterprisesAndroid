@@ -1,4 +1,4 @@
-package pathak.creations.sbl.dashboard.ui.share
+package pathak.creations.sbl.dashboard.ui.retailer_visit
 
 import android.app.Dialog
 import android.graphics.Color
@@ -21,6 +21,7 @@ class RetailerVisit : Fragment() {
 
 
     var list : ArrayList<RetailerVisitData> = ArrayList()
+
    lateinit var adapter : RetailerVisitAdapter
 
 
@@ -48,26 +49,11 @@ class RetailerVisit : Fragment() {
 
         setList()
 
-         adapter  = RetailerVisitAdapter(list)
+    }
 
-        rvRetailerVisit.adapter = adapter
-        adapter.onClicked(object :RetailerVisitAdapter.CardInterface{
-            override fun clickedSelected(position: Int, str: String) {
-                if(str=="delete")
-                {
-                    Log.e("====delete==","==11==$position")
-
-
-                    deleteMethod(position)
-                }
-                else
-                {
-                    Navigation.findNavController(view).navigate(R.id.action_edit_visit)
-                }
-            }
-
-        })
-
+    override fun onResume() {
+        super.onResume()
+        setList()
     }
 
     lateinit var deleteDialog: Dialog
@@ -131,6 +117,26 @@ class RetailerVisit : Fragment() {
             }
 
         }
+
+        adapter  = RetailerVisitAdapter(list)
+
+        rvRetailerVisit.adapter = adapter
+        adapter.onClicked(object :RetailerVisitAdapter.CardInterface{
+            override fun clickedSelected(position: Int, str: String) {
+                if(str=="delete")
+                {
+                    Log.e("====delete==","==11==$position")
+
+
+                    deleteMethod(position)
+                }
+                else
+                {
+                    Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_edit_visit)
+                }
+            }
+
+        })
 
     }
 

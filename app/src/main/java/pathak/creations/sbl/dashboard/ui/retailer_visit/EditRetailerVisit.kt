@@ -1,4 +1,4 @@
-package pathak.creations.sbl.dashboard.ui.share
+package pathak.creations.sbl.dashboard.ui.retailer_visit
 
 import android.os.Bundle
 import android.view.LayoutInflater

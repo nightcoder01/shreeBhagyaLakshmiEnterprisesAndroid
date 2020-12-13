@@ -12,7 +12,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:textAlignment="center"
-        android:textSize="@dimen/_11sdp" />
+        android:textSize="@dimen/_10sdp" />
 
 
     <TextView
@@ -22,7 +22,7 @@
         android:layout_gravity="center"
         android:gravity="center"
 
-        android:textSize="@dimen/_11sdp" />
+        android:textSize="@dimen/_10sdp" />
 
     <TextView
         android:id="@+id/tvBeat"
@@ -32,7 +32,7 @@
         android:gravity="center"
 
         android:textAlignment="center"
-        android:textSize="@dimen/_11sdp" />
+        android:textSize="@dimen/_10sdp" />
 
     <TextView
         android:id="@+id/tvRetailer"
@@ -42,7 +42,7 @@
         android:gravity="center"
 
         android:textAlignment="center"
-        android:textSize="@dimen/_11sdp" />
+        android:textSize="@dimen/_10sdp" />
 
     <TextView
         android:id="@+id/tvRemarks"
@@ -52,7 +52,7 @@
         android:gravity="center"
 
         android:textAlignment="center"
-        android:textSize="@dimen/_11sdp" />
+        android:textSize="@dimen/_10sdp" />
 
 
     <TextView
@@ -63,7 +63,7 @@
         android:gravity="center"
 
         android:textAlignment="center"
-        android:textSize="@dimen/_11sdp" />
+        android:textSize="@dimen/_10sdp" />
 
 
     <LinearLayout
@@ -78,8 +78,8 @@
 
         <ImageView
             android:id="@+id/ivEdit"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="@dimen/_18sdp"
             android:src="@drawable/ic_edit"
             android:tint="@color/colorAccent"
             android:layout_margin="@dimen/_3sdp"
@@ -87,8 +87,8 @@
 
         <ImageView
             android:id="@+id/ivDelete"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="@dimen/_18sdp"
             android:src="@drawable/ic_delete"
             android:tint="@color/red"
             android:layout_margin="@dimen/_3sdp"

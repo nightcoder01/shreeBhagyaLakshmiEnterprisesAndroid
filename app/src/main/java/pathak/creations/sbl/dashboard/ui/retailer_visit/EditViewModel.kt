@@ -1,4 +1,4 @@
-package pathak.creations.sbl.dashboard.ui.share
+package pathak.creations.sbl.dashboard.ui.retailer_visit
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

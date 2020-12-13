@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:tools="http://schemas.android.com/tools">
+<layout >
 
     <data>
         <variable
             name="retailerVisitVM"
-            type="pathak.creations.sbl.dashboard.ui.share.RetailerVisitVM" />
+            type="pathak.creations.sbl.dashboard.ui.retailer_visit.RetailerVisitVM" />
 
     </data>
 
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_10sdp"
         android:textAlignment="center"
-        android:textSize="@dimen/_16sdp"
+        android:textSize="@dimen/_12sdp"
         android:text="@string/date"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_20sdp"
         android:textAlignment="center"
-        android:textSize="@dimen/_14sdp"
+        android:textSize="@dimen/_11sdp"
         android:text="@string/dateValue"
         app:layout_constraintStart_toEndOf="@id/tvDate"
         app:layout_constraintTop_toTopOf="@id/tvDate"
@@ -50,7 +50,7 @@
         android:layout_marginEnd="@dimen/_10sdp"
         android:layout_marginTop="@dimen/_10sdp"
         android:textAlignment="center"
-        android:textSize="@dimen/_11sdp"
+        android:textSize="@dimen/_10sdp"
         android:text="@string/add_visit"
         android:textColor="@color/white"
         android:paddingTop="@dimen/_5sdp"
@@ -79,7 +79,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"
-            tools:listitem="@layout/table_list_item"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="vertical"
             />

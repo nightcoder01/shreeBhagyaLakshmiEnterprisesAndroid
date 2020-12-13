@@ -12,14 +12,14 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="pathak.creations.sbl.dashboard.ui.gallery.GalleryFragment"
+        android:id="@+id/nav_sales_order"
+        android:name="pathak.creations.sbl.dashboard.ui.sales_order.SalesOrder"
         android:label="@string/menu_sales_order"
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="pathak.creations.sbl.dashboard.ui.slideshow.SlideshowFragment"
+        android:id="@+id/nav_retailer_master"
+        android:name="pathak.creations.sbl.dashboard.ui.retailer_master.RetailerMaster"
         android:label="@string/menu_retailer_master"
         tools:layout="@layout/fragment_slideshow" />
 
@@ -30,8 +30,8 @@
         tools:layout="@layout/fragment_tools" />
 
     <fragment
-        android:id="@+id/nav_share"
-        android:name="pathak.creations.sbl.dashboard.ui.share.RetailerVisit"
+        android:id="@+id/nav_retailer"
+        android:name="pathak.creations.sbl.dashboard.ui.retailer_visit.RetailerVisit"
         android:label="@string/menu_retailer_visit"
         tools:layout="@layout/retailer_visit" >
         <action
@@ -60,7 +60,7 @@
 
     <fragment
         android:id="@+id/editRetailerVisit"
-        android:name="pathak.creations.sbl.dashboard.ui.share.EditRetailerVisit"
+        android:name="pathak.creations.sbl.dashboard.ui.retailer_visit.EditRetailerVisit"
         android:label="Edit Retailer Visit" />
 
 </navigation>

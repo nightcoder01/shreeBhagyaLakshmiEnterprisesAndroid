@@ -1,7 +1,5 @@
-package pathak.creations.sbl.dashboard.ui.share
+package pathak.creations.sbl.dashboard.ui.retailer_visit
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
