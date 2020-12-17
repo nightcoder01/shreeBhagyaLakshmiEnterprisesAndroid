@@ -77,7 +77,7 @@ class RetailerVisit : Fragment() {
             deleteDialog.dismiss()
             list.removeAt(position)
             adapter.notifyItemRemoved(position)
-            adapter.notifyItemRangeChanged(position,list.size)
+
 
         }
 
@@ -95,7 +95,7 @@ class RetailerVisit : Fragment() {
         for(i in 0 until 12)
         {
 
-            if(i!=0) {
+
 
                 list.add(
                     RetailerVisitData(
@@ -105,18 +105,9 @@ class RetailerVisit : Fragment() {
                     )
                 )
             }
-            else
-            {
-                list.add(
-                    RetailerVisitData(
-                        i.toString(), "Date",
-                        "Distributor", "Beat Name",
-                        "Retailer Name", "Remarks","Actions",resources.getDrawable(R.drawable.content_header)
-                    )
-                )
-            }
 
-        }
+
+
 
         adapter  = RetailerVisitAdapter(list)
 

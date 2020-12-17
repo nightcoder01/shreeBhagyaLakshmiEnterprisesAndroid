@@ -41,33 +41,16 @@ class RetailerVisitAdapter(var list: ArrayList<RetailerVisit.RetailerVisitData>)
     override fun onBindViewHolder(holder: CardsViewHolder, position: Int) {
 
 
-        if(position!=0)
-        {
-            holder.itemView.llAction.visibility = View.VISIBLE
-            holder.itemView.tvAction.visibility = View.GONE
-        }
-        else
-        {
-            holder.itemView.llAction.visibility = View.GONE
-            holder.itemView.tvAction.visibility = View.VISIBLE
-
-        }
 
 
-        holder.tvDate.background = list[position].drawable
-        holder.itemView.tvBeat.background = list[position].drawable
-        holder.itemView.tvDistributor.background = list[position].drawable
-        holder.itemView.tvRetailer.background = list[position].drawable
-        holder.itemView.tvRemarks.background = list[position].drawable
-        holder.itemView.tvAction.background = list[position].drawable
-        holder.itemView.llAction.background = list[position].drawable
+
+
 
         holder.tvDate.text = list[position].date
         holder.itemView.tvBeat.text = list[position].beat
         holder.itemView.tvDistributor.text = list[position].distributor
         holder.itemView.tvRetailer.text = list[position].retailer
         holder.itemView.tvRemarks.text = list[position].remarks
-        holder.itemView.tvAction.text = list[position].action
 
         holder.itemView.ivDelete.setOnClickListener { clicked.clickedSelected(position,"delete") }
         holder.itemView.ivEdit.setOnClickListener { clicked.clickedSelected(position,"edit") }

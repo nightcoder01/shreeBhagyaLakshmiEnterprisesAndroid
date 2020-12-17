@@ -100,7 +100,7 @@ class RetailerMaster : Fragment() {
         for(i in 0 until 12)
         {
 
-            if(i!=0) {
+
 
                 list.add(
                     RetailerVisit.RetailerVisitData(
@@ -114,22 +114,8 @@ class RetailerMaster : Fragment() {
                         resources.getDrawable(R.drawable.content_cell)
                     )
                 )
-            }
-            else
-            {
-                list.add(
-                    RetailerVisit.RetailerVisitData(
-                        i.toString(),
-                        "Date",
-                        "Distributor",
-                        "Beat Name",
-                        "Retailer Name",
-                        "Remarks",
-                        "Actions",
-                        resources.getDrawable(R.drawable.content_header)
-                    )
-                )
-            }
+
+
 
         }
 

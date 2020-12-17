@@ -32,4 +32,7 @@
     <string name="no">No</string>
     <string name="delete_alert">Are you sure to delete this record ?</string>
     <string name="yes">Yes</string>
+    <string name="remarks">Remarks: </string>
+    <string name="retailer">Retailer: </string>
+    <string name="beat_name">Beat Name: </string>
 </resources>
