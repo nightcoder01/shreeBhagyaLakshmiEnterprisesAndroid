@@ -40,12 +40,6 @@ class RetailerVisitAdapter(var list: ArrayList<RetailerVisit.RetailerVisitData>)
 
     override fun onBindViewHolder(holder: CardsViewHolder, position: Int) {
 
-
-
-
-
-
-
         holder.tvDate.text = list[position].date
         holder.itemView.tvBeat.text = list[position].beat
         holder.itemView.tvDistributor.text = list[position].distributor
@@ -55,9 +49,6 @@ class RetailerVisitAdapter(var list: ArrayList<RetailerVisit.RetailerVisitData>)
         holder.itemView.ivDelete.setOnClickListener { clicked.clickedSelected(position,"delete") }
         holder.itemView.ivEdit.setOnClickListener { clicked.clickedSelected(position,"edit") }
     }
-
-
-
 
 
     inner class CardsViewHolder(v: View) : RecyclerView.ViewHolder(v){

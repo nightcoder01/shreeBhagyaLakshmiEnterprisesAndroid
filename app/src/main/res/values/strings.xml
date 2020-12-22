@@ -35,4 +35,13 @@
     <string name="remarks">Remarks: </string>
     <string name="retailer">Retailer: </string>
     <string name="beat_name">Beat Name: </string>
+    <string name="ok">OK</string>
+
+
+
+    <string name="retry">Retry</string>
+    <string name="cancel">Cancel</string>
+    <string name="connection_to_server_lost">Connection to Server lost!!</string>
+    <string name="checkYourConnection">Check Your Connection</string>
+
 </resources>

@@ -91,8 +91,6 @@
                 android:textSize="@dimen/_10sdp" />
 
 
-
-
             <TextView
                 android:id="@+id/tvRemarksTag"
                 android:layout_width="wrap_content"
@@ -114,7 +112,6 @@
                 app:layout_constraintStart_toStartOf="@id/tvRemarksTag"
                 android:layout_marginTop="@dimen/_2sdp"
                 android:textSize="@dimen/_10sdp" />
-
 
             <TextView
                 android:id="@+id/tvAction"
