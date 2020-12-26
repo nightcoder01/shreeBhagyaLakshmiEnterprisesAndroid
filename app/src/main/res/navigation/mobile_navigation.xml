@@ -32,7 +32,7 @@
     <fragment
         android:id="@+id/nav_retailer"
         android:name="pathak.creations.sbl.dashboard.ui.retailer_visit.RetailerVisit"
-        android:label="@string/menu_retailer_visit"
+        android:label="@string/menu_distributor_list"
         tools:layout="@layout/retailer_visit" >
         <action
             android:id="@+id/action_add_visit"
@@ -56,11 +56,11 @@
     <fragment
         android:id="@+id/sendFragment"
         android:name="pathak.creations.sbl.dashboard.ui.send.SendFragment"
-        android:label="Add Retailer Visit" />
+        android:label="Add Distributor" />
 
     <fragment
         android:id="@+id/editRetailerVisit"
         android:name="pathak.creations.sbl.dashboard.ui.retailer_visit.EditRetailerVisit"
-        android:label="Edit Retailer Visit" />
+        android:label="Edit Distributor" />
 
 </navigation>

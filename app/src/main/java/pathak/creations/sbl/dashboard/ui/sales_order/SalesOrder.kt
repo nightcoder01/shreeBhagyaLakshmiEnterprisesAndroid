@@ -9,7 +9,6 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.fragment_gallery.*
 import kotlinx.android.synthetic.main.logout_alert.*
 import pathak.creations.sbl.R
@@ -79,7 +78,7 @@ class SalesOrder : Fragment() {
 
         deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        deleteDialog.tv_yes.setOnClickListener {
+        deleteDialog.tvYes.setOnClickListener {
             deleteDialog.dismiss()
             list.removeAt(position)
             adapter.notifyItemRemoved(position)
@@ -87,7 +86,7 @@ class SalesOrder : Fragment() {
 
         }
 
-        deleteDialog.tv_no.setOnClickListener {
+        deleteDialog.tvNo.setOnClickListener {
             deleteDialog.dismiss()
         }
 

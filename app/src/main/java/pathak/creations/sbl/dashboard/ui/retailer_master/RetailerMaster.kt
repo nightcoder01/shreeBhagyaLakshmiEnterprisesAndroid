@@ -78,7 +78,7 @@ class RetailerMaster : Fragment() {
 
         deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        deleteDialog.tv_yes.setOnClickListener {
+        deleteDialog.tvYes.setOnClickListener {
             deleteDialog.dismiss()
             list.removeAt(position)
             adapter.notifyItemRemoved(position)
@@ -86,7 +86,7 @@ class RetailerMaster : Fragment() {
 
         }
 
-        deleteDialog.tv_no.setOnClickListener {
+        deleteDialog.tvNo.setOnClickListener {
             deleteDialog.dismiss()
         }
 

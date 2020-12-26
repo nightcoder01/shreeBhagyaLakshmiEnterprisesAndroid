@@ -1,20 +1,26 @@
 package pathak.creations.sbl.dashboard
 
+import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.Menu
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import android.view.Menu
-import android.view.MenuItem
+import com.google.android.material.snackbar.Snackbar
 import pathak.creations.sbl.R
+import pathak.creations.sbl.common.PreferenceFile
+import pathak.creations.sbl.welcome.WelcomeActivity
 
 class DashBoard : AppCompatActivity() {
 
@@ -54,12 +60,52 @@ class DashBoard : AppCompatActivity() {
 
         menuInflater.inflate(R.menu.dash_board, menu)
 
-      // var setting =  menu.findItem(R.id.action_settings)
+        val logOut = menu.findItem(R.id.action_LogOut)
+        logOut.setOnMenuItemClickListener {
+
+            callLogoutDialog()
+
+            true
+
+        }
 
 
 
         return true
     }
+
+
+    private fun callLogoutDialog() {
+        val inflater = LayoutInflater.from(this)
+        val view1 = inflater.inflate(R.layout.logout_alert, null)
+        val deleteDialo = AlertDialog.Builder(this).create()
+
+        val btnYes: TextView
+        val btnNo: TextView
+
+        deleteDialo.setView(view1)
+        btnYes = view1.findViewById(R.id.tvYes)
+        btnNo = view1.findViewById(R.id.tvNo)
+        btnYes.setOnClickListener { view2 ->
+
+            deleteDialo.dismiss()
+            callLogout()
+        }
+        btnNo.setOnClickListener { view22 -> deleteDialo.dismiss() }
+
+        deleteDialo.show()
+
+        Log.e("msg", "profile")
+    }
+
+    private fun callLogout() {
+
+        PreferenceFile.removeAll(this)
+        startActivity(Intent(this, WelcomeActivity::class.java))
+        finishAffinity()
+
+    }
+
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)

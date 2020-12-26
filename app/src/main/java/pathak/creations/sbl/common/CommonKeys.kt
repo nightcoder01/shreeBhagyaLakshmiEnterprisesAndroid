@@ -3,8 +3,7 @@ package pathak.creations.sbl.common
 object CommonKeys {
 
 
-
-    const val BASE_URL = "http://3.13.214.27:8011/api/"
+    const val BASE_URL = "http://secondary.sbl1972.in/dsr/public/index.php/api/"
     const val BASE_IMAGE_Profile = "http://3.13.214.27:8011/uploads/users/"
     const val BASE_IMAGE_Movies = "http://3.13.214.27:8011/uploads/movies/"
     const val BASE_IMAGE_Members = "http://3.13.214.27:8011/uploads/movieMembers/"
@@ -13,14 +12,12 @@ object CommonKeys {
     //http://3.13.214.27:8011/uploads/movieMembers/
     // http://3.13.214.27:8011/uploads/users/
 
-    const val LOGIN = "login"
+    const val LOGIN = "v1/login"
     const val LOGIN_CODE = 1
 
-    const val LOGOUT = "logout"
-    const val LOGOUT_CODE = 2
+    const val RETAILER_LIST = "v1/distributors"
+    const val RETAILER_LIST_CODE = 2
 
-    const val GET_PROFILE = "getProfile"
-    const val GET_PROFILE_CODE = 3
 
 
     val ID = "id"
@@ -39,12 +36,14 @@ object CommonKeys {
     val LONGITUDE = "longitude"
     val OTP = "otp"
     val OTP_VERIFIED = "otp_verified"
-    val DEVICE_TYPE = "device_type"
+    val TYPE = "type"
     val DEVICE_TOKEN = "device_token"
     val SOCIAL_ID = "social_id"
     val SOCIAL_TYPE = "social_type"
     val FORGOT_PASSWORD_HASH = "forgot_password_word"
     val IAT = "iat"
     val TOKEN = "token"
+    val NOTIFICATION_TOKEN = "notification_token"
+    val EMAIL_VERIFIED = "email_verified"
 
 }

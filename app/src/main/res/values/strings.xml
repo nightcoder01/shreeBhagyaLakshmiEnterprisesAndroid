@@ -20,7 +20,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_logout">Logout</string>
 
-    <string name="menu_retailer_visit">Retailer Visit</string>
+    <string name="menu_distributor_list">Distributor List</string>
     <string name="menu_sales_order">Sales Order</string>
     <string name="menu_retailer_master">Retailer Master</string>
     <string name="menu_distributor_ptr">Distributor PTR</string>
@@ -35,6 +35,7 @@
     <string name="remarks">Remarks: </string>
     <string name="retailer">Retailer: </string>
     <string name="beat_name">Beat Name: </string>
+    <string name="beat_name2">Beat Name</string>
     <string name="ok">OK</string>
 
 
@@ -43,5 +44,29 @@
     <string name="cancel">Cancel</string>
     <string name="connection_to_server_lost">Connection to Server lost!!</string>
     <string name="checkYourConnection">Check Your Connection</string>
+    <string name="do_you_want_to_logout">Do you really want to Logout ?</string>
+    <string name="distributor">Distributor</string>
+    <string name="distributor_id">Distributor Id</string>
+    <string name="buy_from_sbl_shop">Buy From SBL Shop</string>
+    <string name="retailer_id">Retailer Id</string>
+    <string name="retailer_name">Retailer Name</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="note">Note</string>
+    <string name="submit">Submit</string>
+    <string name="capture_location">Capture Location</string>
+    <string name="phone_no">Phone No:</string>
+
+
+    <string-array name="array_name">
+        <item>Select</item>
+        <item>Item 1</item>
+        <item>Item 2</item>
+        <item>Item 3</item>
+        <item>Item 4</item>
+        <item>Item 5</item>
+        <item>Item 6</item>
+    </string-array>
+
 
 </resources>

@@ -1,6 +1,7 @@
 package pathak.creations.sbl.common
 
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.util.Log
 import android.view.View
@@ -41,6 +42,27 @@ object CommonMethods  {
         alertDialogBuilder.setPositiveButton(context.getString(R.string.ok)) { arg0, _ -> arg0.dismiss() }
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
+    }
+
+    fun alertDialogIntentClear(
+        context: Context,
+        msg: String,
+        to: Class<*>
+    ) {
+
+        val alert = AlertDialog.Builder(context)
+        alert.setTitle(context.getString(R.string.app_name))
+        alert.setMessage(msg)
+        alert.setPositiveButton(context.getString(R.string.ok)) { dialogInterface, i ->
+            dialogInterface.dismiss()
+            val it = Intent(context, to)
+            it.flags =
+                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            context.startActivity(it)
+
+        }
+        alert.setCancelable(false)
+        alert.create().show()
     }
 
     fun getGender(string: String): String {

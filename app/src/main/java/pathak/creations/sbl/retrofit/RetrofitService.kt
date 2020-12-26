@@ -114,10 +114,10 @@ class RetrofitService {
         if (token == "")
         {
             val okHttpClient = OkHttpClient.Builder()
-                    .callTimeout(2, TimeUnit.MINUTES)
-                    .connectTimeout(20, TimeUnit.SECONDS)
-                    .readTimeout(30, TimeUnit.SECONDS)
-                    .writeTimeout(30, TimeUnit.SECONDS)
+                .callTimeout(5, TimeUnit.MINUTES)
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(40, TimeUnit.SECONDS)
+                .writeTimeout(40, TimeUnit.SECONDS)
 
             okHttpClient.addInterceptor { chain ->
                 val request = chain.request().newBuilder().addHeader("Accept", "application/json").build()
@@ -132,10 +132,10 @@ class RetrofitService {
                     .build()
         }
         else {
-            val httpClient = OkHttpClient.Builder().callTimeout(2, TimeUnit.MINUTES)
-                    .connectTimeout(20, TimeUnit.SECONDS)
-                    .readTimeout(30, TimeUnit.SECONDS)
-                    .writeTimeout(30, TimeUnit.SECONDS)
+            val httpClient = OkHttpClient.Builder().callTimeout(5, TimeUnit.MINUTES)
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(40, TimeUnit.SECONDS)
+                .writeTimeout(40, TimeUnit.SECONDS)
 
             httpClient.addInterceptor { chain ->
                 val request = chain.request().newBuilder().addHeader("Accept", "application/json").addHeader("Authorization", "Bearer $token").build()

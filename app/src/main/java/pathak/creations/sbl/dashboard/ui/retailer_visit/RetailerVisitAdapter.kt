@@ -8,7 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.retailer_item.view.*
 import pathak.creations.sbl.R
 
-class RetailerVisitAdapter(var list: ArrayList<RetailerVisit.RetailerVisitData>) : RecyclerView.Adapter<RetailerVisitAdapter.CardsViewHolder>() {
+class RetailerVisitAdapter(var list: ArrayList<RetailerVisit.RetailerVisitData>) :
+    RecyclerView.Adapter<RetailerVisitAdapter.CardsViewHolder>() {
 
 
     lateinit var clicked: CardInterface

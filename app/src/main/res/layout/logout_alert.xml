@@ -13,9 +13,8 @@
         android:background="@drawable/white_background"
         android:orientation="vertical">
 
-
         <TextView
-            android:id="@+id/tv_logout"
+            android:id="@+id/tvLogoutTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
@@ -26,12 +25,11 @@
             android:textColor="@color/black"
             android:textSize="18sp" />
 
-
         <TextView
-            android:id="@+id/tv_logout_message"
+            android:id="@+id/tvLogoutMsg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_logout"
+            android:layout_below="@+id/tvLogoutTitle"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:text="@string/delete_alert"
@@ -40,11 +38,11 @@
             android:textSize="@dimen/_14sdp" />
 
         <TextView
-            android:id="@+id/tv_no"
+            android:id="@+id/tvNo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toStartOf="@+id/tv_yes"
-            android:layout_below="@+id/tv_logout_message"
+            android:layout_below="@+id/tvLogoutMsg"
+            android:layout_toStartOf="@+id/tvYes"
             android:layout_marginBottom="10dp"
             android:layout_marginEnd="15dp"
             android:layout_marginTop="15dp"
@@ -53,13 +51,12 @@
             android:textColor="@color/red"
             android:textSize="@dimen/_14sdp" />
 
-
         <TextView
-            android:id="@+id/tv_yes"
+            android:id="@+id/tvYes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/tv_logout_message"
+            android:layout_below="@+id/tvLogoutMsg"
             android:layout_marginBottom="10dp"
             android:layout_marginEnd="15dp"
             android:layout_marginTop="15dp"

@@ -13,16 +13,28 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.logout_alert.*
 import kotlinx.android.synthetic.main.retailer_visit.*
+import org.json.JSONObject
 import pathak.creations.sbl.R
+import pathak.creations.sbl.common.CommonKeys
+import pathak.creations.sbl.common.CommonMethods
+import pathak.creations.sbl.common.PreferenceFile
+import pathak.creations.sbl.retrofit.RetrofitResponse
+import pathak.creations.sbl.retrofit.RetrofitService
 
-class RetailerVisit : Fragment() {
+class RetailerVisit : Fragment(), RetrofitResponse {
+
 
     private lateinit var retailerVisitVM: RetailerVisitVM
 
 
     var list : ArrayList<RetailerVisitData> = ArrayList()
+    var listCount: ArrayList<CountData> = ArrayList()
 
-   lateinit var adapter : RetailerVisitAdapter
+    var count = ""
+    var countInitial = "-1"
+
+
+    lateinit var adapter : RetailerVisitAdapter
 
 
     override fun onCreateView(
@@ -47,13 +59,95 @@ class RetailerVisit : Fragment() {
         tvDateValue.setOnClickListener { retailerVisitVM.datePicker(view) }
         tvAdd.setOnClickListener { Navigation.findNavController(view).navigate(R.id.action_add_visit) }
 
-        setList()
+
+        // setCountList()
+
+    }
+
+    private fun setCountList(count: String) {
+
+
+        rvCount.visibility = View.VISIBLE
+
+
+
+
+        listCount.clear()
+        for (i in 0 until count.toInt()) {
+
+            listCount.add(CountData("$i", false))
+        }
+
+        if (countInitial != "-1") {
+            listCount[countInitial.toInt() - 1].bool = true
+        }
+
+        val adapter2 = CountAdapter(listCount)
+
+        rvCount.adapter = adapter2
+        adapter2.onClicked(object : CountAdapter.CardInterface {
+            override fun clickedSelected(position: Int) {
+
+
+                if (!listCount[position].bool) {
+                    for (i in 0 until listCount.size) {
+                        listCount[i].bool = false
+                    }
+                    listCount[position].bool = true
+
+                    countInitial = (position + 1).toString()
+
+                    adapter2.notifyDataSetChanged()
+
+                    callList(countInitial)
+
+                }
+            }
+
+        })
 
     }
 
     override fun onResume() {
         super.onResume()
-        setList()
+
+
+        callList(countInitial)
+
+
+    }
+
+    private fun callList(countInitial: String) {
+        try {
+
+            var endPoint = ""
+            if (countInitial != "-1") {
+                endPoint = "?page=$countInitial"
+            }
+
+
+            if (CommonMethods.isNetworkAvailable(context!!)) {
+                val json = JSONObject()
+
+                RetrofitService(
+                    context!!,
+                    this,
+                    CommonKeys.RETAILER_LIST + endPoint,
+                    CommonKeys.RETAILER_LIST_CODE,
+                    1
+                ).callService(true, PreferenceFile.retrieveKey(context!!, CommonKeys.TOKEN)!!)
+
+                Log.e("callList", "=====$json")
+
+            } else {
+                CommonMethods.alertDialog(
+                    context!!,
+                    getString(R.string.checkYourConnection)
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     lateinit var deleteDialog: Dialog
@@ -73,7 +167,7 @@ class RetailerVisit : Fragment() {
 
         deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        deleteDialog.tv_yes.setOnClickListener {
+        deleteDialog.tvYes.setOnClickListener {
             deleteDialog.dismiss()
             list.removeAt(position)
             adapter.notifyItemRemoved(position)
@@ -81,7 +175,7 @@ class RetailerVisit : Fragment() {
 
         }
 
-        deleteDialog.tv_no.setOnClickListener {
+        deleteDialog.tvNo.setOnClickListener {
             deleteDialog.dismiss()
         }
 
@@ -89,40 +183,19 @@ class RetailerVisit : Fragment() {
     }
 
 
-    private fun setList() {
-
-        list.clear()
-        for(i in 0 until 12)
-        {
-
-
-
-                list.add(
-                    RetailerVisitData(
-                        i.toString(), "12/12/2020",
-                        "AAI MATHAJI ENTERPRISES - BANGALORE", "SEEGEHALLI",
-                        "MANJUNAT STORE", "Order placed","",resources.getDrawable(R.drawable.content_cell)
-                    )
-                )
-            }
-
-
-
+    private fun setListData(list: ArrayList<RetailerVisitData>) {
 
         adapter  = RetailerVisitAdapter(list)
 
         rvRetailerVisit.adapter = adapter
         adapter.onClicked(object :RetailerVisitAdapter.CardInterface{
             override fun clickedSelected(position: Int, str: String) {
-                if(str=="delete")
-                {
+                if(str=="delete") {
                     Log.e("====delete==","==11==$position")
 
 
                     deleteMethod(position)
-                }
-                else
-                {
+                } else {
                     Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_edit_visit)
                 }
             }
@@ -132,11 +205,94 @@ class RetailerVisit : Fragment() {
     }
 
 
-    data class RetailerVisitData(var id: String = "",var date: String = "",
-                                 var distributor: String = "",var beat: String = "",
-                                 var retailer: String = "",var remarks: String = "",
-                                 var action: String = "",var drawable: Drawable
-                                 )
+    data class RetailerVisitData(var id: String = "", var date: String = "",
+                                 var distributor: String = "", var beat: String = "",
+                                 var retailer: String = "", var remarks: String = "",
+                                 var action: String = "", var drawable: Drawable
+    )
+
+    data class CountData(var str: String = "", var bool: Boolean = false)
+
+
+    override fun response(code: Int, response: String) {
+        try {
+            when (code) {
+                CommonKeys.RETAILER_LIST_CODE -> {
+                    try {
+
+                        Log.e("RETAILER_LIST_CODE", "=====$code==$response")
+
+                        val json = JSONObject(response)
+                        val status = json.optBoolean("status")
+                        val msg = json.getString("message")
+                        if (status) {
+
+                            val data = json.getJSONObject("data")
+
+
+                            list.clear()
+                            val dataData = data.getJSONArray("data")
+                            for (i in 0 until dataData.length()) {
+
+                                val dataObj = dataData.getJSONObject(i)
+
+                                //list.add(
+                                //                    RetailerVisitData(
+                                //                        i.toString(), "12/12/2020",
+                                //                        "AAI MATHAJI ENTERPRISES - BANGALORE", "SEEGEHALLI",
+                                //                        "MANJUNAT STORE", "Order placed","",resources.getDrawable(R.drawable.content_cell)
+                                //                    )
+                                //                )
+
+
+                                val beats = dataObj.getJSONArray("beats")
+
+                                for (j in 0 until beats.length()) {
+
+                                    val beatsObj = beats.getJSONObject(j)
+
+                                    list.add(
+                                        RetailerVisitData(
+                                            dataObj.getString("id"),
+                                            beatsObj.getString("updated"),
+                                            beatsObj.getString("distributor"),
+                                            beatsObj.getString("beatname"),
+                                            dataObj.getString("mobile"),
+                                            beatsObj.getString("remarks"),
+                                            "",
+                                            resources.getDrawable(R.drawable.content_cell)
+                                        )
+                                    )
+
+                                    setListData(list)
+
+                                }
+
+
+                            }
+
+
+
+
+
+                            count = data.getString("last_page")
+
+                            setCountList(count)
+                        } else {
+                            CommonMethods.alertDialog(context!!, msg)
+                        }
+
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
 
 }
