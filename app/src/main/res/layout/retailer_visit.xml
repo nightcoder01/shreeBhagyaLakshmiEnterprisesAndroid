@@ -45,6 +45,7 @@
         app:layout_constraintBottom_toBottomOf="@id/tvDate"
         />
 
+
     <TextView
         android:id="@+id/tvAdd"
         android:layout_width="wrap_content"
@@ -59,19 +60,42 @@
         android:paddingBottom="@dimen/_5sdp"
         android:paddingStart="@dimen/_15sdp"
         android:paddingEnd="@dimen/_15sdp"
+        android:visibility="invisible"
         android:background="@drawable/button_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/tvBeatName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/beat_name2"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintStart_toStartOf="@id/tvDate"
+        app:layout_constraintTop_toBottomOf="@id/tvDate" />
 
-    <!-- Table View-->
+
+    <Spinner
+        android:id="@+id/spBeatName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:background="@drawable/round_bg"
+        android:padding="@dimen/_7sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvDate"
+        app:layout_constraintTop_toBottomOf="@id/tvBeatName" />
 
 
-        <androidx.recyclerview.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tvAdd"
+            app:layout_constraintTop_toBottomOf="@id/spBeatName"
             android:layout_marginTop="@dimen/_3sdp"
             android:orientation="horizontal"
             android:paddingTop="@dimen/_2sdp"
@@ -79,6 +103,7 @@
             android:paddingBottom="@dimen/_2sdp"
             android:visibility="gone"
             />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRetailerVisit"

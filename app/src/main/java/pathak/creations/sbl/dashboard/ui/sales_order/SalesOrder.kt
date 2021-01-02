@@ -12,14 +12,14 @@ import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.fragment_gallery.*
 import kotlinx.android.synthetic.main.logout_alert.*
 import pathak.creations.sbl.R
-import pathak.creations.sbl.dashboard.ui.retailer_visit.RetailerVisit
 import pathak.creations.sbl.dashboard.ui.retailer_visit.RetailerVisitAdapter
+import pathak.creations.sbl.data_class.BeatRetailerData
 
 class SalesOrder : Fragment() {
 
     private lateinit var salesOrderVM: SalesOrderVM
 
-    var list : ArrayList<RetailerVisit.RetailerVisitData> = ArrayList()
+    var list : ArrayList<BeatRetailerData> = ArrayList()
 
     lateinit var adapter : RetailerVisitAdapter
 
@@ -97,27 +97,7 @@ class SalesOrder : Fragment() {
     private fun setList() {
 
         list.clear()
-        for(i in 0 until 12)
-        {
 
-
-
-                list.add(
-                    RetailerVisit.RetailerVisitData(
-                        i.toString(),
-                        "12/12/2020",
-                        "AAI MATHAJI ENTERPRISES - BANGALORE",
-                        "SEEGEHALLI",
-                        "MANJUNAT STORE",
-                        "Order placed",
-                        "",
-                        resources.getDrawable(R.drawable.content_cell)
-                    )
-                )
-
-
-
-        }
 
         adapter  = RetailerVisitAdapter(list)
 
@@ -128,7 +108,6 @@ class SalesOrder : Fragment() {
                 {
                     Log.e("====delete==","==11==$position")
 
-
                     deleteMethod(position)
                 }
                 else
@@ -136,11 +115,6 @@ class SalesOrder : Fragment() {
                   //  Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_edit_visit)
                 }
             }
-
         })
-
     }
-
-
-
 }

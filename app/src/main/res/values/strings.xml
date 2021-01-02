@@ -20,6 +20,8 @@
     <string name="action_settings">Settings</string>
     <string name="action_logout">Logout</string>
 
+
+    <string name="menu_retailer_list">Retailer Visit/Sales order</string>
     <string name="menu_distributor_list">Distributor List</string>
     <string name="menu_sales_order">Sales Order</string>
     <string name="menu_retailer_master">Retailer Master</string>
@@ -56,6 +58,11 @@
     <string name="submit">Submit</string>
     <string name="capture_location">Capture Location</string>
     <string name="phone_no">Phone No:</string>
+    <string name="transaction_no">Transaction No.</string>
+    <string name="salesman">Salesman</string>
+    <string name="category">Category</string>
+    <string name="price">Price</string>
+    <string name="price_code">Price Code</string>
 
 
     <string-array name="array_name">

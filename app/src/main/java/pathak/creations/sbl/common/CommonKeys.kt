@@ -18,6 +18,16 @@ object CommonKeys {
     const val RETAILER_LIST = "v1/distributors"
     const val RETAILER_LIST_CODE = 2
 
+    const val BEAT_LIST = "v1/beats"
+    const val BEAT_LIST_CODE = 3
+
+    const val BEAT_RETAILER_LIST = "v1/beat-retailers"
+    const val BEAT_RETAILER_LIST_CODE = 4
+
+
+    const val CATEGORIES = "v1/categories"
+    const val CATEGORIES_CODE = 5
+
 
 
     val ID = "id"

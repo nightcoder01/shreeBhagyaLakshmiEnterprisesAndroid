@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -33,7 +34,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
             <TextView
                 android:id="@+id/tvDistributor"
                 android:layout_width="wrap_content"
@@ -45,19 +45,22 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
             <EditText
+                android:id="@+id/etDistributor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:background="@drawable/round_bg"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:editable="false"
                 android:hint="@string/distributor"
-                android:padding="@dimen/_7sdp"
-                android:textSize="@dimen/_12sdp"
-                android:visibility="gone"
+                android:maxLength="30"
+                android:singleLine="true"
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintBottom_toBottomOf="@id/tvDistributor"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/tvDistributor"
-                app:layout_constraintTop_toBottomOf="@id/tvDistributor" />
+                app:layout_constraintStart_toEndOf="@id/tvDistributor"
+                app:layout_constraintTop_toTopOf="@id/tvDistributor"
+                />
 
             <Spinner
                 android:id="@+id/spDistributor"
@@ -69,34 +72,39 @@
                 android:background="@drawable/round_bg"
                 android:entries="@array/array_name"
                 android:padding="@dimen/_7sdp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/tvDistributor"
                 app:layout_constraintTop_toBottomOf="@id/tvDistributor" />
 
             <TextView
-                android:id="@+id/tvDistributorId"
+                android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
-                android:text="@string/distributor_id"
+                android:text="@string/date"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spDistributor" />
+                app:layout_constraintTop_toBottomOf="@id/etDistributor" />
 
 
             <EditText
+                android:id="@+id/etDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:background="@drawable/round_bg"
-                android:hint="@string/distributor"
-                android:padding="@dimen/_7sdp"
-                android:textSize="@dimen/_12sdp"
-                android:visibility="gone"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:editable="false"
+                android:hint="@string/date"
+                android:maxLength="30"
+                android:singleLine="true"
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintBottom_toBottomOf="@id/tvDate"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/tvDistributorId"
-                app:layout_constraintTop_toBottomOf="@id/tvDistributorId" />
+                app:layout_constraintStart_toEndOf="@id/tvDate"
+                app:layout_constraintTop_toTopOf="@id/tvDate"
+                />
 
             <Spinner
                 android:id="@+id/spDistributorId"
@@ -108,9 +116,10 @@
                 android:background="@drawable/round_bg"
                 android:entries="@array/array_name"
                 android:padding="@dimen/_7sdp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/tvDistributorId"
-                app:layout_constraintTop_toBottomOf="@id/tvDistributorId" />
+                app:layout_constraintStart_toStartOf="@id/tvDate"
+                app:layout_constraintTop_toBottomOf="@id/tvDate" />
 
             <TextView
                 android:id="@+id/tvBeatName"
@@ -121,21 +130,25 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spDistributorId" />
-
+                app:layout_constraintTop_toBottomOf="@id/etDate" />
 
             <EditText
+                android:id="@+id/etBeatName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:background="@drawable/round_bg"
-                android:hint="@string/distributor"
-                android:padding="@dimen/_7sdp"
-                android:textSize="@dimen/_12sdp"
-                android:visibility="gone"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:editable="false"
+                android:hint="@string/beat_name2"
+                android:maxLength="30"
+                android:singleLine="true"
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintBottom_toBottomOf="@id/tvBeatName"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/tvBeatName"
-                app:layout_constraintTop_toBottomOf="@id/tvBeatName" />
+                app:layout_constraintStart_toEndOf="@id/tvBeatName"
+                app:layout_constraintTop_toTopOf="@id/tvBeatName"
+                />
+
 
 
             <Spinner
@@ -148,6 +161,7 @@
                 android:background="@drawable/round_bg"
                 android:entries="@array/array_name"
                 android:padding="@dimen/_7sdp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/tvBeatName"
                 app:layout_constraintTop_toBottomOf="@id/tvBeatName" />
@@ -161,21 +175,25 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spBeatName" />
+                app:layout_constraintTop_toBottomOf="@id/etBeatName" />
 
 
             <EditText
+                android:id="@+id/etRetailerName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:background="@drawable/round_bg"
-                android:hint="@string/distributor"
-                android:padding="@dimen/_7sdp"
-                android:textSize="@dimen/_12sdp"
-                android:visibility="gone"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:editable="false"
+                android:hint="@string/retailer_name"
+                android:maxLength="30"
+                android:singleLine="true"
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintBottom_toBottomOf="@id/tvRetailerName"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/tvRetailerName"
-                app:layout_constraintTop_toBottomOf="@id/tvRetailerName" />
+                app:layout_constraintStart_toEndOf="@id/tvRetailerName"
+                app:layout_constraintTop_toTopOf="@id/tvRetailerName"
+                />
 
             <Spinner
                 android:id="@+id/spRetailerName"
@@ -187,6 +205,7 @@
                 android:background="@drawable/round_bg"
                 android:entries="@array/array_name"
                 android:padding="@dimen/_7sdp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/tvRetailerName"
                 app:layout_constraintTop_toBottomOf="@id/tvRetailerName" />
@@ -201,32 +220,33 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spRetailerName" />
+                app:layout_constraintTop_toBottomOf="@id/etRetailerName" />
 
 
             <EditText
                 android:id="@+id/etRetailerId"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:background="@drawable/round_bg"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:editable="false"
                 android:hint="@string/retailer_id"
                 android:maxLength="30"
-                android:padding="@dimen/_7sdp"
-                android:textSize="@dimen/_12sdp"
+                android:singleLine="true"
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintBottom_toBottomOf="@id/tvRetailerId"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/tvRetailerId"
-                app:layout_constraintTop_toBottomOf="@id/tvRetailerId" />
+                app:layout_constraintStart_toEndOf="@id/tvRetailerId"
+                app:layout_constraintTop_toTopOf="@id/tvRetailerId"
+                />
 
 
             <TextView
-                android:id="@+id/tvLatitude"
+                android:id="@+id/tvTransactionNo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
-                android:text="@string/latitude"
+                android:text="@string/transaction_no"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -234,82 +254,91 @@
 
 
             <EditText
-                android:id="@+id/etLatitude"
-                android:layout_width="match_parent"
+                android:id="@+id/etTransactionNo"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:background="@drawable/round_bg"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
                 android:editable="false"
-                android:hint="@string/latitude"
+                android:hint="@string/transaction_no"
                 android:maxLength="30"
-                android:padding="@dimen/_7sdp"
-                android:textSize="@dimen/_12sdp"
+                android:singleLine="true"
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintBottom_toBottomOf="@id/tvTransactionNo"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/tvLatitude"
-                app:layout_constraintTop_toBottomOf="@id/tvLatitude" />
+                app:layout_constraintStart_toEndOf="@id/tvTransactionNo"
+                app:layout_constraintTop_toTopOf="@id/tvTransactionNo"
+                />
 
 
             <TextView
-                android:id="@+id/tvLongitude"
+                android:id="@+id/tvSalesMan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
-                android:text="@string/longitude"
+                android:text="@string/salesman"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/etLatitude" />
+                app:layout_constraintTop_toBottomOf="@id/etTransactionNo" />
 
 
             <EditText
-                android:id="@+id/etLongitude"
-                android:layout_width="match_parent"
+                android:id="@+id/etSalesman"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginEnd="@dimen/_10sdp"
-                android:background="@drawable/round_bg"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
                 android:editable="false"
-                android:hint="@string/longitude"
+                android:hint="@string/salesman"
                 android:maxLength="30"
-                android:padding="@dimen/_7sdp"
-                android:textSize="@dimen/_12sdp"
+                android:singleLine="true"
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintBottom_toBottomOf="@id/tvSalesMan"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/tvLongitude"
-                app:layout_constraintTop_toBottomOf="@id/tvLongitude" />
+                app:layout_constraintStart_toEndOf="@id/tvSalesMan"
+                app:layout_constraintTop_toTopOf="@id/tvSalesMan"
+                />
 
 
             <TextView
-                android:id="@+id/tvNote"
+                android:id="@+id/tvCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
-                android:text="@string/note"
+                android:text="@string/category"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/etLongitude" />
+                app:layout_constraintTop_toBottomOf="@id/etSalesman" />
 
 
-            <EditText
-                android:id="@+id/etNote"
+            <Spinner
+                android:id="@+id/spCategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:background="@drawable/round_bg"
-                android:gravity="start|top"
-                android:hint="@string/note"
-                android:maxLines="4"
-                android:minHeight="@dimen/_70sdp"
+                android:entries="@array/array_name"
                 android:padding="@dimen/_7sdp"
-                android:textSize="@dimen/_12sdp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/tvNote"
-                app:layout_constraintTop_toBottomOf="@id/tvNote" />
+                app:layout_constraintStart_toStartOf="@id/tvCategory"
+                app:layout_constraintTop_toBottomOf="@id/tvCategory" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvSubCategories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/spCategory"
+
+                />
+
 
 
             <CheckBox
@@ -321,8 +350,9 @@
                 android:paddingBottom="@dimen/_8sdp"
                 android:text="@string/buy_from_sbl_shop"
                 android:textSize="@dimen/_10sdp"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etNote" />
+                app:layout_constraintTop_toBottomOf="@+id/spCategory" />
 
 
             <TextView
@@ -339,6 +369,7 @@
                 android:text="@string/cancel"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12sdp"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvLocation" />
 
@@ -355,6 +386,7 @@
                 android:text="@string/capture_location"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12sdp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/cbBuyFromSBL" />
 
@@ -372,6 +404,7 @@
                 android:text="@string/submit"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12sdp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvLocation" />
 

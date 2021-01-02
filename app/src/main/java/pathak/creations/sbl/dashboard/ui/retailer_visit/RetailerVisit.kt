@@ -1,12 +1,16 @@
 package pathak.creations.sbl.dashboard.ui.retailer_visit
 
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -18,6 +22,8 @@ import pathak.creations.sbl.R
 import pathak.creations.sbl.common.CommonKeys
 import pathak.creations.sbl.common.CommonMethods
 import pathak.creations.sbl.common.PreferenceFile
+import pathak.creations.sbl.data_class.BeatData
+import pathak.creations.sbl.data_class.BeatRetailerData
 import pathak.creations.sbl.retrofit.RetrofitResponse
 import pathak.creations.sbl.retrofit.RetrofitService
 
@@ -28,9 +34,12 @@ class RetailerVisit : Fragment(), RetrofitResponse {
 
 
     var list : ArrayList<RetailerVisitData> = ArrayList()
+    var listBeats : ArrayList<BeatData> = ArrayList()
+    var listBeatsRetailer : ArrayList<BeatRetailerData> = ArrayList()
     var listCount: ArrayList<CountData> = ArrayList()
 
     var count = ""
+    var ctx : Context? = null
     var countInitial = "-1"
 
 
@@ -44,6 +53,8 @@ class RetailerVisit : Fragment(), RetrofitResponse {
     ): View? {
         retailerVisitVM = ViewModelProvider(this).get(RetailerVisitVM::class.java)
         val root = inflater.inflate(R.layout.retailer_visit, container, false)
+
+        ctx = root.context
 
         retailerVisitVM.dateValue.observe(viewLifecycleOwner, Observer {
             tvDateValue.text = it
@@ -60,16 +71,46 @@ class RetailerVisit : Fragment(), RetrofitResponse {
         tvAdd.setOnClickListener { Navigation.findNavController(view).navigate(R.id.action_add_visit) }
 
 
+        callBeatList()
+
+
+
         // setCountList()
 
+    }
+
+    private fun callBeatList() {
+        try {
+
+            if (CommonMethods.isNetworkAvailable(ctx!!)) {
+                val json = JSONObject()
+
+                RetrofitService(
+                    ctx!!,
+                    this,
+                    CommonKeys.BEAT_LIST ,
+                    CommonKeys.BEAT_LIST_CODE,
+                    1
+                ).callService(true, PreferenceFile.retrieveKey(ctx!!, CommonKeys.TOKEN)!!)
+
+                Log.e("callBeatList", "=====$json")
+                Log.e("callBeatList", "=token====${PreferenceFile.retrieveKey(ctx!!, CommonKeys.TOKEN)!!}")
+
+            } else {
+                CommonMethods.alertDialog(
+                    ctx!!,
+                    getString(R.string.checkYourConnection)
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun setCountList(count: String) {
 
 
         rvCount.visibility = View.VISIBLE
-
-
 
 
         listCount.clear()
@@ -108,15 +149,6 @@ class RetailerVisit : Fragment(), RetrofitResponse {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-
-
-        callList(countInitial)
-
-
-    }
-
     private fun callList(countInitial: String) {
         try {
 
@@ -126,22 +158,22 @@ class RetailerVisit : Fragment(), RetrofitResponse {
             }
 
 
-            if (CommonMethods.isNetworkAvailable(context!!)) {
+            if (CommonMethods.isNetworkAvailable(ctx!!)) {
                 val json = JSONObject()
 
                 RetrofitService(
-                    context!!,
+                    ctx!!,
                     this,
                     CommonKeys.RETAILER_LIST + endPoint,
                     CommonKeys.RETAILER_LIST_CODE,
                     1
-                ).callService(true, PreferenceFile.retrieveKey(context!!, CommonKeys.TOKEN)!!)
+                ).callService(true, PreferenceFile.retrieveKey(ctx!!, CommonKeys.TOKEN)!!)
 
                 Log.e("callList", "=====$json")
 
             } else {
                 CommonMethods.alertDialog(
-                    context!!,
+                    ctx!!,
                     getString(R.string.checkYourConnection)
                 )
             }
@@ -153,7 +185,7 @@ class RetailerVisit : Fragment(), RetrofitResponse {
     lateinit var deleteDialog: Dialog
 
     private fun deleteMethod(position: Int) {
-        deleteDialog = Dialog(context!!)
+        deleteDialog = Dialog(ctx!!)
         deleteDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         deleteDialog.setContentView(R.layout.logout_alert)
 
@@ -172,7 +204,6 @@ class RetailerVisit : Fragment(), RetrofitResponse {
             list.removeAt(position)
             adapter.notifyItemRemoved(position)
 
-
         }
 
         deleteDialog.tvNo.setOnClickListener {
@@ -185,7 +216,7 @@ class RetailerVisit : Fragment(), RetrofitResponse {
 
     private fun setListData(list: ArrayList<RetailerVisitData>) {
 
-        adapter  = RetailerVisitAdapter(list)
+        adapter  = RetailerVisitAdapter(listBeatsRetailer)
 
         rvRetailerVisit.adapter = adapter
         adapter.onClicked(object :RetailerVisitAdapter.CardInterface{
@@ -193,13 +224,11 @@ class RetailerVisit : Fragment(), RetrofitResponse {
                 if(str=="delete") {
                     Log.e("====delete==","==11==$position")
 
-
                     deleteMethod(position)
                 } else {
                     Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_edit_visit)
                 }
             }
-
         })
 
     }
@@ -264,7 +293,7 @@ class RetailerVisit : Fragment(), RetrofitResponse {
                                         )
                                     )
 
-                                    setListData(list)
+                                  //  setListData(list)
 
                                 }
 
@@ -279,7 +308,140 @@ class RetailerVisit : Fragment(), RetrofitResponse {
 
                             setCountList(count)
                         } else {
-                            CommonMethods.alertDialog(context!!, msg)
+                            CommonMethods.alertDialog(ctx!!, msg)
+                        }
+
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+                CommonKeys.BEAT_LIST_CODE -> {
+                    try {
+
+                        Log.e("BEAT_LIST_CODE", "=====$code==$response")
+
+                        val json = JSONObject(response)
+                        val status = json.optBoolean("status")
+                        val msg = json.getString("message")
+                        if (status) {
+
+                            val data = json.getJSONArray("data")
+
+
+
+                            listBeats.clear()
+
+                            listBeats.add(BeatData(
+                                "","Select Beat","","","",""
+                            ))
+
+                            for (i in 0 until data.length()) {
+
+                                val dataObj = data.getJSONObject(i)
+
+                                if(dataObj.getString("beatname").isNotEmpty()) {
+                                    listBeats.add(
+                                        BeatData(
+                                            dataObj.getString("areaname"),
+                                            dataObj.getString("beatname"),
+                                            dataObj.getString("dist_id"),
+                                            dataObj.getString("distributor"),
+                                            dataObj.getString("id"),
+                                            dataObj.getString("state")
+                                        )
+                                    )
+                                }
+                            }
+
+
+                            setBeatAdapter(listBeats)
+                        }
+
+                        else {
+                            CommonMethods.alertDialog(ctx!!, msg)
+                        }
+
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+                CommonKeys.BEAT_RETAILER_LIST_CODE -> {
+                    try {
+
+                        Log.e("BEAT_RETAILER_LIST_CODE", "=====$code==$response")
+
+                        val json = JSONObject(response)
+                        val status = json.optBoolean("status")
+                        val msg = json.getString("message")
+                        if (status) {
+
+                            val data = json.getJSONArray("data")
+
+
+
+                            listBeatsRetailer.clear()
+
+
+
+                            for (i in 0 until data.length()) {
+
+                                val dataObj = data.getJSONObject(i)
+
+                                if(dataObj.getString("beatname").isNotEmpty()) {
+                                    listBeatsRetailer.add(
+                                        BeatRetailerData(
+                                            dataObj.getString("address"),
+                                            dataObj.getString("areaname"),
+                                            dataObj.getString("beatname"),
+                                            dataObj.getString("ca"),
+                                            dataObj.getString("cac"),
+                                            dataObj.getString("classification"),
+                                            dataObj.getString("client"),
+                                            dataObj.getString("country"),
+                                            dataObj.getString("cperson"),
+                                            dataObj.getString("cst"),
+                                            dataObj.getString("cst_registerationdate"),
+                                            dataObj.getString("csttin"),
+                                            dataObj.getString("date"),
+                                            dataObj.getString("dist_id"),
+                                            dataObj.getString("distributor"),
+                                            dataObj.getString("dvisit"),
+                                            dataObj.getString("email"),
+                                            dataObj.getString("empname"),
+                                            dataObj.getString("firstname"),
+                                            dataObj.getString("gstin"),
+                                            dataObj.getString("id"),
+                                            dataObj.getString("lastname"),
+                                            dataObj.getString("latitude"),
+                                            dataObj.getString("longitude"),
+                                            dataObj.getString("mobile"),
+                                            dataObj.getString("note"),
+                                            dataObj.getString("pan"),
+                                            dataObj.getString("phone"),
+                                            dataObj.getString("pincode"),
+                                            dataObj.getString("place"),
+                                            dataObj.getString("retailer_id"),
+                                            dataObj.getString("retailer_name"),
+                                            dataObj.getString("retailer_type"),
+                                            dataObj.getString("rid"),
+                                            dataObj.getString("sno"),
+                                            dataObj.getString("state"),
+                                            dataObj.getString("type"),
+                                            dataObj.getString("updated"),
+                                            dataObj.getString("vattin")
+                                        )
+                                    )
+                                }
+                            }
+
+
+                            setBeatRetailerAdapter(listBeatsRetailer)
+                        }
+
+                        else {
+                            CommonMethods.alertDialog(ctx!!, msg)
                         }
 
 
@@ -292,6 +454,109 @@ class RetailerVisit : Fragment(), RetrofitResponse {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    private fun setBeatRetailerAdapter(listBeatsRetailer: ArrayList<BeatRetailerData>) {
+
+
+        adapter  = RetailerVisitAdapter(listBeatsRetailer)
+
+        rvRetailerVisit.adapter = adapter
+        adapter.onClicked(object :RetailerVisitAdapter.CardInterface{
+            override fun clickedSelected(position: Int, str: String) {
+                if(str=="delete") {
+                    Log.e("====delete==","==11==$position")
+
+                    deleteMethod(position)
+                }
+                if(str=="add")
+                {
+
+                    val bundle = bundleOf("distributorName" to listBeatsRetailer[position].distributor,
+                        "beatName" to listBeatsRetailer[position].beatname,
+                        "retailer" to listBeatsRetailer[position].retailer_name,
+                        "retailerId" to listBeatsRetailer[position].retailer_id,
+                        "salesman" to listBeatsRetailer[position].client
+                        )
+                    Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_add_sales,bundle)
+                }
+
+                if(str=="edit")
+                {
+                    Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_edit_visit)
+                }
+            }
+        })
+
+    }
+
+    private fun setBeatAdapter(listBeats: ArrayList<BeatData>) {
+
+        val listShort : ArrayList<String>  = getList(listBeats)
+
+        val adapter = ArrayAdapter<String>(ctx!!,R.layout.spinner_item,listShort)
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
+        spBeatName.adapter = adapter
+
+        spBeatName.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ){
+
+                if(position!=0)
+                {
+                    callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
+                }
+            }
+        }
+
+    }
+
+    private fun callBeatRetailer(distId: String, beatname: String) {
+        try {
+
+            if (CommonMethods.isNetworkAvailable(ctx!!)) {
+                val json = JSONObject()
+
+                json.put("dist_id",distId)
+                json.put("beatname",beatname)
+
+                RetrofitService(
+                    ctx!!,
+                    this,
+                    CommonKeys.BEAT_RETAILER_LIST ,
+                    CommonKeys.BEAT_RETAILER_LIST_CODE,
+                    json,2
+                ).callService(true, PreferenceFile.retrieveKey(ctx!!, CommonKeys.TOKEN)!!)
+
+                Log.e("callBeatList", "=====$json")
+
+            } else {
+                CommonMethods.alertDialog(
+                    ctx!!,
+                    getString(R.string.checkYourConnection)
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun getList(listBeats: ArrayList<BeatData>): ArrayList<String> {
+        val list : ArrayList<String> = ArrayList()
+
+        for(i in 0 until listBeats.size)
+        {
+            list.add(listBeats[i].beatname)
+        }
+
+        return list
     }
 
 

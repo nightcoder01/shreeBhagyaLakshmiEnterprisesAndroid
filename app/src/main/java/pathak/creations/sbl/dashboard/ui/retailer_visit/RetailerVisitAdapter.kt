@@ -7,8 +7,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.retailer_item.view.*
 import pathak.creations.sbl.R
+import pathak.creations.sbl.data_class.BeatRetailerData
 
-class RetailerVisitAdapter(var list: ArrayList<RetailerVisit.RetailerVisitData>) :
+class RetailerVisitAdapter(var list: ArrayList<BeatRetailerData>) :
     RecyclerView.Adapter<RetailerVisitAdapter.CardsViewHolder>() {
 
 
@@ -18,7 +19,6 @@ class RetailerVisitAdapter(var list: ArrayList<RetailerVisit.RetailerVisitData>)
         fun clickedSelected(position: Int,str: String)
 
     }
-
 
     fun onClicked(clicked: CardInterface)
     {this.clicked = clicked}
@@ -42,13 +42,14 @@ class RetailerVisitAdapter(var list: ArrayList<RetailerVisit.RetailerVisitData>)
     override fun onBindViewHolder(holder: CardsViewHolder, position: Int) {
 
         holder.tvDate.text = list[position].date
-        holder.itemView.tvBeat.text = list[position].beat
+        holder.itemView.tvBeat.text = list[position].beatname
         holder.itemView.tvDistributor.text = list[position].distributor
-        holder.itemView.tvRetailer.text = list[position].retailer
-        holder.itemView.tvRemarks.text = list[position].remarks
+        holder.itemView.tvRetailer.text = list[position].retailer_name
+        holder.itemView.tvRemarks.text = list[position].note
 
         holder.itemView.ivDelete.setOnClickListener { clicked.clickedSelected(position,"delete") }
         holder.itemView.ivEdit.setOnClickListener { clicked.clickedSelected(position,"edit") }
+        holder.itemView.tvAdd.setOnClickListener { clicked.clickedSelected(position,"add") }
     }
 
 
