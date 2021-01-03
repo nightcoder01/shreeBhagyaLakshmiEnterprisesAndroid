@@ -63,6 +63,10 @@
     <string name="category">Category</string>
     <string name="price">Price</string>
     <string name="price_code">Price Code</string>
+    <string name="log_in">LOG IN</string>
+    <string name="total_tonnage">Total Tonnage</string>
+    <string name="_100">100</string>
+    <string name="dd_mm_yyyy">DD/MM/YYYY</string>
 
 
     <string-array name="array_name">

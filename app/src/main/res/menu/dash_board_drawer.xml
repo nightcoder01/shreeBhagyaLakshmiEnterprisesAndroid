@@ -12,18 +12,18 @@
             android:id="@+id/nav_retailer"
             android:icon="@drawable/ic_customer"
             android:title="@string/menu_retailer_list" />
-        <item
+       <!-- <item
             android:id="@+id/nav_sales_order"
             android:icon="@drawable/ic_orders"
-            android:title="@string/menu_sales_order" />
+            android:title="@string/menu_sales_order" />-->
         <item
             android:id="@+id/nav_retailer_master"
             android:icon="@drawable/ic_user"
             android:title="@string/menu_retailer_master" />
-        <item
+       <!-- <item
             android:id="@+id/nav_tools"
             android:icon="@drawable/ic_customer"
-            android:title="@string/menu_distributor_ptr" />
+            android:title="@string/menu_distributor_ptr" />-->
 
         <item
             android:id="@+id/nav_send"

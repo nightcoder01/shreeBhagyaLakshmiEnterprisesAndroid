@@ -115,6 +115,7 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
         etSalesman.text = Editable.Factory.getInstance().newEditable(arguments?.getString("salesman"))
 
         etDate.text =Editable.Factory.getInstance().newEditable(SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()))
+        tvDateMain.text =SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
     }
 
