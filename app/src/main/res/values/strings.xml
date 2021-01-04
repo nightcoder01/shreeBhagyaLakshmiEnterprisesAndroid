@@ -62,7 +62,7 @@
     <string name="transaction_no">Transaction No.</string>
     <string name="salesman">Salesman</string>
     <string name="category">Category</string>
-    <string name="price">Price</string>
+    <string name="price">Price:</string>
     <string name="price_code">Price Code</string>
     <string name="log_in">LOG IN</string>
     <string name="total_tonnage">Total Tonnage</string>
