@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_5sdp"
                 android:singleLine="true"
-                android:text="@string/price_code"
+                android:text="@string/price"
                 app:layout_constraintStart_toEndOf="@id/cvImage"
                 app:layout_constraintTop_toBottomOf="@id/tvName"/>
 
