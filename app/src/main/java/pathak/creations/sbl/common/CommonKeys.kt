@@ -28,6 +28,9 @@ object CommonKeys {
     const val CATEGORIES = "v1/categories"
     const val CATEGORIES_CODE = 5
 
+    const val GET_RETAILERS = "v1/get-retailers"
+    const val GET_RETAILERS_CODE = 6
+
 
 
     val ID = "id"

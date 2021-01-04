@@ -52,6 +52,7 @@
     <string name="buy_from_sbl_shop">Buy From SBL Shop</string>
     <string name="retailer_id">Retailer Id</string>
     <string name="retailer_name">Retailer Name</string>
+    <string name="retailer_name2">Retailer Name:</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     <string name="note">Note</string>
