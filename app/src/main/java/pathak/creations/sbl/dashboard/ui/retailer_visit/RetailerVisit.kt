@@ -6,15 +6,18 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.*
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import android.widget.PopupWindow
+import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import kotlinx.android.synthetic.main.custom_spinner.view.*
 import kotlinx.android.synthetic.main.logout_alert.*
 import kotlinx.android.synthetic.main.retailer_visit.*
 import org.json.JSONObject
@@ -22,6 +25,7 @@ import pathak.creations.sbl.R
 import pathak.creations.sbl.common.CommonKeys
 import pathak.creations.sbl.common.CommonMethods
 import pathak.creations.sbl.common.PreferenceFile
+import pathak.creations.sbl.custom_adapter.SpinnerCustomAdapter
 import pathak.creations.sbl.data_class.BeatData
 import pathak.creations.sbl.data_class.BeatRetailerData
 import pathak.creations.sbl.retrofit.RetrofitResponse
@@ -85,12 +89,15 @@ class RetailerVisit : Fragment(), RetrofitResponse {
             if (CommonMethods.isNetworkAvailable(ctx!!)) {
                 val json = JSONObject()
 
+
+                json.put("dist_id","DST-002")
+
                 RetrofitService(
                     ctx!!,
                     this,
                     CommonKeys.BEAT_LIST ,
                     CommonKeys.BEAT_LIST_CODE,
-                    1
+                    json,2
                 ).callService(true, PreferenceFile.retrieveKey(ctx!!, CommonKeys.TOKEN)!!)
 
                 Log.e("callBeatList", "=====$json")
@@ -332,9 +339,9 @@ class RetailerVisit : Fragment(), RetrofitResponse {
 
                             listBeats.clear()
 
-                            listBeats.add(BeatData(
+                           /* listBeats.add(BeatData(
                                 "","Select Beat","","","",""
-                            ))
+                            ))*/
 
                             for (i in 0 until data.length()) {
 
@@ -492,13 +499,41 @@ class RetailerVisit : Fragment(), RetrofitResponse {
 
     private fun setBeatAdapter(listBeats: ArrayList<BeatData>) {
 
-        val listShort : ArrayList<String>  = getList(listBeats)
 
-        val adapter = ArrayAdapter<String>(ctx!!,R.layout.spinner_item,listShort)
-        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
-        spBeatName.adapter = adapter
+      //  val adapter = ArrayAdapter<String>(ctx!!,R.layout.spinner_dropdown_item,listShort)
+       // adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
+     //   spBeatName.adapter = adapter
+       // tvBeatName2.setAdapter(adapter)
 
-        spBeatName.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+
+        tvBeatName2.setOnClickListener {
+            openPopShortBy(tvBeatName2,listBeats)
+        }
+
+
+
+
+
+
+
+
+
+
+
+       /* spBeatName.setOnItemSelectedListener(object:OnItemSelectedListener{
+            override fun onNothingSelected() {
+               /// TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onItemSelected(view: View?, position: Int, id: Long) {
+                if(position!=0)
+                {
+                    callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
+                }
+            }
+        })*/
+
+       /* spBeatName.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
 
@@ -508,13 +543,117 @@ class RetailerVisit : Fragment(), RetrofitResponse {
                 position: Int,
                 id: Long
             ){
-
                 if(position!=0)
                 {
                     callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
                 }
             }
-        }
+        }*/
+
+    }
+
+    var popupWindow: PopupWindow? = null
+
+    fun openPopShortBy(
+        view: TextView,
+        listBeats: ArrayList<BeatData>
+    ) {
+        val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val customView = inflater.inflate(R.layout.custom_spinner, null)
+
+
+
+        popupWindow = PopupWindow(
+            customView,
+            view.width,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+
+        val adapter = SpinnerCustomAdapter(listBeats)
+        customView.rvSpinner.adapter = adapter
+        adapter.onClicked(object :SpinnerCustomAdapter.CardInterface{
+            override fun clickedSelected(position: Int) {
+
+                view.text =listBeats[position].beatname
+                popupWindow!!.dismiss()
+                callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
+            }
+
+
+        })
+
+
+        customView.etSearch.addTextChangedListener(object :TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+               // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                if(s.isNullOrBlank())
+                {
+                    val adapter2 = SpinnerCustomAdapter(listBeats)
+                    customView.rvSpinner.adapter = adapter2
+                    adapter2.onClicked(object :SpinnerCustomAdapter.CardInterface{
+                        override fun clickedSelected(position: Int) {
+
+                            view.text =listBeats[position].beatname
+                            popupWindow!!.dismiss()
+                            callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
+                        }
+
+
+                    })
+                }
+                else
+                {
+
+                    val list : ArrayList<BeatData> = ArrayList()
+
+                    for(i in 0 until listBeats.size)
+                    {
+                        if(listBeats[i].beatname.contains(s))
+                        {
+                        list.add(listBeats[i])
+
+                        }
+                    }
+
+
+                    val adapter2 = SpinnerCustomAdapter(list)
+                    customView.rvSpinner.adapter = adapter2
+                    adapter2.onClicked(object :SpinnerCustomAdapter.CardInterface{
+                        override fun clickedSelected(position: Int) {
+
+                            view.text =list[position].beatname
+                            popupWindow!!.dismiss()
+                            callBeatRetailer(list[position].dist_id,list[position].beatname)
+                        }
+
+
+                    })
+
+                }
+
+
+
+               // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        })
+
+
+
+
+
+        popupWindow!!.isOutsideTouchable = true
+
+        popupWindow!!.showAsDropDown(view)
+        popupWindow!!.isFocusable = true
+        popupWindow!!.update()
 
     }
 

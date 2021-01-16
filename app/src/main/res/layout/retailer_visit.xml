@@ -27,6 +27,7 @@
         android:textAlignment="center"
         android:textSize="@dimen/_12sdp"
         android:text="@string/date"
+        android:visibility="gone"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/tvAdd"
@@ -39,6 +40,7 @@
         android:layout_marginStart="@dimen/_20sdp"
         android:textAlignment="center"
         android:textSize="@dimen/_11sdp"
+        android:visibility="gone"
         android:text="@string/dateValue"
         app:layout_constraintStart_toEndOf="@id/tvDate"
         app:layout_constraintTop_toTopOf="@id/tvDate"
@@ -60,7 +62,7 @@
         android:paddingBottom="@dimen/_5sdp"
         android:paddingStart="@dimen/_15sdp"
         android:paddingEnd="@dimen/_15sdp"
-        android:visibility="invisible"
+        android:visibility="gone"
         android:background="@drawable/button_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -70,6 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginStart="@dimen/_10sdp"
         android:text="@string/beat_name2"
         android:textColor="@color/black"
         android:textSize="@dimen/_12sdp"
@@ -77,7 +80,45 @@
         app:layout_constraintTop_toBottomOf="@id/tvDate" />
 
 
-    <Spinner
+
+
+
+    <TextView
+        android:id="@+id/tvBeatName2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:background="@drawable/round_bg"
+        android:drawableEnd="@drawable/ic_arrow_drop"
+        android:hint="Select Beat Name"
+        android:maxLength="30"
+        android:padding="@dimen/_7sdp"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvDate"
+        app:layout_constraintTop_toBottomOf="@id/tvBeatName" />
+
+
+   <!-- <com.androidtrip.plugins.searchablespinner.SearchableSpinner
+        android:id="@+id/spBeatName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvDate"
+        app:layout_constraintTop_toBottomOf="@id/tvBeatName"
+        app:SpinnerExpandHeight="@dimen/_300sdp"
+        app:ShowBorders="false"
+        app:RevealEmptyText=" Select Beat"
+
+        />-->
+
+
+   <!-- <Spinner
         android:id="@+id/spBeatName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -88,14 +129,14 @@
         android:padding="@dimen/_7sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/tvDate"
-        app:layout_constraintTop_toBottomOf="@id/tvBeatName" />
+        app:layout_constraintTop_toBottomOf="@id/tvBeatName" />-->
 
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/spBeatName"
+            app:layout_constraintTop_toBottomOf="@id/tvBeatName2"
             android:layout_marginTop="@dimen/_3sdp"
             android:orientation="horizontal"
             android:paddingTop="@dimen/_2sdp"

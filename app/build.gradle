@@ -77,4 +77,8 @@ dependencies {
     //validator
     implementation 'com.github.Ilhasoft:data-binding-validator:2.0.0'
 
+    //searchSpinner
+    implementation 'com.github.mudassar1:SearchableSpinner:v1.1'
+
+
 }

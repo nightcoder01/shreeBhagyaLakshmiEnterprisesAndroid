@@ -151,9 +151,10 @@
                     android:layout_height="@dimen/_15sdp"
                     android:src="@drawable/ic_edit"
                     android:tint="@color/colorAccent"
-                    app:layout_constraintEnd_toStartOf="@id/ivDelete"
-                    app:layout_constraintTop_toTopOf="@id/ivDelete"
-                    android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_20sdp"
+                app:layout_constraintBottom_toBottomOf="@id/tvAdd"
+                    app:layout_constraintEnd_toStartOf="@id/tvAdd"
+                    app:layout_constraintTop_toTopOf="@id/tvAdd"
                     />
 
                 <ImageView
@@ -164,6 +165,7 @@
                     android:tint="@color/red"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_margin="@dimen/_6sdp"
+                    android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@id/tvAdd"
                     />
 
