@@ -372,7 +372,7 @@ class RetailerMaster : Fragment(), RetrofitResponse {
                     val list2: ArrayList<String> = ArrayList()
 
                     for (i in 0 until listDistName.size) {
-                        if (listDistName[i].contains(s)) {
+                        if (listDistName[i].toLowerCase().contains(s.toString().toLowerCase(),false)) {
                             list.add(listDistName[i])
                             list2.add(listDistId[i])
 

@@ -21,7 +21,7 @@
     <string name="action_logout">Logout</string>
 
 
-    <string name="menu_retailer_list">Retailer Visit/Sales order</string>
+    <string name="menu_retailer_list">Retailer Visit</string>
     <string name="menu_distributor_list">Distributor List</string>
     <string name="menu_sales_order">Sales Order</string>
     <string name="menu_retailer_master">Retailer Master</string>

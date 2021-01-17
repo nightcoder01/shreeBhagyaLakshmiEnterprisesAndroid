@@ -326,9 +326,9 @@ class SalesOrder : Fragment(), RetrofitResponse {
                         val msg = json.getString("message")
                         if (status) {
 
-                            val data = json.getJSONObject("data")
+                            //val data = json.getJSONObject("data")
 
-                            val dataArray = data.getJSONArray("data")
+                            val dataArray = json.getJSONArray("data")
 
                             listDistName.clear()
                             listDistId.clear()
@@ -563,7 +563,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
 
                     for(i in 0 until listCategories.size)
                     {
-                        if(listCategories[i].main_category.contains(s))
+                        if(listCategories[i].main_category.toLowerCase().contains(s.toString().toLowerCase(),false))
                         {
                             list.add(listCategories[i])
 
@@ -701,7 +701,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
 
                     for(i in 0 until listDistName.size)
                     {
-                        if(listDistName[i].contains(s))
+                        if(listDistName[i].toLowerCase().contains(s.toString().toLowerCase(),false))
                         {
                             list.add(listDistName[i])
                             list2.add(listDistId[i])
@@ -799,7 +799,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
 
                     for(i in 0 until listBeatsRetailer.size)
                     {
-                        if(listBeatsRetailer[i].retailer_name.contains(s))
+                        if(listBeatsRetailer[i].retailer_name.toLowerCase().contains(s.toString().toLowerCase(),false))
                         {
                             list.add(listBeatsRetailer[i])
 
@@ -917,7 +917,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
 
                     for(i in 0 until listBeats.size)
                     {
-                        if(listBeats[i].beatname.contains(s))
+                        if(listBeats[i].beatname.toLowerCase().contains(s.toString().toLowerCase(),false))
                         {
                             list.add(listBeats[i])
 

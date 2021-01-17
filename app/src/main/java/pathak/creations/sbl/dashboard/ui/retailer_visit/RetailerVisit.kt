@@ -492,7 +492,7 @@ class RetailerVisit : Fragment(), RetrofitResponse {
 
                     for(i in 0 until listBeats.size)
                     {
-                        if(listBeats[i].beatname.contains(s))
+                        if(listBeats[i].beatname.toLowerCase().contains(s.toString().toLowerCase(),false))
                         {
                         list.add(listBeats[i])
 
@@ -636,7 +636,7 @@ class RetailerVisit : Fragment(), RetrofitResponse {
 
                     for(i in 0 until listDistName.size)
                     {
-                        if(listDistName[i].contains(s))
+                        if(listDistName[i].toLowerCase().contains(s.toString().toLowerCase(),false))
                         {
                             list.add(listDistName[i])
                             list2.add(listDistId[i])
