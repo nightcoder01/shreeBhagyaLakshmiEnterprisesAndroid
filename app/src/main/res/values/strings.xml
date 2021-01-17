@@ -36,6 +36,7 @@
     <string name="yes">Yes</string>
     <string name="remarks">Remarks: </string>
     <string name="retailer">Retailer: </string>
+    <string name="retailer2">Retailer</string>
     <string name="beat_name">Beat Name: </string>
     <string name="beat_name2">Beat Name</string>
     <string name="ok">OK</string>
@@ -68,6 +69,10 @@
     <string name="total_tonnage">Total Tonnage</string>
     <string name="_100">100</string>
     <string name="dd_mm_yyyy">DD/MM/YYYY</string>
+    <string name="select_distributor_name">Select Distributor Name</string>
+    <string name="select_beat_name">Select Beat Name</string>
+    <string name="select_retailer_name">Select Retailer Name</string>
+    <string name="select_category_name">Select Category Name</string>
 
 
     <string-array name="array_name">

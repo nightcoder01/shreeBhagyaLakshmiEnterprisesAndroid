@@ -15,7 +15,7 @@ object CommonKeys {
     const val LOGIN = "v1/login"
     const val LOGIN_CODE = 1
 
-    const val RETAILER_LIST = "v1/distributors"
+    const val RETAILER_LIST = "v1/dists"
     const val RETAILER_LIST_CODE = 2
 
     const val BEAT_LIST = "v1/beats"

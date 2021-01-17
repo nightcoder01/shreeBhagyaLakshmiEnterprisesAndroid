@@ -67,6 +67,39 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+
+    <TextView
+        android:id="@+id/tvDistributor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/distributor"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvDate" />
+
+
+    <TextView
+        android:id="@+id/tvDistributor2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:background="@drawable/round_bg"
+        android:drawableEnd="@drawable/ic_arrow_drop"
+        android:hint="@string/select_distributor_name"
+        android:maxLength="30"
+        android:padding="@dimen/_7sdp"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvDistributor"
+        app:layout_constraintTop_toBottomOf="@id/tvDistributor" />
+
+
+
     <TextView
         android:id="@+id/tvBeatName"
         android:layout_width="wrap_content"
@@ -77,7 +110,7 @@
         android:textColor="@color/black"
         android:textSize="@dimen/_12sdp"
         app:layout_constraintStart_toStartOf="@id/tvDate"
-        app:layout_constraintTop_toBottomOf="@id/tvDate" />
+        app:layout_constraintTop_toBottomOf="@id/tvDistributor2" />
 
 
 

@@ -1,28 +1,57 @@
 package pathak.creations.sbl.dashboard.ui.sales_order
 
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.PopupWindow
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.fragment_gallery.*
-import kotlinx.android.synthetic.main.logout_alert.*
+import kotlinx.android.synthetic.main.custom_spinner.view.*
+import kotlinx.android.synthetic.main.sales_order.*
+import org.json.JSONArray
+import org.json.JSONObject
 import pathak.creations.sbl.R
+import pathak.creations.sbl.common.CommonKeys
+import pathak.creations.sbl.common.CommonMethods
+import pathak.creations.sbl.common.PreferenceFile
+import pathak.creations.sbl.custom_adapter.SpinnerCustomAdapter
+import pathak.creations.sbl.custom_adapter.SpinnerCustomCategoryAdapter
+import pathak.creations.sbl.custom_adapter.SpinnerCustomDistributorAdapter
+import pathak.creations.sbl.custom_adapter.SpinnerCustomRetailerAdapter
 import pathak.creations.sbl.dashboard.ui.retailer_visit.RetailerVisitAdapter
-import pathak.creations.sbl.data_class.BeatRetailerData
+import pathak.creations.sbl.data_class.*
+import pathak.creations.sbl.retrofit.RetrofitResponse
+import pathak.creations.sbl.retrofit.RetrofitService
+import java.text.SimpleDateFormat
+import java.util.*
 
-class SalesOrder : Fragment() {
+class SalesOrder : Fragment(), RetrofitResponse {
+
 
     private lateinit var salesOrderVM: SalesOrderVM
+    lateinit var adapter: RetailerVisitAdapter
+    private lateinit var ctx: Context
 
-    var list : ArrayList<BeatRetailerData> = ArrayList()
 
-    lateinit var adapter : RetailerVisitAdapter
 
+    var listBeats : ArrayList<BeatData> = ArrayList()
+    var listBeatsRetailer : ArrayList<BeatRetailerData> = ArrayList()
+
+
+    var listDistName : ArrayList<String> = ArrayList()
+    var listDistId : ArrayList<String> = ArrayList()
+
+
+    var listCategories: ArrayList<CategoriesData> = ArrayList()
+    var listSubCategories: ArrayList<SubCat> = ArrayList()
 
 
     override fun onCreateView(
@@ -32,89 +61,951 @@ class SalesOrder : Fragment() {
     ): View? {
         salesOrderVM =
             ViewModelProvider(this).get(SalesOrderVM::class.java)
-        val root = inflater.inflate(R.layout.fragment_gallery, container, false)
-
-        salesOrderVM.dateValue.observe(viewLifecycleOwner, Observer {
-            tvDateValue.text = it
-        })
-
+        val root = inflater.inflate(R.layout.sales_order, container, false)
+        ctx = root.context
 
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        tvDateMain.text = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
-        tvDate.setOnClickListener { salesOrderVM.datePicker(view) }
-        tvDateValue.setOnClickListener { salesOrderVM.datePicker(view) }
-        tvAdd.setOnClickListener {
-          //  Navigation.findNavController(view).navigate(R.id.action_add_visit)
+        setDistributor()
+        callCategories()
+
+    }
+
+    private fun setDistributor() {
+        if(PreferenceFile.retrieveKey(ctx,CommonKeys.TYPE).equals("distributor"))
+        {
+            tvDistributor2.hint = PreferenceFile.retrieveKey(ctx,CommonKeys.NAME)
+            callBeatList(PreferenceFile.retrieveKey(ctx,CommonKeys.NAME))
         }
-
-        setList()
-
+        else
+        {
+            callDistributorList()
+        }
     }
 
+    private fun callDistributorList() {
+        try {
 
-    override fun onResume() {
-        super.onResume()
-        setList()
+            if (CommonMethods.isNetworkAvailable(ctx)) {
+                val json = JSONObject()
+
+
+
+                RetrofitService(
+                    ctx,
+                    this,
+                    CommonKeys.RETAILER_LIST ,
+                    CommonKeys.RETAILER_LIST_CODE,
+                    1
+                ).callService(true, PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!)
+
+                Log.e("callDistributorList", "=====$json")
+                Log.e("callDistributorList", "=token====${PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!}")
+
+            } else {
+                CommonMethods.alertDialog(
+                    ctx,
+                    getString(R.string.checkYourConnection)
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
-    lateinit var deleteDialog: Dialog
+    private fun callBeatList(distID: String?) {
+        try {
 
-    private fun deleteMethod(position: Int) {
-        deleteDialog = Dialog(context!!)
-        deleteDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        deleteDialog.setContentView(R.layout.logout_alert)
+            if (CommonMethods.isNetworkAvailable(ctx)) {
+                val json = JSONObject()
 
-        deleteDialog.window!!.setLayout(
-            WindowManager.LayoutParams.MATCH_PARENT,
+
+                json.put("dist_id",distID)
+
+                RetrofitService(
+                    ctx,
+                    this,
+                    CommonKeys.BEAT_LIST ,
+                    CommonKeys.BEAT_LIST_CODE,
+                    json,2
+                ).callService(true, PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!)
+
+                Log.e("callBeatList", "=====$json")
+                Log.e("callBeatList", "=token====${PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!}")
+
+            } else {
+                CommonMethods.alertDialog(
+                    ctx,
+                    getString(R.string.checkYourConnection)
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun callCategories() {
+        try {
+
+            if (CommonMethods.isNetworkAvailable(ctx)) {
+                val json = JSONObject()
+
+                RetrofitService(
+                    ctx,
+                    this,
+                    CommonKeys.CATEGORIES ,
+                    CommonKeys.CATEGORIES_CODE,
+                    1
+                ).callService(true, PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!)
+
+                Log.e("callCategories", "=====$json")
+                Log.e("callCategories", "=token====${PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!}")
+
+            } else {
+                CommonMethods.alertDialog(
+                    ctx,
+                    getString(R.string.checkYourConnection)
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun response(code: Int, response: String) {
+        try {
+            Log.e("SalesOrder", "=====$code=====$response")
+
+
+            when (code) {
+                CommonKeys.BEAT_LIST_CODE -> {
+                    try {
+
+                        Log.e("BEAT_LIST_CODE", "=====$code==$response")
+
+                        val json = JSONObject(response)
+                        val status = json.optBoolean("status")
+                        val msg = json.getString("message")
+                        if (status) {
+
+                            val data = json.getJSONArray("data")
+
+
+
+                            listBeats.clear()
+
+                            /* listBeats.add(BeatData(
+                                 "","Select Beat","","","",""
+                             ))*/
+
+                            for (i in 0 until data.length()) {
+
+                                val dataObj = data.getJSONObject(i)
+
+                                if(dataObj.getString("beatname").isNotEmpty()) {
+                                    listBeats.add(
+                                        BeatData(
+                                            dataObj.getString("areaname"),
+                                            dataObj.getString("beatname"),
+                                            dataObj.getString("dist_id"),
+                                            dataObj.getString("distributor"),
+                                            dataObj.getString("id"),
+                                            dataObj.getString("state")
+                                        )
+                                    )
+                                }
+                            }
+
+
+                            setBeatAdapter(listBeats)
+                        }
+
+                        else {
+                            CommonMethods.alertDialog(ctx, msg)
+                        }
+
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+                CommonKeys.BEAT_RETAILER_LIST_CODE -> {
+                    try {
+
+                        Log.e("BEAT_RETAILER_LIST_CODE", "=====$code==$response")
+
+                        val json = JSONObject(response)
+                        val status = json.optBoolean("status")
+                        val msg = json.getString("message")
+                        if (status) {
+
+                            val data = json.getJSONArray("data")
+
+
+
+                            listBeatsRetailer.clear()
+
+
+
+                            for (i in 0 until data.length()) {
+
+                                val dataObj = data.getJSONObject(i)
+
+                                if(dataObj.getString("beatname").isNotEmpty()) {
+                                    listBeatsRetailer.add(
+                                        BeatRetailerData(
+                                            dataObj.getString("address"),
+                                            dataObj.getString("areaname"),
+                                            dataObj.getString("beatname"),
+                                            dataObj.getString("ca"),
+                                            dataObj.getString("cac"),
+                                            dataObj.getString("classification"),
+                                            dataObj.getString("client"),
+                                            dataObj.getString("country"),
+                                            dataObj.getString("cperson"),
+                                            dataObj.getString("cst"),
+                                            dataObj.getString("cst_registerationdate"),
+                                            dataObj.getString("csttin"),
+                                            dataObj.getString("date"),
+                                            dataObj.getString("dist_id"),
+                                            dataObj.getString("distributor"),
+                                            dataObj.getString("dvisit"),
+                                            dataObj.getString("email"),
+                                            dataObj.getString("empname"),
+                                            dataObj.getString("firstname"),
+                                            dataObj.getString("gstin"),
+                                            dataObj.getString("id"),
+                                            dataObj.getString("lastname"),
+                                            dataObj.getString("latitude"),
+                                            dataObj.getString("longitude"),
+                                            dataObj.getString("mobile"),
+                                            dataObj.getString("note"),
+                                            dataObj.getString("pan"),
+                                            dataObj.getString("phone"),
+                                            dataObj.getString("pincode"),
+                                            dataObj.getString("place"),
+                                            dataObj.getString("retailer_id"),
+                                            dataObj.getString("retailer_name"),
+                                            dataObj.getString("retailer_type"),
+                                            dataObj.getString("rid"),
+                                            dataObj.getString("sno"),
+                                            dataObj.getString("state"),
+                                            dataObj.getString("type"),
+                                            dataObj.getString("updated"),
+                                            dataObj.getString("vattin")
+                                        )
+                                    )
+                                }
+                            }
+
+
+                            setBeatRetailerAdapter(listBeatsRetailer)
+                        }
+
+                        else {
+                            CommonMethods.alertDialog(ctx, msg)
+                        }
+
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+                CommonKeys.RETAILER_LIST_CODE -> {
+                    try {
+
+                        Log.e("RETAILER_LIST_CODE", "=====$code==$response")
+
+                        val json = JSONObject(response)
+                        val status = json.optBoolean("status")
+                        val msg = json.getString("message")
+                        if (status) {
+
+                            val data = json.getJSONObject("data")
+
+                            val dataArray = data.getJSONArray("data")
+
+                            listDistName.clear()
+                            listDistId.clear()
+
+                            for(i in 0 until dataArray.length())
+                            {
+                                val dataObj = dataArray.getJSONObject(i)
+                                listDistId.add(dataObj.getString("dist_id"))
+                                listDistName.add(dataObj.getString("name"))
+
+                            }
+
+                            setDistributorAdapter(listDistName,listDistId)
+
+                        }
+
+                        else {
+                            CommonMethods.alertDialog(ctx, msg)
+                        }
+
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+                CommonKeys.CATEGORIES_CODE -> {
+                    try {
+
+                        Log.e("CATEGORIES_CODE", "=====$code==$response")
+
+                        val json = JSONObject(response)
+                        val status = json.optBoolean("status")
+                        val msg = json.getString("message")
+                        if (status) {
+
+                            val data = json.getJSONArray("data")
+
+
+
+                            listCategories.clear()
+
+
+
+                            for (i in 0 until data.length()) {
+
+                                val dataObj = data.getJSONObject(i)
+                                val arr = dataObj.getJSONArray("sub_cats")
+
+
+                                listSubCategories.clear()
+
+                                for(j in 0 until arr.length())
+                                {
+                                    val obj = arr.getJSONObject(j)
+
+                                    listSubCategories.add(
+                                        SubCat(obj.getString("cat"),obj.getString("catgroup"),
+                                        obj.getString("code"),obj.getString("cunits"),
+                                        obj.getString("description"),obj.getString("sunits")
+                                    )
+                                    )
+                                }
+
+
+                                if(dataObj.getString("main_category").isNotEmpty()) {
+
+                                    listCategories.add(
+                                        CategoriesData(
+                                            dataObj.getString("main_category"),setSubList(dataObj.getJSONArray("sub_cats"))
+                                        )
+                                    )
+                                }
+
+
+                                Log.e("data in list ","======${listCategories[i]}")
+                            }
+
+
+                            setCategories(listCategories)
+                        }
+
+                        else {
+                            CommonMethods.alertDialog(ctx, msg)
+                        }
+
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun setCategories(listCategories: ArrayList<CategoriesData>) {
+        tvCategory2.setOnClickListener {
+            openCategoryShort(tvCategory2,listCategories)
+        }
+    }
+
+    private fun openCategoryShort(view: TextView, listCategories: ArrayList<CategoriesData>)
+    {
+        val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val customView = inflater.inflate(R.layout.custom_spinner, null)
+
+
+
+        popupWindow = PopupWindow(
+            customView,
+            view.width,
             WindowManager.LayoutParams.WRAP_CONTENT
         )
-        deleteDialog.setCancelable(true)
-        deleteDialog.setCanceledOnTouchOutside(false)
-        deleteDialog.window!!.setGravity(Gravity.CENTER)
 
-        deleteDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val adapter = SpinnerCustomCategoryAdapter(listCategories)
+        customView.rvSpinner.adapter = adapter
+        adapter.onClicked(object :SpinnerCustomCategoryAdapter.CardInterface{
+            override fun clickedSelected(position: Int) {
 
-        deleteDialog.tvYes.setOnClickListener {
-            deleteDialog.dismiss()
-            list.removeAt(position)
-            adapter.notifyItemRemoved(position)
-            adapter.notifyItemRangeChanged(position,list.size)
+                view.text =listCategories[position].main_category
+                popupWindow!!.dismiss()
 
-        }
-
-        deleteDialog.tvNo.setOnClickListener {
-            deleteDialog.dismiss()
-        }
-
-        deleteDialog.show()
-    }
+                //setSubCategory
 
 
-    private fun setList() {
+                    val adapter2  = SubCategaryAdapter(listCategories[position].sub_cats)
+                    rvSubCategories.adapter = adapter2
 
-        list.clear()
+                    adapter2.onClicked(object: SubCategaryAdapter.CardInterface{
+                        override fun clickedSelected(pos: Int, str: String) {
+                            if(str=="add")
+                            {
+                                if(listCategories[position].sub_cats[pos].cartItem.toInt()>999)
+                                {
+                                    Toast.makeText(ctx,"max limit crossed", Toast.LENGTH_SHORT).show()
+                                }
+                                else
+                                {
+                                    listCategories[position].sub_cats[pos].cartItem = (listCategories[position].sub_cats[pos].cartItem.toInt()+1).toString()
+                                    adapter2.notifyDataSetChanged()
+                                }
+                            }
+                            if(str=="remove")
+                            {
+                                if(listCategories[position].sub_cats[pos].cartItem.toInt()<1)
+                                {
+                                    Toast.makeText(ctx,"minimum limit crossed",Toast.LENGTH_SHORT).show()
+                                }
 
+                                else
+                                {
+                                    listCategories[position].sub_cats[pos].cartItem = (listCategories[position].sub_cats[pos].cartItem.toInt()-1).toString()
+                                    adapter2.notifyDataSetChanged()
+                                }
+                            }
+                        }
+                    })
 
-        adapter  = RetailerVisitAdapter(list)
+               // callBeatList(listCategories[position])
 
-        rvRetailerVisit.adapter = adapter
-        adapter.onClicked(object :RetailerVisitAdapter.CardInterface{
-            override fun clickedSelected(position: Int, str: String) {
-                if(str=="delete")
+            }
+        })
+
+        customView.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                if(s.isNullOrBlank())
                 {
-                    Log.e("====delete==","==11==$position")
+                    val adapter2 = SpinnerCustomCategoryAdapter(listCategories)
+                    customView.rvSpinner.adapter = adapter2
+                    adapter2.onClicked(object :SpinnerCustomCategoryAdapter.CardInterface{
+                        override fun clickedSelected(position: Int) {
 
-                    deleteMethod(position)
+                            view.text =listCategories[position].main_category
+                            popupWindow!!.dismiss()
+
+
+                            val adapter3  = SubCategaryAdapter(listCategories[position].sub_cats)
+                            rvSubCategories.adapter = adapter3
+
+                            adapter3.onClicked(object: SubCategaryAdapter.CardInterface{
+                                override fun clickedSelected(pos: Int, str: String) {
+                                    if(str=="add")
+                                    {
+                                        if(listCategories[position].sub_cats[pos].cartItem.toInt()>999)
+                                        {
+                                            Toast.makeText(ctx,"max limit crossed", Toast.LENGTH_SHORT).show()
+                                        }
+                                        else
+                                        {
+                                            listCategories[position].sub_cats[pos].cartItem = (listCategories[position].sub_cats[pos].cartItem.toInt()+1).toString()
+                                            adapter2.notifyDataSetChanged()
+                                        }
+                                    }
+                                    if(str=="remove")
+                                    {
+                                        if(listCategories[position].sub_cats[pos].cartItem.toInt()<1)
+                                        {
+                                            Toast.makeText(ctx,"minimum limit crossed",Toast.LENGTH_SHORT).show()
+                                        }
+
+                                        else
+                                        {
+                                            listCategories[position].sub_cats[pos].cartItem = (listCategories[position].sub_cats[pos].cartItem.toInt()-1).toString()
+                                            adapter2.notifyDataSetChanged()
+                                        }
+                                    }
+                                }
+                            })
+
+
+                            //  callBeatList(listDistId[position])
+
+                            //  callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
+                        }
+                    })
                 }
                 else
                 {
-                  //  Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_edit_visit)
+
+                    val list : ArrayList<CategoriesData> = ArrayList()
+
+                    for(i in 0 until listCategories.size)
+                    {
+                        if(listCategories[i].main_category.contains(s))
+                        {
+                            list.add(listCategories[i])
+
+                        }
+                    }
+
+
+                    val adapter2 = SpinnerCustomCategoryAdapter(list)
+                    customView.rvSpinner.adapter = adapter2
+                    adapter2.onClicked(object :SpinnerCustomCategoryAdapter.CardInterface{
+                        override fun clickedSelected(position: Int) {
+
+                            view.text =list[position].main_category
+                            popupWindow!!.dismiss()
+
+                            val adapter3  = SubCategaryAdapter(list[position].sub_cats)
+                            rvSubCategories.adapter = adapter3
+
+                            adapter3.onClicked(object: SubCategaryAdapter.CardInterface{
+                                override fun clickedSelected(pos: Int, str: String) {
+                                    if(str=="add")
+                                    {
+                                        if(list[position].sub_cats[pos].cartItem.toInt()>999)
+                                        {
+                                            Toast.makeText(ctx,"max limit crossed", Toast.LENGTH_SHORT).show()
+                                        }
+                                        else
+                                        {
+                                            list[position].sub_cats[pos].cartItem = (list[position].sub_cats[pos].cartItem.toInt()+1).toString()
+                                            adapter3.notifyDataSetChanged()
+                                        }
+                                    }
+                                    if(str=="remove")
+                                    {
+                                        if(list[position].sub_cats[pos].cartItem.toInt()<1)
+                                        {
+                                            Toast.makeText(ctx,"minimum limit crossed",Toast.LENGTH_SHORT).show()
+                                        }
+
+                                        else
+                                        {
+                                            list[position].sub_cats[pos].cartItem = (list[position].sub_cats[pos].cartItem.toInt()-1).toString()
+                                            adapter3.notifyDataSetChanged()
+                                        }
+                                    }
+                                }
+                            })
+
+
+                            //  callBeatList(list2[position])
+
+                            // callBeatRetailer(list[position].dist_id,list[position].beatname)
+                        }
+                    })
                 }
             }
         })
+
+        popupWindow!!.isOutsideTouchable = true
+
+        popupWindow!!.showAsDropDown(view)
+        popupWindow!!.isFocusable = true
+        popupWindow!!.update()
+
     }
+
+    private fun setDistributorAdapter(
+        listDistName: ArrayList<String>,
+        listDistId: ArrayList<String>
+    ) {
+        tvDistributor2.setOnClickListener {
+            openDistributorShort(tvDistributor2,listDistName,listDistId)
+        }    }
+
+    private fun openDistributorShort(
+        view: TextView,
+        listDistName: ArrayList<String>,
+        listDistId: ArrayList<String>
+    ) {
+        val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val customView = inflater.inflate(R.layout.custom_spinner, null)
+
+
+
+        popupWindow = PopupWindow(
+            customView,
+            view.width,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+
+        val adapter = SpinnerCustomDistributorAdapter(listDistName)
+        customView.rvSpinner.adapter = adapter
+        adapter.onClicked(object :SpinnerCustomDistributorAdapter.CardInterface{
+            override fun clickedSelected(position: Int) {
+
+                view.text =listDistName[position]
+                popupWindow!!.dismiss()
+                callBeatList(listDistId[position])
+
+               // callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
+            }
+        })
+
+        customView.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                if(s.isNullOrBlank())
+                {
+                    val adapter2 = SpinnerCustomDistributorAdapter(listDistName)
+                    customView.rvSpinner.adapter = adapter2
+                    adapter2.onClicked(object :SpinnerCustomDistributorAdapter.CardInterface{
+                        override fun clickedSelected(position: Int) {
+
+                            view.text =listDistName[position]
+                            popupWindow!!.dismiss()
+                            callBeatList(listDistId[position])
+
+                            //  callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
+                        }
+                    })
+                }
+                else
+                {
+
+                    val list : ArrayList<String> = ArrayList()
+                    val list2 : ArrayList<String> = ArrayList()
+
+                    for(i in 0 until listDistName.size)
+                    {
+                        if(listDistName[i].contains(s))
+                        {
+                            list.add(listDistName[i])
+                            list2.add(listDistId[i])
+
+                        }
+                    }
+
+
+                    val adapter2 = SpinnerCustomDistributorAdapter(list)
+                    customView.rvSpinner.adapter = adapter2
+                    adapter2.onClicked(object :SpinnerCustomDistributorAdapter.CardInterface{
+                        override fun clickedSelected(position: Int) {
+
+                            view.text =list[position]
+                            popupWindow!!.dismiss()
+                            callBeatList(list2[position])
+
+                            // callBeatRetailer(list[position].dist_id,list[position].beatname)
+                        }
+                    })
+                }
+            }
+        })
+
+        popupWindow!!.isOutsideTouchable = true
+
+        popupWindow!!.showAsDropDown(view)
+        popupWindow!!.isFocusable = true
+        popupWindow!!.update()
+
+    }
+
+    private fun setBeatRetailerAdapter(listBeatsRetailer: ArrayList<BeatRetailerData>) {
+        tvRetailer2.setOnClickListener {
+            openRetailerSpinner(tvRetailer2,listBeatsRetailer)
+        }
+    }
+
+    private fun openRetailerSpinner(view: TextView, listBeatsRetailer: ArrayList<BeatRetailerData>) {
+        val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val customView = inflater.inflate(R.layout.custom_spinner, null)
+
+        popupWindow = PopupWindow(
+            customView,
+            view.width,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+
+        val adapter = SpinnerCustomRetailerAdapter(listBeatsRetailer)
+        customView.rvSpinner.adapter = adapter
+        adapter.onClicked(object :SpinnerCustomRetailerAdapter.CardInterface{
+            override fun clickedSelected(position: Int) {
+
+                view.text =listBeatsRetailer[position].retailer_name
+                popupWindow!!.dismiss()
+               // callCategory(listBeatsRetailer[position].retailer_id)
+            }
+
+
+        })
+
+
+        customView.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                if(s.isNullOrBlank())
+                {
+                    val adapter2 = SpinnerCustomRetailerAdapter(listBeatsRetailer)
+                    customView.rvSpinner.adapter = adapter2
+                    adapter2.onClicked(object :SpinnerCustomRetailerAdapter.CardInterface{
+                        override fun clickedSelected(position: Int) {
+
+                            view.text =listBeatsRetailer[position].retailer_name
+                            popupWindow!!.dismiss()
+
+                          //  callCategory(listBeatsRetailer[position].retailer_id)
+                          //  callBeatRetailer(listBeatsRetailer[position].dist_id,listBeats[position].beatname)
+                        }
+
+
+                    })
+                }
+                else
+                {
+
+                    val list : ArrayList<BeatRetailerData> = ArrayList()
+
+                    for(i in 0 until listBeatsRetailer.size)
+                    {
+                        if(listBeatsRetailer[i].retailer_name.contains(s))
+                        {
+                            list.add(listBeatsRetailer[i])
+
+                        }
+                    }
+
+
+                    val adapter2 = SpinnerCustomRetailerAdapter(list)
+                    customView.rvSpinner.adapter = adapter2
+                    adapter2.onClicked(object :SpinnerCustomRetailerAdapter.CardInterface{
+                        override fun clickedSelected(position: Int) {
+
+                            view.text =list[position].retailer_name
+                            popupWindow!!.dismiss()
+                          //  callCategory(listBeatsRetailer[position].retailer_id)
+                            //callBeatRetailer(list[position].dist_id,list[position].beatname)
+                        }
+
+
+                    })
+
+                }
+
+
+
+                // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        })
+
+
+
+
+
+        popupWindow!!.isOutsideTouchable = true
+
+        popupWindow!!.showAsDropDown(view)
+        popupWindow!!.isFocusable = true
+        popupWindow!!.update()
+
+    }
+
+
+
+    private fun setBeatAdapter(listBeats: ArrayList<BeatData>) {
+        tvBeatName2.setOnClickListener {
+            openPopShortBy(tvBeatName2,listBeats)
+        }
+    }
+
+
+
+
+    var popupWindow: PopupWindow? = null
+
+
+    fun openPopShortBy(
+        view: TextView,
+        listBeats: ArrayList<BeatData>
+    ) {
+        val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val customView = inflater.inflate(R.layout.custom_spinner, null)
+
+
+
+        popupWindow = PopupWindow(
+            customView,
+            view.width,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+
+        val adapter = SpinnerCustomAdapter(listBeats)
+        customView.rvSpinner.adapter = adapter
+        adapter.onClicked(object :SpinnerCustomAdapter.CardInterface{
+            override fun clickedSelected(position: Int) {
+
+                view.text =listBeats[position].beatname
+                popupWindow!!.dismiss()
+                callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
+            }
+
+
+        })
+
+
+        customView.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                if(s.isNullOrBlank())
+                {
+                    val adapter2 = SpinnerCustomAdapter(listBeats)
+                    customView.rvSpinner.adapter = adapter2
+                    adapter2.onClicked(object :SpinnerCustomAdapter.CardInterface{
+                        override fun clickedSelected(position: Int) {
+
+                            view.text =listBeats[position].beatname
+                            popupWindow!!.dismiss()
+                            callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
+                        }
+
+
+                    })
+                }
+                else
+                {
+
+                    val list : ArrayList<BeatData> = ArrayList()
+
+                    for(i in 0 until listBeats.size)
+                    {
+                        if(listBeats[i].beatname.contains(s))
+                        {
+                            list.add(listBeats[i])
+
+                        }
+                    }
+
+
+                    val adapter2 = SpinnerCustomAdapter(list)
+                    customView.rvSpinner.adapter = adapter2
+                    adapter2.onClicked(object :SpinnerCustomAdapter.CardInterface{
+                        override fun clickedSelected(position: Int) {
+
+                            view.text =list[position].beatname
+                            popupWindow!!.dismiss()
+                            callBeatRetailer(list[position].dist_id,list[position].beatname)
+                        }
+
+
+                    })
+
+                }
+
+
+
+                // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        })
+
+
+
+
+
+        popupWindow!!.isOutsideTouchable = true
+
+        popupWindow!!.showAsDropDown(view)
+        popupWindow!!.isFocusable = true
+        popupWindow!!.update()
+
+    }
+
+    private fun callBeatRetailer(distId: String, beatname: String) {
+        try {
+
+            if (CommonMethods.isNetworkAvailable(ctx)) {
+                val json = JSONObject()
+
+                json.put("dist_id",distId)
+                json.put("beatname",beatname)
+
+                RetrofitService(
+                    ctx,
+                    this,
+                    CommonKeys.BEAT_RETAILER_LIST ,
+                    CommonKeys.BEAT_RETAILER_LIST_CODE,
+                    json,2
+                ).callService(true, PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!)
+
+                Log.e("callBeatList", "=====$json")
+
+            } else {
+                CommonMethods.alertDialog(
+                    ctx,
+                    getString(R.string.checkYourConnection)
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun setSubList(arr: JSONArray): ArrayList<SubCat> {
+
+        listSubCategories.clear()
+        val list : ArrayList<SubCat> = ArrayList()
+
+
+        for(i in 0 until arr.length())
+        {
+            val obj = arr.getJSONObject(i)
+
+            list.add(SubCat(obj.getString("cat"),obj.getString("catgroup"),
+                obj.getString("code"),obj.getString("cunits"),
+                obj.getString("description"),obj.getString("sunits"),"0"
+            ))
+        }
+
+        return list
+    }
+
+
 }

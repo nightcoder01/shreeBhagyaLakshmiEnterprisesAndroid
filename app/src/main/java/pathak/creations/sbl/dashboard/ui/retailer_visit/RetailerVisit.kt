@@ -26,6 +26,7 @@ import pathak.creations.sbl.common.CommonKeys
 import pathak.creations.sbl.common.CommonMethods
 import pathak.creations.sbl.common.PreferenceFile
 import pathak.creations.sbl.custom_adapter.SpinnerCustomAdapter
+import pathak.creations.sbl.custom_adapter.SpinnerCustomDistributorAdapter
 import pathak.creations.sbl.data_class.BeatData
 import pathak.creations.sbl.data_class.BeatRetailerData
 import pathak.creations.sbl.retrofit.RetrofitResponse
@@ -40,11 +41,13 @@ class RetailerVisit : Fragment(), RetrofitResponse {
     var list : ArrayList<RetailerVisitData> = ArrayList()
     var listBeats : ArrayList<BeatData> = ArrayList()
     var listBeatsRetailer : ArrayList<BeatRetailerData> = ArrayList()
-    var listCount: ArrayList<CountData> = ArrayList()
 
-    var count = ""
+    var listDistName : ArrayList<String> = ArrayList()
+    var listDistId : ArrayList<String> = ArrayList()
+
+
+
     var ctx : Context? = null
-    var countInitial = "-1"
 
 
     lateinit var adapter : RetailerVisitAdapter
@@ -75,22 +78,65 @@ class RetailerVisit : Fragment(), RetrofitResponse {
         tvAdd.setOnClickListener { Navigation.findNavController(view).navigate(R.id.action_add_visit) }
 
 
-        callBeatList()
-
+        //callBeatList(PreferenceFile.retrieveKey(ctx!!,CommonKeys.NAME))
+        setDistributor()
 
 
         // setCountList()
 
     }
 
-    private fun callBeatList() {
+    private fun setDistributor() {
+        if(PreferenceFile.retrieveKey(ctx!!,CommonKeys.TYPE).equals("distributor"))
+        {
+            tvDistributor2.hint = PreferenceFile.retrieveKey(ctx!!,CommonKeys.NAME)
+            callBeatList(PreferenceFile.retrieveKey(ctx!!,CommonKeys.NAME))
+        }
+        else
+        {
+            callDistributorList()
+        }
+    }
+
+    private fun callDistributorList() {
         try {
 
             if (CommonMethods.isNetworkAvailable(ctx!!)) {
                 val json = JSONObject()
 
 
-                json.put("dist_id","DST-002")
+
+                RetrofitService(
+                    ctx!!,
+                    this,
+                    CommonKeys.RETAILER_LIST ,
+                    CommonKeys.RETAILER_LIST_CODE,
+                    1
+                ).callService(true, PreferenceFile.retrieveKey(ctx!!, CommonKeys.TOKEN)!!)
+
+                Log.e("callDistributorList", "=====$json")
+                Log.e("callDistributorList", "=token====${PreferenceFile.retrieveKey(ctx!!, CommonKeys.TOKEN)!!}")
+
+            } else {
+                CommonMethods.alertDialog(
+                    ctx!!,
+                    getString(R.string.checkYourConnection)
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+
+    private fun callBeatList(distID: String?) {
+        try {
+
+            if (CommonMethods.isNetworkAvailable(ctx!!)) {
+                val json = JSONObject()
+
+
+                json.put("dist_id",distID)
 
                 RetrofitService(
                     ctx!!,
@@ -114,80 +160,7 @@ class RetailerVisit : Fragment(), RetrofitResponse {
         }
     }
 
-    private fun setCountList(count: String) {
 
-
-        rvCount.visibility = View.VISIBLE
-
-
-        listCount.clear()
-        for (i in 0 until count.toInt()) {
-
-            listCount.add(CountData("$i", false))
-        }
-
-        if (countInitial != "-1") {
-            listCount[countInitial.toInt() - 1].bool = true
-        }
-
-        val adapter2 = CountAdapter(listCount)
-
-        rvCount.adapter = adapter2
-        adapter2.onClicked(object : CountAdapter.CardInterface {
-            override fun clickedSelected(position: Int) {
-
-
-                if (!listCount[position].bool) {
-                    for (i in 0 until listCount.size) {
-                        listCount[i].bool = false
-                    }
-                    listCount[position].bool = true
-
-                    countInitial = (position + 1).toString()
-
-                    adapter2.notifyDataSetChanged()
-
-                    callList(countInitial)
-
-                }
-            }
-
-        })
-
-    }
-
-    private fun callList(countInitial: String) {
-        try {
-
-            var endPoint = ""
-            if (countInitial != "-1") {
-                endPoint = "?page=$countInitial"
-            }
-
-
-            if (CommonMethods.isNetworkAvailable(ctx!!)) {
-                val json = JSONObject()
-
-                RetrofitService(
-                    ctx!!,
-                    this,
-                    CommonKeys.RETAILER_LIST + endPoint,
-                    CommonKeys.RETAILER_LIST_CODE,
-                    1
-                ).callService(true, PreferenceFile.retrieveKey(ctx!!, CommonKeys.TOKEN)!!)
-
-                Log.e("callList", "=====$json")
-
-            } else {
-                CommonMethods.alertDialog(
-                    ctx!!,
-                    getString(R.string.checkYourConnection)
-                )
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
 
     lateinit var deleteDialog: Dialog
 
@@ -221,24 +194,6 @@ class RetailerVisit : Fragment(), RetrofitResponse {
     }
 
 
-    private fun setListData(list: ArrayList<RetailerVisitData>) {
-
-        adapter  = RetailerVisitAdapter(listBeatsRetailer)
-
-        rvRetailerVisit.adapter = adapter
-        adapter.onClicked(object :RetailerVisitAdapter.CardInterface{
-            override fun clickedSelected(position: Int, str: String) {
-                if(str=="delete") {
-                    Log.e("====delete==","==11==$position")
-
-                    deleteMethod(position)
-                } else {
-                    Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_edit_visit)
-                }
-            }
-        })
-
-    }
 
 
     data class RetailerVisitData(var id: String = "", var date: String = "",
@@ -263,58 +218,25 @@ class RetailerVisit : Fragment(), RetrofitResponse {
                         val msg = json.getString("message")
                         if (status) {
 
-                            val data = json.getJSONObject("data")
 
+                            val dataArray = json.getJSONArray("data")
 
-                            list.clear()
-                            val dataData = data.getJSONArray("data")
-                            for (i in 0 until dataData.length()) {
+                            listDistName.clear()
+                            listDistId.clear()
 
-                                val dataObj = dataData.getJSONObject(i)
-
-                                //list.add(
-                                //                    RetailerVisitData(
-                                //                        i.toString(), "12/12/2020",
-                                //                        "AAI MATHAJI ENTERPRISES - BANGALORE", "SEEGEHALLI",
-                                //                        "MANJUNAT STORE", "Order placed","",resources.getDrawable(R.drawable.content_cell)
-                                //                    )
-                                //                )
-
-
-                                val beats = dataObj.getJSONArray("beats")
-
-                                for (j in 0 until beats.length()) {
-
-                                    val beatsObj = beats.getJSONObject(j)
-
-                                    list.add(
-                                        RetailerVisitData(
-                                            dataObj.getString("id"),
-                                            beatsObj.getString("updated"),
-                                            beatsObj.getString("distributor"),
-                                            beatsObj.getString("beatname"),
-                                            dataObj.getString("mobile"),
-                                            beatsObj.getString("remarks"),
-                                            "",
-                                            resources.getDrawable(R.drawable.content_cell)
-                                        )
-                                    )
-
-                                  //  setListData(list)
-
-                                }
-
+                            for(i in 0 until dataArray.length())
+                            {
+                                val dataObj = dataArray.getJSONObject(i)
+                                listDistId.add(dataObj.getString("dist_id"))
+                                listDistName.add(dataObj.getString("name"))
 
                             }
 
+                            setDistributorAdapter(listDistName,listDistId)
 
+                        }
 
-
-
-                            count = data.getString("last_page")
-
-                            setCountList(count)
-                        } else {
+                        else {
                             CommonMethods.alertDialog(ctx!!, msg)
                         }
 
@@ -500,55 +422,9 @@ class RetailerVisit : Fragment(), RetrofitResponse {
     private fun setBeatAdapter(listBeats: ArrayList<BeatData>) {
 
 
-      //  val adapter = ArrayAdapter<String>(ctx!!,R.layout.spinner_dropdown_item,listShort)
-       // adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
-     //   spBeatName.adapter = adapter
-       // tvBeatName2.setAdapter(adapter)
-
-
         tvBeatName2.setOnClickListener {
             openPopShortBy(tvBeatName2,listBeats)
         }
-
-
-
-
-
-
-
-
-
-
-
-       /* spBeatName.setOnItemSelectedListener(object:OnItemSelectedListener{
-            override fun onNothingSelected() {
-               /// TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-
-            override fun onItemSelected(view: View?, position: Int, id: Long) {
-                if(position!=0)
-                {
-                    callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
-                }
-            }
-        })*/
-
-       /* spBeatName.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ){
-                if(position!=0)
-                {
-                    callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
-                }
-            }
-        }*/
 
     }
 
@@ -687,16 +563,112 @@ class RetailerVisit : Fragment(), RetrofitResponse {
         }
     }
 
-    private fun getList(listBeats: ArrayList<BeatData>): ArrayList<String> {
-        val list : ArrayList<String> = ArrayList()
 
-        for(i in 0 until listBeats.size)
-        {
-            list.add(listBeats[i].beatname)
-        }
 
-        return list
+    private fun setDistributorAdapter(
+        listDistName: ArrayList<String>,
+        listDistId: ArrayList<String>
+    ) {
+        tvDistributor2.setOnClickListener {
+            openDistributorShort(tvDistributor2,listDistName,listDistId)
+        }    }
+
+    private fun openDistributorShort(
+        view: TextView,
+        listDistName: ArrayList<String>,
+        listDistId: ArrayList<String>
+    ) {
+        val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val customView = inflater.inflate(R.layout.custom_spinner, null)
+
+
+
+        popupWindow = PopupWindow(
+            customView,
+            view.width,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+
+        val adapter = SpinnerCustomDistributorAdapter(listDistName)
+        customView.rvSpinner.adapter = adapter
+        adapter.onClicked(object :SpinnerCustomDistributorAdapter.CardInterface{
+            override fun clickedSelected(position: Int) {
+
+                view.text =listDistName[position]
+                popupWindow!!.dismiss()
+                callBeatList(listDistId[position])
+
+                // callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
+            }
+        })
+
+        customView.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                if(s.isNullOrBlank())
+                {
+                    val adapter2 = SpinnerCustomDistributorAdapter(listDistName)
+                    customView.rvSpinner.adapter = adapter2
+                    adapter2.onClicked(object :SpinnerCustomDistributorAdapter.CardInterface{
+                        override fun clickedSelected(position: Int) {
+
+                            view.text =listDistName[position]
+                            popupWindow!!.dismiss()
+                            callBeatList(listDistId[position])
+
+                            //  callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
+                        }
+                    })
+                }
+                else
+                {
+
+                    val list : ArrayList<String> = ArrayList()
+                    val list2 : ArrayList<String> = ArrayList()
+
+                    for(i in 0 until listDistName.size)
+                    {
+                        if(listDistName[i].contains(s))
+                        {
+                            list.add(listDistName[i])
+                            list2.add(listDistId[i])
+
+                        }
+                    }
+
+
+                    val adapter2 = SpinnerCustomDistributorAdapter(list)
+                    customView.rvSpinner.adapter = adapter2
+                    adapter2.onClicked(object :SpinnerCustomDistributorAdapter.CardInterface{
+                        override fun clickedSelected(position: Int) {
+
+                            view.text =list[position]
+                            popupWindow!!.dismiss()
+                            callBeatList(list2[position])
+
+                            // callBeatRetailer(list[position].dist_id,list[position].beatname)
+                        }
+                    })
+                }
+            }
+        })
+
+        popupWindow!!.isOutsideTouchable = true
+
+        popupWindow!!.showAsDropDown(view)
+        popupWindow!!.isFocusable = true
+        popupWindow!!.update()
+
     }
+
 
 
 }

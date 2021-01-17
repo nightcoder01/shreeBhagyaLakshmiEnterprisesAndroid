@@ -220,7 +220,6 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
                 {
                     Log.e("data in list222$position ","======${listCategories[position]}")
 
-
                     val adapter2  = SubCategaryAdapter(listCategories[position].sub_cats)
                     rvSubCategories.adapter = adapter2
 
@@ -245,6 +244,7 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
                                 {
                                     Toast.makeText(ctx,"minimum limit crossed",Toast.LENGTH_SHORT).show()
                                 }
+
                                 else
                                 {
                                     listCategories[position].sub_cats[pos].cartItem = (listCategories[position].sub_cats[pos].cartItem.toInt()-1).toString()
