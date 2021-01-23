@@ -41,7 +41,7 @@ class SubCategaryAdapter(var list: List<SubCat>) :
 
         holder.itemView.tvName.text = list[position].description
         holder.itemView.tvImageText.text = list[position].description
-        holder.itemView.tvPriceValue.text = "150"
+        holder.itemView.tvPriceValue.text = list[position].price
         holder.itemView.tvCount.text = list[position].cartItem
 
 

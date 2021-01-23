@@ -32,6 +32,7 @@ import pathak.creations.sbl.retrofit.RetrofitResponse
 import pathak.creations.sbl.retrofit.RetrofitService
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class SalesOrder : Fragment(), RetrofitResponse {
 
@@ -72,7 +73,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
         tvDateMain.text = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
         setDistributor()
-        callCategories()
+
 
     }
 
@@ -80,6 +81,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
         if(PreferenceFile.retrieveKey(ctx,CommonKeys.TYPE).equals("distributor"))
         {
             tvDistributor2.hint = PreferenceFile.retrieveKey(ctx,CommonKeys.NAME)
+            callCategories(PreferenceFile.retrieveKey(ctx,CommonKeys.NAME))
             callBeatList(PreferenceFile.retrieveKey(ctx,CommonKeys.NAME))
         }
         else
@@ -149,18 +151,21 @@ class SalesOrder : Fragment(), RetrofitResponse {
         }
     }
 
-    private fun callCategories() {
+    private fun callCategories(id: String?) {
         try {
 
             if (CommonMethods.isNetworkAvailable(ctx)) {
                 val json = JSONObject()
 
+                json.put("dist_id",id)
+
                 RetrofitService(
                     ctx,
                     this,
                     CommonKeys.CATEGORIES ,
-                    CommonKeys.CATEGORIES_CODE,
-                    1
+                    CommonKeys.CATEGORIES_CODE
+                    ,json,
+                    2
                 ).callService(true, PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!)
 
                 Log.e("callCategories", "=====$json")
@@ -199,9 +204,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
 
                             listBeats.clear()
 
-                            /* listBeats.add(BeatData(
-                                 "","Select Beat","","","",""
-                             ))*/
+
 
                             for (i in 0 until data.length()) {
 
@@ -366,38 +369,24 @@ class SalesOrder : Fragment(), RetrofitResponse {
 
                             val data = json.getJSONArray("data")
 
-
-
                             listCategories.clear()
-
-
 
                             for (i in 0 until data.length()) {
 
                                 val dataObj = data.getJSONObject(i)
-                                val arr = dataObj.getJSONArray("sub_cats")
 
-
-                                listSubCategories.clear()
-
-                                for(j in 0 until arr.length())
-                                {
-                                    val obj = arr.getJSONObject(j)
-
-                                    listSubCategories.add(
-                                        SubCat(obj.getString("cat"),obj.getString("catgroup"),
-                                        obj.getString("code"),obj.getString("cunits"),
-                                        obj.getString("description"),obj.getString("sunits")
-                                    )
-                                    )
-                                }
-
-
-                                if(dataObj.getString("main_category").isNotEmpty()) {
+                                if(dataObj.getString("catgroup").isNotEmpty()) {
 
                                     listCategories.add(
                                         CategoriesData(
-                                            dataObj.getString("main_category"),setSubList(dataObj.getJSONArray("sub_cats"))
+                                            dataObj.getString("catgroup"),
+                                            dataObj.getString("category"),
+                                            dataObj.getString("code"),
+                                            dataObj.getString("description"),
+                                            dataObj.getString("price"),
+                                            dataObj.getString("weight"),
+                                            dataObj.getString("ptrflag")
+
                                         )
                                     )
                                 }
@@ -445,51 +434,59 @@ class SalesOrder : Fragment(), RetrofitResponse {
             WindowManager.LayoutParams.WRAP_CONTENT
         )
 
-        val adapter = SpinnerCustomCategoryAdapter(listCategories)
+
+        val listFiltered : ArrayList<String> = getListFiltered(listCategories)
+
+
+
+
+        val adapter = SpinnerCustomCategoryAdapter(listFiltered)
         customView.rvSpinner.adapter = adapter
         adapter.onClicked(object :SpinnerCustomCategoryAdapter.CardInterface{
             override fun clickedSelected(position: Int) {
 
-                view.text =listCategories[position].main_category
+                view.text =listFiltered[position]
                 popupWindow!!.dismiss()
 
                 //setSubCategory
 
+                val subList :ArrayList<SubCat> = getSubListFiltered(listFiltered[position],listCategories)
 
-                    val adapter2  = SubCategaryAdapter(listCategories[position].sub_cats)
+
+
+                    val adapter2  = SubCategaryAdapter(subList)
                     rvSubCategories.adapter = adapter2
 
                     adapter2.onClicked(object: SubCategaryAdapter.CardInterface{
                         override fun clickedSelected(pos: Int, str: String) {
                             if(str=="add")
                             {
-                                if(listCategories[position].sub_cats[pos].cartItem.toInt()>999)
+                                if(subList[pos].cartItem.toInt()>999)
                                 {
                                     Toast.makeText(ctx,"max limit crossed", Toast.LENGTH_SHORT).show()
                                 }
                                 else
                                 {
-                                    listCategories[position].sub_cats[pos].cartItem = (listCategories[position].sub_cats[pos].cartItem.toInt()+1).toString()
+                                    subList[pos].cartItem = (subList[pos].cartItem.toInt()+1).toString()
                                     adapter2.notifyDataSetChanged()
                                 }
                             }
                             if(str=="remove")
                             {
-                                if(listCategories[position].sub_cats[pos].cartItem.toInt()<1)
+                                if(subList[pos].cartItem.toInt()<1)
                                 {
-                                    Toast.makeText(ctx,"minimum limit crossed",Toast.LENGTH_SHORT).show()
+                                  //  Toast.makeText(ctx,"minimum limit crossed",Toast.LENGTH_SHORT).show()
                                 }
 
                                 else
                                 {
-                                    listCategories[position].sub_cats[pos].cartItem = (listCategories[position].sub_cats[pos].cartItem.toInt()-1).toString()
+                                    subList[pos].cartItem = (subList[pos].cartItem.toInt()-1).toString()
                                     adapter2.notifyDataSetChanged()
                                 }
                             }
                         }
                     })
 
-               // callBeatList(listCategories[position])
 
             }
         })
@@ -507,42 +504,47 @@ class SalesOrder : Fragment(), RetrofitResponse {
 
                 if(s.isNullOrBlank())
                 {
-                    val adapter2 = SpinnerCustomCategoryAdapter(listCategories)
+                    val listFiltered2 : ArrayList<String> = getListFiltered(listCategories)
+
+                    val adapter2 = SpinnerCustomCategoryAdapter(listFiltered2)
                     customView.rvSpinner.adapter = adapter2
                     adapter2.onClicked(object :SpinnerCustomCategoryAdapter.CardInterface{
                         override fun clickedSelected(position: Int) {
 
-                            view.text =listCategories[position].main_category
+                            view.text =listFiltered2[position]
                             popupWindow!!.dismiss()
 
+                            val subList :ArrayList<SubCat> = getSubListFiltered(listFiltered2[position],listCategories)
 
-                            val adapter3  = SubCategaryAdapter(listCategories[position].sub_cats)
+
+
+                            val adapter3  = SubCategaryAdapter(subList)
                             rvSubCategories.adapter = adapter3
 
                             adapter3.onClicked(object: SubCategaryAdapter.CardInterface{
                                 override fun clickedSelected(pos: Int, str: String) {
                                     if(str=="add")
                                     {
-                                        if(listCategories[position].sub_cats[pos].cartItem.toInt()>999)
+                                        if(subList[pos].cartItem.toInt()>999)
                                         {
                                             Toast.makeText(ctx,"max limit crossed", Toast.LENGTH_SHORT).show()
                                         }
                                         else
                                         {
-                                            listCategories[position].sub_cats[pos].cartItem = (listCategories[position].sub_cats[pos].cartItem.toInt()+1).toString()
+                                            subList[pos].cartItem = (subList[pos].cartItem.toInt()+1).toString()
                                             adapter2.notifyDataSetChanged()
                                         }
                                     }
                                     if(str=="remove")
                                     {
-                                        if(listCategories[position].sub_cats[pos].cartItem.toInt()<1)
+                                        if(subList[pos].cartItem.toInt()<1)
                                         {
-                                            Toast.makeText(ctx,"minimum limit crossed",Toast.LENGTH_SHORT).show()
+                                          //  Toast.makeText(ctx,"minimum limit crossed",Toast.LENGTH_SHORT).show()
                                         }
 
                                         else
                                         {
-                                            listCategories[position].sub_cats[pos].cartItem = (listCategories[position].sub_cats[pos].cartItem.toInt()-1).toString()
+                                            subList[pos].cartItem = (subList[pos].cartItem.toInt()-1).toString()
                                             adapter2.notifyDataSetChanged()
                                         }
                                     }
@@ -550,9 +552,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
                             })
 
 
-                            //  callBeatList(listDistId[position])
 
-                            //  callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
                         }
                     })
                 }
@@ -563,59 +563,59 @@ class SalesOrder : Fragment(), RetrofitResponse {
 
                     for(i in 0 until listCategories.size)
                     {
-                        if(listCategories[i].main_category.toLowerCase().contains(s.toString().toLowerCase(),false))
+                        if(listCategories[i].catgroup.toLowerCase().contains(s.toString().toLowerCase(),false))
                         {
                             list.add(listCategories[i])
 
                         }
                     }
 
+                    val listFiltered2 : ArrayList<String> = getListFiltered(list)
 
-                    val adapter2 = SpinnerCustomCategoryAdapter(list)
+                    val adapter2 = SpinnerCustomCategoryAdapter(listFiltered2)
                     customView.rvSpinner.adapter = adapter2
                     adapter2.onClicked(object :SpinnerCustomCategoryAdapter.CardInterface{
                         override fun clickedSelected(position: Int) {
 
-                            view.text =list[position].main_category
+                            view.text =listFiltered2[position]
                             popupWindow!!.dismiss()
 
-                            val adapter3  = SubCategaryAdapter(list[position].sub_cats)
+
+                            val subList :ArrayList<SubCat> = getSubListFiltered(listFiltered2[position],list)
+
+
+                            val adapter3  = SubCategaryAdapter(subList)
                             rvSubCategories.adapter = adapter3
 
                             adapter3.onClicked(object: SubCategaryAdapter.CardInterface{
                                 override fun clickedSelected(pos: Int, str: String) {
                                     if(str=="add")
                                     {
-                                        if(list[position].sub_cats[pos].cartItem.toInt()>999)
+                                        if(subList[pos].cartItem.toInt()>999)
                                         {
                                             Toast.makeText(ctx,"max limit crossed", Toast.LENGTH_SHORT).show()
                                         }
                                         else
                                         {
-                                            list[position].sub_cats[pos].cartItem = (list[position].sub_cats[pos].cartItem.toInt()+1).toString()
+                                            subList[pos].cartItem = (subList[pos].cartItem.toInt()+1).toString()
                                             adapter3.notifyDataSetChanged()
                                         }
                                     }
                                     if(str=="remove")
                                     {
-                                        if(list[position].sub_cats[pos].cartItem.toInt()<1)
+                                        if(subList[pos].cartItem.toInt()<1)
                                         {
-                                            Toast.makeText(ctx,"minimum limit crossed",Toast.LENGTH_SHORT).show()
+                                           // Toast.makeText(ctx,"minimum limit crossed",Toast.LENGTH_SHORT).show()
                                         }
 
                                         else
                                         {
-                                            list[position].sub_cats[pos].cartItem = (list[position].sub_cats[pos].cartItem.toInt()-1).toString()
+                                            subList[pos].cartItem = (subList[pos].cartItem.toInt()-1).toString()
                                             adapter3.notifyDataSetChanged()
                                         }
                                     }
                                 }
                             })
-
-
-                            //  callBeatList(list2[position])
-
-                            // callBeatRetailer(list[position].dist_id,list[position].beatname)
                         }
                     })
                 }
@@ -623,10 +623,45 @@ class SalesOrder : Fragment(), RetrofitResponse {
         })
 
         popupWindow!!.isOutsideTouchable = true
-
         popupWindow!!.showAsDropDown(view)
         popupWindow!!.isFocusable = true
         popupWindow!!.update()
+
+    }
+
+
+
+    private fun getSubListFiltered(s: String, listCategories: ArrayList<CategoriesData>): ArrayList<SubCat> {
+
+
+        val list :ArrayList<SubCat>  = ArrayList()
+
+        for(i in 0 until listCategories.size)
+        {
+            if(listCategories[i].catgroup==s)
+            {
+            list.add(SubCat(listCategories[i].catgroup,listCategories[i].catgroup,
+                listCategories[i].code,listCategories[i].description,
+                listCategories[i].price,listCategories[i].weight,
+                listCategories[i].ptrflag,"0"
+                ))
+        }
+        }
+        return list
+
+    }
+
+    private fun getListFiltered(listCategories: ArrayList<CategoriesData>): ArrayList<String> {
+
+
+        var list :ArrayList<String> = ArrayList()
+        for(i in 0 until listCategories.size)
+        {
+            list.add(listCategories[i].catgroup)
+        }
+      list  =   list.distinct() as ArrayList<String>
+
+        return list
 
     }
 
@@ -662,6 +697,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
                 view.text =listDistName[position]
                 popupWindow!!.dismiss()
                 callBeatList(listDistId[position])
+                callCategories(listDistId[position])
 
                // callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
             }
@@ -688,8 +724,8 @@ class SalesOrder : Fragment(), RetrofitResponse {
                             view.text =listDistName[position]
                             popupWindow!!.dismiss()
                             callBeatList(listDistId[position])
+                            callCategories(listDistId[position])
 
-                            //  callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
                         }
                     })
                 }
@@ -705,10 +741,8 @@ class SalesOrder : Fragment(), RetrofitResponse {
                         {
                             list.add(listDistName[i])
                             list2.add(listDistId[i])
-
                         }
                     }
-
 
                     val adapter2 = SpinnerCustomDistributorAdapter(list)
                     customView.rvSpinner.adapter = adapter2
@@ -718,8 +752,8 @@ class SalesOrder : Fragment(), RetrofitResponse {
                             view.text =list[position]
                             popupWindow!!.dismiss()
                             callBeatList(list2[position])
+                            callCategories(list2[position])
 
-                            // callBeatRetailer(list[position].dist_id,list[position].beatname)
                         }
                     })
                 }
@@ -841,15 +875,11 @@ class SalesOrder : Fragment(), RetrofitResponse {
 
     }
 
-
-
     private fun setBeatAdapter(listBeats: ArrayList<BeatData>) {
         tvBeatName2.setOnClickListener {
             openPopShortBy(tvBeatName2,listBeats)
         }
     }
-
-
 
 
     var popupWindow: PopupWindow? = null
@@ -958,6 +988,8 @@ class SalesOrder : Fragment(), RetrofitResponse {
 
     }
 
+
+
     private fun callBeatRetailer(distId: String, beatname: String) {
         try {
 
@@ -975,7 +1007,6 @@ class SalesOrder : Fragment(), RetrofitResponse {
                     json,2
                 ).callService(true, PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!)
 
-                Log.e("callBeatList", "=====$json")
 
             } else {
                 CommonMethods.alertDialog(

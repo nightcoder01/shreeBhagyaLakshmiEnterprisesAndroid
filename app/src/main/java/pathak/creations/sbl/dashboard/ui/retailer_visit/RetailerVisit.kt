@@ -405,7 +405,8 @@ class RetailerVisit : Fragment(), RetrofitResponse {
                         "beatName" to listBeatsRetailer[position].beatname,
                         "retailer" to listBeatsRetailer[position].retailer_name,
                         "retailerId" to listBeatsRetailer[position].retailer_id,
-                        "salesman" to listBeatsRetailer[position].client
+                        "salesman" to listBeatsRetailer[position].client,
+                        "dist_id" to listBeatsRetailer[position].dist_id
                         )
                     Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_add_sales,bundle)
                 }
@@ -481,8 +482,6 @@ class RetailerVisit : Fragment(), RetrofitResponse {
                             popupWindow!!.dismiss()
                             callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
                         }
-
-
                     })
                 }
                 else

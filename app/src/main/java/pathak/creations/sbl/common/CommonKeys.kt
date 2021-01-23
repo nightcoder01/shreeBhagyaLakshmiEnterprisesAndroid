@@ -25,8 +25,13 @@ object CommonKeys {
     const val BEAT_RETAILER_LIST_CODE = 4
 
 
+    const val CATEGORIES = "v1/sblcats"
+    const val CATEGORIES_CODE = 5
+/*
+
     const val CATEGORIES = "v1/categories"
     const val CATEGORIES_CODE = 5
+*/
 
     const val GET_RETAILERS = "v1/get-retailers"
     const val GET_RETAILERS_CODE = 6
@@ -47,7 +52,7 @@ object CommonKeys {
     val ADDRESS = "address"
     val LATITUDE = "latitude"
     val LONGITUDE = "longitude"
-    val OTP = "otp"
+    val OTP = "Otp"
     val OTP_VERIFIED = "otp_verified"
     val TYPE = "type"
     val DEVICE_TOKEN = "device_token"

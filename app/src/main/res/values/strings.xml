@@ -42,7 +42,6 @@
     <string name="ok">OK</string>
 
 
-
     <string name="retry">Retry</string>
     <string name="cancel">Cancel</string>
     <string name="connection_to_server_lost">Connection to Server lost!!</string>
@@ -73,6 +72,14 @@
     <string name="select_beat_name">Select Beat Name</string>
     <string name="select_retailer_name">Select Retailer Name</string>
     <string name="select_category_name">Select Category Name</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="please_enter_your_registered_username_so_nwe_can_send_otp_on_e_mail_for_password_reset">Please enter your registered username, so we can send OTP on e-mail for password reset</string>
+    <string name="send">Send</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
+    <string name="update">Update</string>
+    <string name="emptyOTP">please enter OTP</string>
 
 
     <string-array name="array_name">

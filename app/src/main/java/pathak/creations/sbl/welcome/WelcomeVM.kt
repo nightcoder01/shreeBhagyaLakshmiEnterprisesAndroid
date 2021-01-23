@@ -1,5 +1,6 @@
 package pathak.creations.sbl.welcome
 
+import android.content.Intent
 import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModel
@@ -16,7 +17,8 @@ import pathak.creations.sbl.retrofit.RetrofitService
 class WelcomeVM(
     var context: WelcomeActivity,
     var  validator: Validator
-) : ViewModel(), RetrofitResponse {
+) : ViewModel(), RetrofitResponse
+{
 
 
 
@@ -69,6 +71,8 @@ class WelcomeVM(
 
     fun forgetPass(view: View) {
         ///forget()
+       view.context.startActivity(Intent(view.context,ForgotPassword::class.java))
+
     }
 
     fun rememberMe(view: View) {

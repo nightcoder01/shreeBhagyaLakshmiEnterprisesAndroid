@@ -6,10 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.spinner_dropdown_item2.view.*
 import pathak.creations.sbl.R
-import pathak.creations.sbl.data_class.CategoriesData
-import java.util.*
 
-class SpinnerCustomCategoryAdapter(var listShort: ArrayList<CategoriesData>):
+class SpinnerCustomCategoryAdapter(var listShort: ArrayList<String>):
     RecyclerView.Adapter<SpinnerCustomCategoryAdapter.CardsViewHolder>() {
 
 
@@ -41,7 +39,7 @@ class SpinnerCustomCategoryAdapter(var listShort: ArrayList<CategoriesData>):
 
     override fun onBindViewHolder(holder: CardsViewHolder, position: Int) {
 
-        holder.itemView.tvText.text = listShort[position].main_category
+        holder.itemView.tvText.text = listShort[position]
         holder.itemView.setOnClickListener { clicked.clickedSelected(position) }
     }
 

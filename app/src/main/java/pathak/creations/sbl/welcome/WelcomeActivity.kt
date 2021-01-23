@@ -22,6 +22,10 @@ class WelcomeActivity:AppCompatActivity(){
         welcomeBinding.welcomeVM = welcomeVM
 
 
+
+
+
+
     }
 
 }
