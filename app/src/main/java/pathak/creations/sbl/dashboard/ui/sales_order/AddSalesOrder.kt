@@ -441,7 +441,12 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
         {
             list.add(listCategories[i].catgroup)
         }
-       list =  list.distinct() as ArrayList<String>
+
+        if(list.isNotEmpty()) {
+            list = list.distinct() as ArrayList<String>
+        }
+
+      // list =  list.distinct() as ArrayList<String>
 
         return list
 
