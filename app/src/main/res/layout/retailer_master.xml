@@ -16,8 +16,8 @@
         android:text="@string/date"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvAdd"
-        app:layout_constraintBottom_toBottomOf="@id/tvAdd"/>
+        app:layout_constraintBottom_toBottomOf="@id/tvAddRetailer"
+        app:layout_constraintTop_toTopOf="@id/tvAddRetailer"/>
 
     <TextView
         android:id="@+id/tvDateValue"
@@ -33,19 +33,18 @@
         />
 
     <TextView
-        android:id="@+id/tvAdd"
+        android:id="@+id/tvAddRetailer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_10sdp"
         android:layout_marginTop="@dimen/_10sdp"
         android:textAlignment="center"
         android:textSize="@dimen/_10sdp"
-        android:text="@string/add_visit"
+        android:text="@string/add_retailer"
         android:textColor="@color/white"
         android:paddingTop="@dimen/_5sdp"
         android:paddingBottom="@dimen/_5sdp"
         android:paddingStart="@dimen/_15sdp"
-        android:visibility="invisible"
         android:paddingEnd="@dimen/_15sdp"
         android:background="@drawable/button_background"
         app:layout_constraintEnd_toEndOf="parent"

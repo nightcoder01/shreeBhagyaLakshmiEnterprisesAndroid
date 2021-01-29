@@ -80,6 +80,7 @@
     <string name="confirm_new_password">Confirm New Password</string>
     <string name="update">Update</string>
     <string name="emptyOTP">please enter OTP</string>
+    <string name="add_retailer">Add Retailer</string>
 
 
     <string-array name="array_name">

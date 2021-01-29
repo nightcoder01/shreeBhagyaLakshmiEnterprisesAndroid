@@ -21,7 +21,25 @@
         android:id="@+id/nav_retailer_master"
         android:name="pathak.creations.sbl.dashboard.ui.retailer_master.RetailerMaster"
         android:label="@string/menu_retailer_master"
-        tools:layout="@layout/retailer_master" />
+        tools:layout="@layout/retailer_master" >
+
+        <action
+            android:id="@+id/action_add_retailer"
+            app:destination="@id/addRetailer"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_edit_retailer"
+            app:destination="@id/editRetailer"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
+
+    </fragment>
 
     <fragment
         android:id="@+id/nav_tools"
@@ -68,6 +86,16 @@
         android:id="@+id/editRetailerVisit"
         android:name="pathak.creations.sbl.dashboard.ui.retailer_visit.EditRetailerVisit"
         android:label="Edit Distributor" />
+
+    <fragment
+        android:id="@+id/editRetailer"
+        android:name="pathak.creations.sbl.dashboard.ui.retailer_master.EditRetailer"
+        android:label="Edit Retailer" />
+
+    <fragment
+        android:id="@+id/addRetailer"
+        android:name="pathak.creations.sbl.dashboard.ui.retailer_master.AddRetailer"
+        android:label="Add Retailer" />
 
     <fragment
         android:id="@+id/addSalesOrder"

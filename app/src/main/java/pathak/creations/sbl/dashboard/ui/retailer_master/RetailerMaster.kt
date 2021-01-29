@@ -14,6 +14,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.custom_spinner.view.*
 import kotlinx.android.synthetic.main.retailer_master.*
 import org.json.JSONObject
@@ -68,6 +69,7 @@ class RetailerMaster : Fragment(), RetrofitResponse {
 
         tvDate.setOnClickListener { retailerMasterVM.datePicker(view) }
         tvDateValue.setOnClickListener { retailerMasterVM.datePicker(view) }
+        tvAddRetailer.setOnClickListener { Navigation.findNavController(view).navigate(R.id.action_add_retailer) }
 
 
         // callBeatList()
@@ -413,7 +415,11 @@ class RetailerMaster : Fragment(), RetrofitResponse {
         rvRetailerVisit.adapter = adapter
         adapter.onClicked(object : RetailerAdapter.CardInterface {
             override fun clickedSelected(position: Int, str: String) {
-                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+                if(str=="edit") {
+                    Navigation.findNavController(rvRetailerVisit)
+                        .navigate(R.id.action_edit_retailer)
+                }
             }
         })
 
