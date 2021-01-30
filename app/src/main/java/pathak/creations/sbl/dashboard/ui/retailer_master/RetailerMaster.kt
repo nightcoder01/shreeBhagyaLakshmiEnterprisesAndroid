@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -417,8 +418,24 @@ class RetailerMaster : Fragment(), RetrofitResponse {
             override fun clickedSelected(position: Int, str: String) {
 
                 if(str=="edit") {
+
+                    val bundle = bundleOf("dist_id" to listRetailers[position].dist_id,
+                        "idd" to listRetailers[position].id,
+                        "distributor" to listRetailers[position].distributor,
+                        "retailer_id" to listRetailers[position].retailer_id,
+                        "retailer_name" to listRetailers[position].retailer_name,
+                        "beatName" to listRetailers[position].beatname,
+                        "address" to listRetailers[position].address,
+                        "mobile" to listRetailers[position].mobile,
+                        "areaname" to listRetailers[position].areaname,
+                        "state" to listRetailers[position].state,
+                        "gstin" to listRetailers[position].gstin,
+                        "classification" to listRetailers[position].classification,
+                        "retailer_type" to listRetailers[position].retailer_type
+                        )
+
                     Navigation.findNavController(rvRetailerVisit)
-                        .navigate(R.id.action_edit_retailer)
+                        .navigate(R.id.action_edit_retailer,bundle)
                 }
             }
         })

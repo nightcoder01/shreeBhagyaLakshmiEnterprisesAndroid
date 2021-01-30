@@ -81,6 +81,13 @@
     <string name="update">Update</string>
     <string name="emptyOTP">please enter OTP</string>
     <string name="add_retailer">Add Retailer</string>
+    <string name="address">Address</string>
+    <string name="mobile">Mobile</string>
+    <string name="area_name">Area Name</string>
+    <string name="state_name">State Name</string>
+    <string name="gstin">GSTIN</string>
+    <string name="classification">Classification</string>
+    <string name="retailer_type">Retailer Type</string>
 
 
     <string-array name="array_name">
