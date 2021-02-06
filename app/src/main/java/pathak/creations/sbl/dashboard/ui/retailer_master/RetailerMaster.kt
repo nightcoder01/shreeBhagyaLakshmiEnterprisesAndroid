@@ -24,7 +24,6 @@ import pathak.creations.sbl.common.CommonKeys
 import pathak.creations.sbl.common.CommonMethods
 import pathak.creations.sbl.common.PreferenceFile
 import pathak.creations.sbl.custom_adapter.SpinnerCustomDistributorAdapter
-import pathak.creations.sbl.data_class.BeatData
 import pathak.creations.sbl.data_class.BeatRetailerData
 import pathak.creations.sbl.data_class.RetailerData
 import pathak.creations.sbl.retrofit.RetrofitResponse
@@ -36,6 +35,11 @@ class RetailerMaster : Fragment(), RetrofitResponse {
 
     var list: ArrayList<BeatRetailerData> = ArrayList()
     var listRetailers: ArrayList<RetailerData> = ArrayList()
+    var listRetailersFilter: ArrayList<RetailerData> = ArrayList()
+
+    var distributor = ""
+    var distributorId = ""
+
 
     lateinit var ctx: Context
 
@@ -70,17 +74,81 @@ class RetailerMaster : Fragment(), RetrofitResponse {
 
         tvDate.setOnClickListener { retailerMasterVM.datePicker(view) }
         tvDateValue.setOnClickListener { retailerMasterVM.datePicker(view) }
-        tvAddRetailer.setOnClickListener { Navigation.findNavController(view).navigate(R.id.action_add_retailer) }
+        tvAddRetailer.setOnClickListener {
+
+
+            CommonMethods.hideKeyboard(rvRetailerVisit)
+
+            Log.e("tvDistributor2","====${tvDistributor2.hint}")
+
+            distributor = if(tvDistributor2.hint!="Select Distributor Name")
+            {
+                tvDistributor2.hint.toString()
+            }
+            else
+            {""}
+
+            Navigation.findNavController(view).navigate(R.id.action_add_retailer) }
 
 
         // callBeatList()
         setDistributor()
 
 
+        setSearch()
+
+
+    }
+
+    private fun setSearch() {
+        etSearch.addTextChangedListener(object :TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+
+                if(s.isNullOrEmpty())
+                {
+                    setRetailerAdapter(listRetailers)
+                }
+                else
+                {
+                    listRetailersFilter.clear()
+
+
+                    listRetailersFilter.addAll(listRetailers.filter
+                    { it.retailer_name.toLowerCase().contains(s.toString().toLowerCase())
+                            ||
+                            it.beatname.toLowerCase().contains(s.toString().toLowerCase())
+                            ||
+                            it.distributor.toLowerCase().contains(s.toString().toLowerCase())
+                    })
+
+                    setRetailerAdapter(listRetailersFilter)
+                   // setBeatRetailerAdapter(listBeatsRetailerFilter)
+
+                }
+
+                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+            }
+        })
     }
 
 
     private fun setDistributor() {
+
+       if(distributor.isNotEmpty())
+       {
+           tvDistributor2.hint = distributor
+       }
+
         if (PreferenceFile.retrieveKey(ctx, CommonKeys.TYPE).equals("distributor")) {
             tvDistributor2.hint = PreferenceFile.retrieveKey(ctx, CommonKeys.NAME)
             // callBeatList(PreferenceFile.retrieveKey(ctx,CommonKeys.NAME)!!)
@@ -129,6 +197,7 @@ class RetailerMaster : Fragment(), RetrofitResponse {
             if (CommonMethods.isNetworkAvailable(ctx)) {
                 val json = JSONObject()
 
+                distributorId = distId
                 json.put("dist_id", distId)
 
                 RetrofitService(
@@ -152,25 +221,6 @@ class RetailerMaster : Fragment(), RetrofitResponse {
         }
     }
 
-    private fun getList(listBeats: ArrayList<BeatData>): ArrayList<String> {
-        val list: ArrayList<String> = ArrayList()
-
-        for (i in 0 until listBeats.size) {
-            list.add(listBeats[i].distributor)
-        }
-
-        return list
-    }
-
-    private fun getDistIdList(listBeats: ArrayList<BeatData>): ArrayList<String> {
-        val list: ArrayList<String> = ArrayList()
-
-        for (i in 0 until listBeats.size) {
-            list.add(listBeats[i].dist_id)
-        }
-
-        return list
-    }
 
 
     override fun response(code: Int, response: String) {
@@ -310,9 +360,7 @@ class RetailerMaster : Fragment(), RetrofitResponse {
         }
     }
 
-
     var popupWindow: PopupWindow? = null
-
 
     private fun openDistributorShort(
         view: TextView,
@@ -322,8 +370,6 @@ class RetailerMaster : Fragment(), RetrofitResponse {
         val inflater =
             view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val customView = inflater.inflate(R.layout.custom_spinner, null)
-
-
 
         popupWindow = PopupWindow(
             customView,
@@ -336,7 +382,7 @@ class RetailerMaster : Fragment(), RetrofitResponse {
         adapter.onClicked(object : SpinnerCustomDistributorAdapter.CardInterface {
             override fun clickedSelected(position: Int) {
 
-                view.text = listDistName[position]
+                view.hint = listDistName[position]
                 popupWindow!!.dismiss()
                 // callBeatList(listDistId[position])
                 callDistRetailer(listDistId[position])
@@ -361,7 +407,7 @@ class RetailerMaster : Fragment(), RetrofitResponse {
                     adapter2.onClicked(object : SpinnerCustomDistributorAdapter.CardInterface {
                         override fun clickedSelected(position: Int) {
 
-                            view.text = listDistName[position]
+                            view.hint = listDistName[position]
                             popupWindow!!.dismiss()
                             //callBeatList(listDistId[position])
                             callDistRetailer(listDistId[position])
@@ -388,20 +434,16 @@ class RetailerMaster : Fragment(), RetrofitResponse {
                     adapter2.onClicked(object : SpinnerCustomDistributorAdapter.CardInterface {
                         override fun clickedSelected(position: Int) {
 
-                            view.text = list[position]
+                            view.hint = list[position]
                             popupWindow!!.dismiss()
                             // callBeatList(list2[position])
                             callDistRetailer(list2[position])
 
                             // callBeatRetailer(list[position].dist_id,list[position].beatname)
-                        }
-                    })
-                }
-            }
+                        } }) } }
         })
 
         popupWindow!!.isOutsideTouchable = true
-
         popupWindow!!.showAsDropDown(view)
         popupWindow!!.isFocusable = true
         popupWindow!!.update()
@@ -418,6 +460,9 @@ class RetailerMaster : Fragment(), RetrofitResponse {
             override fun clickedSelected(position: Int, str: String) {
 
                 if(str=="edit") {
+
+                    distributor = tvDistributor2.hint.toString()
+                    CommonMethods.hideKeyboard(rvRetailerVisit)
 
                     val bundle = bundleOf("dist_id" to listRetailers[position].dist_id,
                         "idd" to listRetailers[position].id,
@@ -439,7 +484,5 @@ class RetailerMaster : Fragment(), RetrofitResponse {
                 }
             }
         })
-
-
     }
 }
