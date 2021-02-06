@@ -1,130 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="@dimen/_2sdp"
-    >
+    android:padding="@dimen/_2sdp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cvRetailer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_4sdp"
-        app:cardElevation="@dimen/_2sdp"
-        >
+        app:cardElevation="@dimen/_2sdp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_3sdp"
-            >
+            android:padding="@dimen/_3sdp">
 
             <TextView
                 android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textSize="@dimen/_10sdp"
-                android:maxLength="10"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 android:layout_margin="@dimen/_5sdp"
-                />
+                android:maxLength="10"
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <TextView
                 android:id="@+id/tvDistributor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:singleLine="true"
-                android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/tvDate"
-                app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:textSize="@dimen/_10sdp" />
+                android:singleLine="true"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintEnd_toStartOf="@id/tvDate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvBeatTag"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:text="@string/beat_name"
                 android:textColor="@color/black"
-                app:layout_constraintTop_toBottomOf="@id/tvDistributor"
+                android:textSize="@dimen/_10sdp"
                 app:layout_constraintStart_toStartOf="@id/tvDistributor"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:textSize="@dimen/_10sdp" />
+                app:layout_constraintTop_toBottomOf="@id/tvDistributor" />
 
             <TextView
                 android:id="@+id/tvBeat"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                app:layout_constraintTop_toTopOf="@id/tvBeatTag"
-                app:layout_constraintStart_toEndOf="@id/tvBeatTag"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:singleLine="true"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:layout_marginEnd="@dimen/_5sdp"
-                android:textSize="@dimen/_10sdp" />
+                android:singleLine="true"
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvBeatTag"
+                app:layout_constraintTop_toTopOf="@id/tvBeatTag" />
 
             <TextView
                 android:id="@+id/tvRetailerTag"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:text="@string/retailer_name2"
                 android:textColor="@color/black"
-                app:layout_constraintTop_toBottomOf="@id/tvBeatTag"
+                android:textSize="@dimen/_10sdp"
                 app:layout_constraintStart_toStartOf="@id/tvBeatTag"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:textSize="@dimen/_10sdp" />
+                app:layout_constraintTop_toBottomOf="@id/tvBeatTag" />
 
             <TextView
                 android:id="@+id/tvRetailer"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tvRetailerTag"
-                app:layout_constraintStart_toEndOf="@id/tvRetailerTag"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:layout_marginEnd="@dimen/_5sdp"
                 android:singleLine="true"
-                android:textSize="@dimen/_10sdp" />
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvRetailerTag"
+                app:layout_constraintTop_toTopOf="@id/tvRetailerTag" />
 
 
             <TextView
                 android:id="@+id/tvRemarksTag"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:text="@string/remarks"
                 android:textColor="@color/black"
-                app:layout_constraintTop_toBottomOf="@id/tvRetailerTag"
+                android:textSize="@dimen/_10sdp"
                 app:layout_constraintStart_toStartOf="@id/tvRetailerTag"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:textSize="@dimen/_10sdp" />
+                app:layout_constraintTop_toBottomOf="@id/tvRetailerTag" />
 
             <TextView
                 android:id="@+id/tvRemarks"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:singleLine="true"
-                android:padding="@dimen/_2sdp"
-                android:textSize="@dimen/_10sdp"
-                app:layout_constraintTop_toBottomOf="@id/tvRemarksTag"
-                app:layout_constraintStart_toStartOf="@id/tvRemarksTag"
                 android:layout_marginTop="@dimen/_2sdp"
-                app:layout_constraintEnd_toStartOf="@id/tvAdd"/>
+                android:padding="@dimen/_2sdp"
+                android:singleLine="true"
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintEnd_toStartOf="@id/tvAdd"
+                app:layout_constraintStart_toStartOf="@id/tvRemarksTag"
+                app:layout_constraintTop_toBottomOf="@id/tvRemarksTag" />
 
             <TextView
                 android:id="@+id/tvAction"
                 android:layout_width="@dimen/_60sdp"
                 android:layout_height="match_parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:textSize="@dimen/_10sdp"
                 android:visibility="gone"
-                android:textSize="@dimen/_10sdp" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvAdd"
@@ -142,32 +137,30 @@
                 android:textSize="@dimen/_10sdp"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvRetailer"
-                />
+                app:layout_constraintTop_toBottomOf="@id/tvRetailer" />
 
             <ImageView
-                    android:id="@+id/ivEdit"
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_15sdp"
-                    android:src="@drawable/ic_edit"
-                    android:tint="@color/colorAccent"
+                android:id="@+id/ivEdit"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
                 android:layout_marginEnd="@dimen/_20sdp"
+                android:src="@drawable/ic_edit"
+                android:tint="@color/colorAccent"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/tvAdd"
-                    app:layout_constraintEnd_toStartOf="@id/tvAdd"
-                    app:layout_constraintTop_toTopOf="@id/tvAdd"
-                    />
+                app:layout_constraintEnd_toStartOf="@id/tvAdd"
+                app:layout_constraintTop_toTopOf="@id/tvAdd" />
 
-                <ImageView
-                    android:id="@+id/ivDelete"
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_15sdp"
-                    android:src="@drawable/ic_delete"
-                    android:tint="@color/red"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_margin="@dimen/_6sdp"
-                    android:visibility="gone"
-                    app:layout_constraintTop_toBottomOf="@id/tvAdd"
-                    />
+            <ImageView
+                android:id="@+id/ivDelete"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
+                android:layout_margin="@dimen/_6sdp"
+                android:src="@drawable/ic_delete"
+                android:tint="@color/red"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAdd" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

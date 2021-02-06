@@ -40,7 +40,13 @@ class RetailerVisit : Fragment(), RetrofitResponse {
 
     var list : ArrayList<RetailerVisitData> = ArrayList()
     var listBeats : ArrayList<BeatData> = ArrayList()
+
+
+    var distributor: String = ""
+    var distributorId: String = ""
+    var beat: String = ""
     var listBeatsRetailer : ArrayList<BeatRetailerData> = ArrayList()
+    var listBeatsRetailerFilter : ArrayList<BeatRetailerData> = ArrayList()
 
     var listDistName : ArrayList<String> = ArrayList()
     var listDistId : ArrayList<String> = ArrayList()
@@ -79,17 +85,74 @@ class RetailerVisit : Fragment(), RetrofitResponse {
 
 
         //callBeatList(PreferenceFile.retrieveKey(ctx!!,CommonKeys.NAME))
+
         setDistributor()
+        if(beat.isNotEmpty()) {
+
+            tvDistributor2.hint = distributor
+            tvBeatName2.hint = beat
+
+            callBeatList(distributorId)
+        }
+
 
 
         // setCountList()
 
+        setSearch()
+
+    }
+
+    private fun setSearch() {
+        etSearch.addTextChangedListener(object :TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+
+                if(s.isNullOrEmpty())
+                {
+                    setBeatRetailerAdapter(listBeatsRetailer)
+                }
+                else
+                {
+                    listBeatsRetailerFilter.clear()
+
+
+                    listBeatsRetailerFilter.addAll(listBeatsRetailer.filter
+                    { it.retailer_name.toLowerCase().contains(s.toString().toLowerCase())
+                            ||
+                            it.beatname.toLowerCase().contains(s.toString().toLowerCase())
+                            ||
+                            it.distributor.toLowerCase().contains(s.toString().toLowerCase())
+                    })
+
+
+                    setBeatRetailerAdapter(listBeatsRetailerFilter)
+
+                }
+
+
+
+
+
+
+                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        })
     }
 
     private fun setDistributor() {
         if(PreferenceFile.retrieveKey(ctx!!,CommonKeys.TYPE).equals("distributor"))
         {
             tvDistributor2.hint = PreferenceFile.retrieveKey(ctx!!,CommonKeys.NAME)
+            distributor = PreferenceFile.retrieveKey(ctx!!,CommonKeys.NAME)!!
             callBeatList(PreferenceFile.retrieveKey(ctx!!,CommonKeys.NAME))
         }
         else
@@ -135,7 +198,7 @@ class RetailerVisit : Fragment(), RetrofitResponse {
             if (CommonMethods.isNetworkAvailable(ctx!!)) {
                 val json = JSONObject()
 
-
+                distributor =distID!!
                 json.put("dist_id",distID)
 
                 RetrofitService(
@@ -400,6 +463,9 @@ class RetailerVisit : Fragment(), RetrofitResponse {
                 }
                 if(str=="add")
                 {
+                    distributor = listBeatsRetailer[position].distributor
+                    distributorId = listBeatsRetailer[position].dist_id
+                    beat = listBeatsRetailer[position].beatname
 
                     val bundle = bundleOf("distributorName" to listBeatsRetailer[position].distributor,
                         "beatName" to listBeatsRetailer[position].beatname,
@@ -408,6 +474,7 @@ class RetailerVisit : Fragment(), RetrofitResponse {
                         "salesman" to listBeatsRetailer[position].client,
                         "dist_id" to listBeatsRetailer[position].dist_id
                         )
+                    CommonMethods.hideKeyboard(rvRetailerVisit)
                     Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_add_sales,bundle)
                 }
 
@@ -537,6 +604,8 @@ class RetailerVisit : Fragment(), RetrofitResponse {
 
             if (CommonMethods.isNetworkAvailable(ctx!!)) {
                 val json = JSONObject()
+
+                beat = beatname
 
                 json.put("dist_id",distId)
                 json.put("beatname",beatname)
