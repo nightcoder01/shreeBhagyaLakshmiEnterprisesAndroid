@@ -41,6 +41,8 @@
     <string name="beat_name2">Beat Name</string>
     <string name="ok">OK</string>
 
+    <string name="gps_settings">Location Required!!</string>
+    <string name="gps_settings_desc">Please enable Location settings</string>
 
     <string name="retry">Retry</string>
     <string name="cancel">Cancel</string>

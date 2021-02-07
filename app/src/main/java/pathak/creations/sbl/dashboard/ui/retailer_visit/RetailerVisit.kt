@@ -1,17 +1,26 @@
 package pathak.creations.sbl.dashboard.ui.retailer_visit
 
+import android.Manifest
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.*
 import android.widget.PopupWindow
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -24,6 +33,7 @@ import org.json.JSONObject
 import pathak.creations.sbl.R
 import pathak.creations.sbl.common.CommonKeys
 import pathak.creations.sbl.common.CommonMethods
+import pathak.creations.sbl.common.GPSTracker
 import pathak.creations.sbl.common.PreferenceFile
 import pathak.creations.sbl.custom_adapter.SpinnerCustomAdapter
 import pathak.creations.sbl.custom_adapter.SpinnerCustomDistributorAdapter
@@ -57,6 +67,13 @@ class RetailerVisit : Fragment(), RetrofitResponse {
 
 
     lateinit var adapter : RetailerVisitAdapter
+
+
+
+    private var latitude : Double = 0.0
+    private var longitude : Double = 0.0
+    private var gpsTracker: GPSTracker? = null
+
 
 
     override fun onCreateView(
@@ -466,16 +483,57 @@ class RetailerVisit : Fragment(), RetrofitResponse {
                     distributor = listBeatsRetailer[position].distributor
                     distributorId = listBeatsRetailer[position].dist_id
                     beat = listBeatsRetailer[position].beatname
+                    CommonMethods.hideKeyboard(rvRetailerVisit)
 
-                    val bundle = bundleOf("distributorName" to listBeatsRetailer[position].distributor,
+
+
+                    shareLocation(position)
+
+/*
+                    gpsTracker = GPSTracker(ctx)
+
+
+                    if (gpsTracker!!.canGetLocation()) {
+
+
+                        Log.e("ifffff", "==else===" + gpsTracker!!.canGetLocation())
+
+                        val gpsTracker = GPSTracker(ctx)
+                        latitude = gpsTracker.latitude
+                        longitude = gpsTracker.longitude
+
+                        Toast.makeText(
+                            ctx,
+                            "lattitude==$latitude    longitude==$longitude",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        val bundle = bundleOf("distributorName" to listBeatsRetailer[position].distributor,
+                            "beatName" to listBeatsRetailer[position].beatname,
+                            "retailer" to listBeatsRetailer[position].retailer_name,
+                            "retailerId" to listBeatsRetailer[position].retailer_id,
+                            "salesman" to listBeatsRetailer[position].client,
+                            "dist_id" to listBeatsRetailer[position].dist_id
+                        )
+                        Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_add_sales,bundle)
+                    }
+                    else {
+
+                        Log.e("iffffff", "===iff==" + gpsTracker!!.canGetLocation())
+                        showSettingsAlert()
+                    }
+*/
+
+
+
+                   /* val bundle = bundleOf("distributorName" to listBeatsRetailer[position].distributor,
                         "beatName" to listBeatsRetailer[position].beatname,
                         "retailer" to listBeatsRetailer[position].retailer_name,
                         "retailerId" to listBeatsRetailer[position].retailer_id,
                         "salesman" to listBeatsRetailer[position].client,
                         "dist_id" to listBeatsRetailer[position].dist_id
                         )
-                    CommonMethods.hideKeyboard(rvRetailerVisit)
-                    Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_add_sales,bundle)
+                    Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_add_sales,bundle)*/
                 }
 
                 if(str=="edit")
@@ -736,6 +794,182 @@ class RetailerVisit : Fragment(), RetrofitResponse {
         popupWindow!!.update()
 
     }
+
+
+
+
+
+    private fun permissions(): Boolean {
+        when {
+            ContextCompat.checkSelfPermission(ctx!!, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ->
+                when {
+                    ActivityCompat.shouldShowRequestPermissionRationale(
+                        ctx as Activity,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) -> {
+                        ActivityCompat.requestPermissions(
+                            ctx as Activity,
+                            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+                            1
+                        )
+                        return false
+                    }
+                    else -> {
+                        ActivityCompat.requestPermissions(
+                            ctx as Activity,
+                            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+                            1
+                        )
+                        return false
+                    }
+                }
+            else -> return true
+        }
+    }
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when (requestCode) {
+            1 -> {
+                when {
+                    grantResults.isNotEmpty() &&
+                            grantResults[0] == PackageManager.PERMISSION_GRANTED -> {
+                        //setGoogleMap(mMap)
+
+                        Toast.makeText(ctx,"Permission Granted",Toast.LENGTH_SHORT).show()
+
+                    }
+                    else -> {
+                        showAlertMap()
+                    }
+                }
+                return
+            }
+        }}
+    private fun showAlertMap() {
+        val alertDialog = AlertDialog.Builder(ctx!!)
+        alertDialog.setTitle("Location required !!")
+        alertDialog.setCancelable(false)
+        alertDialog.setMessage("Please accept location permission for area Preference.")
+        alertDialog.setPositiveButton("ok") { dialog, which ->
+            permissions()
+            dialog.dismiss()
+        }
+        alertDialog.setNegativeButton("cancel")
+        {
+                dialog, which ->
+            dialog.dismiss()
+
+        }
+
+        alertDialog.show()
+    }
+    private fun showSettingsAlert(position: Int) {
+        val alertDialog = AlertDialog.Builder(ctx!!)
+        alertDialog.setTitle("Enable GPS !!")
+        alertDialog.setCancelable(false)
+        alertDialog.setMessage("Please enable location permission for area Preference.")
+        alertDialog.setPositiveButton("ok") { dialog, which ->
+           // permissions()
+            dialog.dismiss()
+            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            ctx!!.startActivity(intent)
+        }
+        alertDialog.setNegativeButton("cancel")
+        {
+                dialog, which ->
+            dialog.dismiss()
+
+            val bundle = bundleOf(
+                "distributorName" to listBeatsRetailer[position].distributor,
+                "beatName" to listBeatsRetailer[position].beatname,
+                "retailer" to listBeatsRetailer[position].retailer_name,
+                "retailerId" to listBeatsRetailer[position].retailer_id,
+                "salesman" to listBeatsRetailer[position].client,
+                "dist_id" to listBeatsRetailer[position].dist_id
+            )
+            Navigation.findNavController(rvRetailerVisit)
+                .navigate(R.id.action_add_sales, bundle)
+        }
+
+        alertDialog.show()
+    }
+    private fun shareLocation(position: Int) {
+        val alertDialog = AlertDialog.Builder(ctx!!)
+        alertDialog.setTitle("share Location !!")
+        alertDialog.setCancelable(false)
+        alertDialog.setMessage("Please share location permission for area Preference.")
+        alertDialog.setPositiveButton("ok") { dialog, which ->
+            dialog.dismiss()
+
+            gpsTracker = GPSTracker(ctx)
+
+
+
+
+
+           if(permissions())
+           {
+               if(gpsTracker!!.canGetLocation()) {
+
+                   Log.e("ifffff", "==else===" + gpsTracker!!.canGetLocation())
+
+                   val gpsTracker = GPSTracker(ctx)
+                   latitude = gpsTracker.latitude
+                   longitude = gpsTracker.longitude
+
+                   Toast.makeText(
+                       ctx,
+                       "lattitude==$latitude    longitude==$longitude",
+                       Toast.LENGTH_SHORT
+                   ).show()
+
+                   val bundle = bundleOf(
+                       "distributorName" to listBeatsRetailer[position].distributor,
+                       "beatName" to listBeatsRetailer[position].beatname,
+                       "retailer" to listBeatsRetailer[position].retailer_name,
+                       "retailerId" to listBeatsRetailer[position].retailer_id,
+                       "salesman" to listBeatsRetailer[position].client,
+                       "dist_id" to listBeatsRetailer[position].dist_id
+                   )
+                   Navigation.findNavController(rvRetailerVisit)
+                       .navigate(R.id.action_add_sales, bundle)
+               }
+               else
+               {
+                   showSettingsAlert(position)
+               }
+           }
+
+        }
+        alertDialog.setNegativeButton("cancel")
+        {
+                dialog, which ->
+
+                dialog.dismiss()
+                 val bundle = bundleOf("distributorName" to listBeatsRetailer[position].distributor,
+                            "beatName" to listBeatsRetailer[position].beatname,
+                            "retailer" to listBeatsRetailer[position].retailer_name,
+                            "retailerId" to listBeatsRetailer[position].retailer_id,
+                            "salesman" to listBeatsRetailer[position].client,
+                            "dist_id" to listBeatsRetailer[position].dist_id
+                            )
+                        Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_add_sales,bundle)
+
+
+
+
+        }
+
+        alertDialog.show()
+    }
+
 
 
 
