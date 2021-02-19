@@ -73,7 +73,7 @@
                 android:singleLine="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/cvImage"
-                app:layout_constraintTop_toTopOf="@id/cvImage"/>
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
                 android:id="@+id/tvPrice"
@@ -87,6 +87,48 @@
 
             <TextView
                 android:id="@+id/tvPriceValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:maxLength="10"
+                android:singleLine="true"
+                app:layout_constraintStart_toEndOf="@id/tvPrice"
+                app:layout_constraintTop_toBottomOf="@id/tvName"/>
+
+            <TextView
+                android:id="@+id/tvPriceEdited"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:singleLine="true"
+                android:text="Price*"
+                app:layout_constraintStart_toEndOf="@id/cvImage"
+                app:layout_constraintTop_toBottomOf="@id/tvPrice"/>
+
+            <EditText
+                android:id="@+id/tvPriceEditedValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:maxLength="5"
+                android:singleLine="true"
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintStart_toEndOf="@id/tvPriceEdited"
+                app:layout_constraintTop_toBottomOf="@id/tvPrice"/>
+
+
+            <TextView
+                android:id="@+id/tvPriceOverall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:singleLine="true"
+                android:text="OverAll Price"
+                app:layout_constraintStart_toEndOf="@id/cvImage"
+                app:layout_constraintTop_toBottomOf="@id/tvPriceEdited"/>
+
+            <TextView
+                android:id="@+id/tvPriceOverallValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_5sdp"

@@ -10,16 +10,31 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
     //   the UI when the data actually changes.
     // - Repository is completely separated from the UI through the ViewModel.
     val allWords: LiveData<List<Word>> = repository.allWords.asLiveData()
+    val allDistributor: LiveData<List<Distributor>> = repository.allDistributors.asLiveData()
 
     /**
      * Launching a new coroutine to insert the data in a non-blocking way
      */
+
+
     fun insert(word: Word) = viewModelScope.launch {
         repository.insert(word)
     }
+
+    fun insertDist(dist: Distributor) = viewModelScope.launch {
+        repository.insertDist(dist)
+    }
+
+
     fun delete() = viewModelScope.launch {
         repository.delete()
     }
+
+    fun deleteAllDist() = viewModelScope.launch {
+        repository.deleteAllDist()
+    }
+
+
 }
 
 class WordViewModelFactory(private val repository: WordRepository) : ViewModelProvider.Factory {

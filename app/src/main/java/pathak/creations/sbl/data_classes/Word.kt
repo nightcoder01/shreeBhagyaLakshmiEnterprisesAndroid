@@ -5,5 +5,13 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
+
+
+
+
+@Entity(tableName = "distributor_table")
+ class Distributor(@PrimaryKey @ColumnInfo(name = "dist") val distID : String, @ColumnInfo(name = "distName")val distName : String)
+
+
 @Entity(tableName = "word_table")
- class Word(@PrimaryKey @ColumnInfo(name = "word") val word : String)
+class Word(@PrimaryKey @ColumnInfo(name = "word") val word : String)

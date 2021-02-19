@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.spinner_dropdown_item2.view.*
 import pathak.creations.sbl.R
-import java.util.*
+import pathak.creations.sbl.data_classes.Distributor
 
-class SpinnerCustomDistributorAdapter(var listShort: ArrayList<String>) :
+class SpinnerCustomDistributorAdapter(var listShort: List<Distributor>) :
      RecyclerView.Adapter<SpinnerCustomDistributorAdapter.CardsViewHolder>() {
 
 
@@ -40,7 +40,7 @@ class SpinnerCustomDistributorAdapter(var listShort: ArrayList<String>) :
 
     override fun onBindViewHolder(holder: CardsViewHolder, position: Int) {
 
-        holder.itemView.tvText.text = listShort[position]
+        holder.itemView.tvText.text = listShort[position].distName
         holder.itemView.setOnClickListener { clicked.clickedSelected(position) }
     }
 

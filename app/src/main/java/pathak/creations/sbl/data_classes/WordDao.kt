@@ -22,4 +22,20 @@ interface WordDao {
 
     @Query("DELETE FROM word_table")
     suspend fun deleteAll()
+
+
+
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertDist(dist: Distributor)
+
+
+
+    @Query("SELECT * FROM distributor_table ORDER BY dist ASC")
+    fun getDistributors(): Flow<List<Distributor>>
+
+    @Query("DELETE FROM distributor_table")
+    suspend fun deleteAllDist()
+
+
 }

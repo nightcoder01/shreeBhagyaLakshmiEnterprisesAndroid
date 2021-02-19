@@ -10,6 +10,7 @@ class WordRepository(private val wordDao: WordDao) {
     // Room executes all queries on a separate thread.
     // Observed Flow will notify the observer when the data has changed.
     val allWords: Flow<List<Word>> = wordDao.getAlphabetizedWords()
+    val allDistributors: Flow<List<Distributor>> = wordDao.getDistributors()
 
     // By default Room runs suspend queries off the main thread, therefore, we don't need to
     // implement anything else to ensure we're not doing long running database work
@@ -20,9 +21,22 @@ class WordRepository(private val wordDao: WordDao) {
         wordDao.insert(word)
     }
 
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun insertDist(dist: Distributor) {
+        wordDao.insertDist(dist)
+    }
+
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun delete() {
         wordDao.deleteAll()
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun deleteAllDist() {
+        wordDao.deleteAllDist()
     }
 }

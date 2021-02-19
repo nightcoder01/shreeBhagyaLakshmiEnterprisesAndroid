@@ -14,10 +14,13 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.add_retailer.*
 import kotlinx.android.synthetic.main.custom_spinner.view.*
 import org.json.JSONObject
+import pathak.creations.sbl.AppController
 import pathak.creations.sbl.R
 import pathak.creations.sbl.common.CommonKeys
 import pathak.creations.sbl.common.CommonMethods
@@ -26,6 +29,9 @@ import pathak.creations.sbl.custom_adapter.SpinnerCustomAdapter
 import pathak.creations.sbl.custom_adapter.SpinnerCustomCategoryAdapter
 import pathak.creations.sbl.custom_adapter.SpinnerCustomDistributorAdapter
 import pathak.creations.sbl.data_class.BeatData
+import pathak.creations.sbl.data_classes.Distributor
+import pathak.creations.sbl.data_classes.WordViewModel
+import pathak.creations.sbl.data_classes.WordViewModelFactory
 import pathak.creations.sbl.retrofit.RetrofitResponse
 import pathak.creations.sbl.retrofit.RetrofitService
 
@@ -40,8 +46,8 @@ class AddRetailer : Fragment(), RetrofitResponse {
     private lateinit var viewModel: AddRetailerVM
     private lateinit var ctx: Context
 
-    var listDistName : ArrayList<String> = ArrayList()
-    var listDistId : ArrayList<String> = ArrayList()
+   // var listDistName : ArrayList<String> = ArrayList()
+   // var listDistId : ArrayList<String> = ArrayList()
     var listBeats : ArrayList<BeatData> = ArrayList()
     var listClassification : ArrayList<String> = ArrayList()
     var listRetailerType : ArrayList<String> = ArrayList()
@@ -79,7 +85,28 @@ class AddRetailer : Fragment(), RetrofitResponse {
             if(valid()){
             callAddRetailer()
         }
+
+
+
+
         }
+
+
+
+        //set live data observer
+        wordViewModel.allDistributor.observe(viewLifecycleOwner, Observer { dist ->
+            // Update the cached copy of the words in the adapter.
+
+
+            dist?.let {
+
+                setDistributorAdapter(it)
+
+            }
+        })
+
+
+
     }
 
     private fun valid(): Boolean {
@@ -440,18 +467,24 @@ class AddRetailer : Fragment(), RetrofitResponse {
 
                             val dataArray = json.getJSONArray("data")
 
-                            listDistName.clear()
-                            listDistId.clear()
+                            //listDistName.clear()
+                           // listDistId.clear()
+
+                            wordViewModel.deleteAllDist()
 
                             for(i in 0 until dataArray.length())
                             {
                                 val dataObj = dataArray.getJSONObject(i)
-                                listDistId.add(dataObj.getString("dist_id"))
-                                listDistName.add(dataObj.getString("name"))
+                              //  listDistId.add(dataObj.getString("dist_id"))
+                              //  listDistName.add(dataObj.getString("name"))
+
+                                wordViewModel.insertDist(
+                                    Distributor(dataObj.getString("dist_id")
+                                        ,dataObj.getString("name")))
 
                             }
 
-                            setDistributorAdapter(listDistName,listDistId)
+                           // setDistributorAdapter(listDistName,listDistId)
 
                         }
 
@@ -668,19 +701,15 @@ class AddRetailer : Fragment(), RetrofitResponse {
 
 
 
-    private fun setDistributorAdapter(
-        listDistName: ArrayList<String>,
-        listDistId: ArrayList<String>
-    ) {
+    private fun setDistributorAdapter(list: List<Distributor>) {
         tvDistributor2.setOnClickListener {
-            openDistributorShort(tvDistributor2,listDistName,listDistId)
+            openDistributorShort(tvDistributor2,list)
         }    }
 
     private fun openDistributorShort(
         view: TextView,
-        listDistName: ArrayList<String>,
-        listDistId: ArrayList<String>
-    ) {
+        list: List<Distributor>
+        ) {
         val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val customView = inflater.inflate(R.layout.custom_spinner, null)
 
@@ -692,14 +721,14 @@ class AddRetailer : Fragment(), RetrofitResponse {
             WindowManager.LayoutParams.WRAP_CONTENT
         )
 
-        val adapter = SpinnerCustomDistributorAdapter(listDistName)
+        val adapter = SpinnerCustomDistributorAdapter(list)
         customView.rvSpinner.adapter = adapter
         adapter.onClicked(object :SpinnerCustomDistributorAdapter.CardInterface{
             override fun clickedSelected(position: Int) {
 
-                view.text =listDistName[position]
+                view.text =list[position].distName
                 popupWindow!!.dismiss()
-                callBeatList(listDistId[position])
+                callBeatList(list[position].distID)
 
                 // callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
             }
@@ -718,14 +747,14 @@ class AddRetailer : Fragment(), RetrofitResponse {
 
                 if(s.isNullOrBlank())
                 {
-                    val adapter2 = SpinnerCustomDistributorAdapter(listDistName)
+                    val adapter2 = SpinnerCustomDistributorAdapter(list)
                     customView.rvSpinner.adapter = adapter2
                     adapter2.onClicked(object :SpinnerCustomDistributorAdapter.CardInterface{
                         override fun clickedSelected(position: Int) {
 
-                            view.text =listDistName[position]
+                            view.text =list[position].distName
                             popupWindow!!.dismiss()
-                            callBeatList(listDistId[position])
+                            callBeatList(list[position].distID)
 
                             //  callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
                         }
@@ -734,15 +763,13 @@ class AddRetailer : Fragment(), RetrofitResponse {
                 else
                 {
 
-                    val list : ArrayList<String> = ArrayList()
-                    val list2 : ArrayList<String> = ArrayList()
+                    val list2 : ArrayList<Distributor> = ArrayList()
 
-                    for(i in 0 until listDistName.size)
+                    for(i in list.indices)
                     {
-                        if(listDistName[i].toLowerCase().contains(s.toString().toLowerCase(),false))
+                        if(list[i].distName.toLowerCase().contains(s.toString().toLowerCase(),false))
                         {
-                            list.add(listDistName[i])
-                            list2.add(listDistId[i])
+                            list2.add(list[i])
 
                         }
                     }
@@ -753,9 +780,9 @@ class AddRetailer : Fragment(), RetrofitResponse {
                     adapter2.onClicked(object :SpinnerCustomDistributorAdapter.CardInterface{
                         override fun clickedSelected(position: Int) {
 
-                            view.text =list[position]
+                            view.text =list2[position].distName
                             popupWindow!!.dismiss()
-                            callBeatList(list2[position])
+                            callBeatList(list2[position].distID)
 
                             // callBeatRetailer(list[position].dist_id,list[position].beatname)
                         }
@@ -773,5 +800,8 @@ class AddRetailer : Fragment(), RetrofitResponse {
     }
 
 
-
+    //data base work
+    private val wordViewModel: WordViewModel by viewModels {
+        WordViewModelFactory(((context as Activity).application as AppController).repository)
+    }
 }
