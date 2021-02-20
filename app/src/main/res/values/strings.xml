@@ -90,8 +90,9 @@
     <string name="gstin">GSTIN</string>
     <string name="classification">Classification</string>
     <string name="retailer_type">Retailer Type</string>
-    <string name="overall_price">OverAll Price</string>
+    <string name="overall_price">Overall Price:</string>
     <string name="add_to_cart">Add to Cart</string>
+    <string name="custom_price">Custom Price</string>
 
 
     <string-array name="array_name">

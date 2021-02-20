@@ -107,6 +107,7 @@ class RetailerVisit : Fragment(), RetrofitResponse {
             tvBeatName2.hint = beat
 
             callBeatList(distributorId)
+
         }
 
 
@@ -351,6 +352,10 @@ class RetailerVisit : Fragment(), RetrofitResponse {
                            /* listBeats.add(BeatData(
                                 "","Select Beat","","","",""
                             ))*/
+
+
+
+
 
                             for (i in 0 until data.length()) {
 

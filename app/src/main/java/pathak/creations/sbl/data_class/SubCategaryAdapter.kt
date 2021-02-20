@@ -55,7 +55,7 @@ class SubCategaryAdapter(var list: List<SubCat>) :
 
             clicked.clickedSelected(position,"remove")
         }
-
+        holder.itemView.etPriceEditedValue.text =Editable.Factory.getInstance().newEditable((list[position].price.toFloat()+list[position].price.toFloat()*(45/1000)).toString())
 
         holder.itemView.etPriceEditedValue.addTextChangedListener(object :TextWatcher{
             override fun afterTextChanged(s: Editable?) {
@@ -74,7 +74,7 @@ class SubCategaryAdapter(var list: List<SubCat>) :
                 if(!s.isNullOrBlank())
                 {
 
-                  ///  holder.itemView.tvPriceOverallValue.text  =
+                    holder.itemView.tvPriceOverallValue.text  = (holder.itemView.etPriceEditedValue.text.toString().toFloat()*holder.itemView.tvCount.text.toString().toFloat()).toString()
 
                 }
 
