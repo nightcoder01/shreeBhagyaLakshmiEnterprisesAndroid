@@ -2,6 +2,7 @@ package pathak.creations.sbl.data_class
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +18,7 @@ class SubCategaryAdapter(var list: List<SubCat>) :
 
     interface CardInterface {
         fun clickedSelected(pos: Int,str: String)
+        fun valueChanged(pos: Int,str: String)
 
     }
 
@@ -55,7 +57,16 @@ class SubCategaryAdapter(var list: List<SubCat>) :
 
             clicked.clickedSelected(position,"remove")
         }
-        holder.itemView.etPriceEditedValue.text =Editable.Factory.getInstance().newEditable((list[position].price.toFloat()+list[position].price.toFloat()*(45/1000)).toString())
+       // holder.itemView.etPriceEditedValue.text =Editable.Factory.getInstance().newEditable((list[position].price.toFloat()+(list[position].price.toFloat()*(45))/1000 ).toString())
+        holder.itemView.etPriceEditedValue.text =Editable.Factory.getInstance().newEditable(list[position].customPrice)
+
+
+
+        Log.e("dfad0","======${list[position].customPrice}")
+        Log.e("dfad0","======${(list[position].price.toFloat()*(45))/1000}")
+        holder.itemView.tvPriceOverallValue.text  = (holder.itemView.etPriceEditedValue.text.toString().toFloat()*holder.itemView.tvCount.text.toString().toFloat()).toString()
+
+
 
         holder.itemView.etPriceEditedValue.addTextChangedListener(object :TextWatcher{
             override fun afterTextChanged(s: Editable?) {
@@ -73,8 +84,8 @@ class SubCategaryAdapter(var list: List<SubCat>) :
 
                 if(!s.isNullOrBlank())
                 {
-
-                    holder.itemView.tvPriceOverallValue.text  = (holder.itemView.etPriceEditedValue.text.toString().toFloat()*holder.itemView.tvCount.text.toString().toFloat()).toString()
+                  //  clicked.valueChanged(position,s.toString())
+                  //  holder.itemView.tvPriceOverallValue.text  = (holder.itemView.etPriceEditedValue.text.toString().toFloat()*holder.itemView.tvCount.text.toString().toFloat()).toString()
 
                 }
 

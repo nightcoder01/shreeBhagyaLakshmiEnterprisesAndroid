@@ -10,5 +10,7 @@ data class SubCat(
     var price: String = "",
     var weight: String = "",
     var ptrflag: String = "",
-    var cartItem: String = ""
+    var cartItem: String = "",
+    var customPrice: String = "",
+    var overAllPrice: String = ""
 ):Serializable

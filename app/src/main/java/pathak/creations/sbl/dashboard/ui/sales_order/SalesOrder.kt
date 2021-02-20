@@ -490,6 +490,10 @@ class SalesOrder : Fragment(), RetrofitResponse {
                     rvSubCategories.adapter = adapter2
 
                     adapter2.onClicked(object: SubCategaryAdapter.CardInterface{
+                        override fun valueChanged(pos: Int, str: String) {
+                            subList[pos].customPrice = str
+                            adapter2.notifyItemChanged(pos)                        }
+
                         override fun clickedSelected(pos: Int, str: String) {
                             if(str=="add")
                             {
@@ -500,7 +504,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
                                 else
                                 {
                                     subList[pos].cartItem = (subList[pos].cartItem.toInt()+1).toString()
-                                    adapter2.notifyDataSetChanged()
+                                    adapter2.notifyItemChanged(pos)
                                 }
                             }
                             if(str=="remove")
@@ -513,7 +517,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
                                 else
                                 {
                                     subList[pos].cartItem = (subList[pos].cartItem.toInt()-1).toString()
-                                    adapter2.notifyDataSetChanged()
+                                    adapter2.notifyItemChanged(pos)
                                 }
                             }
                         }
@@ -554,6 +558,11 @@ class SalesOrder : Fragment(), RetrofitResponse {
                             rvSubCategories.adapter = adapter3
 
                             adapter3.onClicked(object: SubCategaryAdapter.CardInterface{
+
+                                override fun valueChanged(pos: Int, str: String) {
+                                    subList[pos].customPrice = str
+                                    adapter2.notifyItemChanged(pos)
+                                }
                                 override fun clickedSelected(pos: Int, str: String) {
                                     if(str=="add")
                                     {
@@ -564,7 +573,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
                                         else
                                         {
                                             subList[pos].cartItem = (subList[pos].cartItem.toInt()+1).toString()
-                                            adapter2.notifyDataSetChanged()
+                                            adapter2.notifyItemChanged(pos)
                                         }
                                     }
                                     if(str=="remove")
@@ -577,7 +586,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
                                         else
                                         {
                                             subList[pos].cartItem = (subList[pos].cartItem.toInt()-1).toString()
-                                            adapter2.notifyDataSetChanged()
+                                            adapter2.notifyItemChanged(pos)
                                         }
                                     }
                                 }
@@ -620,6 +629,12 @@ class SalesOrder : Fragment(), RetrofitResponse {
                             rvSubCategories.adapter = adapter3
 
                             adapter3.onClicked(object: SubCategaryAdapter.CardInterface{
+
+                                override fun valueChanged(pos: Int, str: String) {
+                                    subList[pos].customPrice = str
+                                    adapter2.notifyItemChanged(pos)
+                                }
+
                                 override fun clickedSelected(pos: Int, str: String) {
                                     if(str=="add")
                                     {
@@ -630,7 +645,8 @@ class SalesOrder : Fragment(), RetrofitResponse {
                                         else
                                         {
                                             subList[pos].cartItem = (subList[pos].cartItem.toInt()+1).toString()
-                                            adapter3.notifyDataSetChanged()
+                                            adapter2.notifyItemChanged(pos)
+
                                         }
                                     }
                                     if(str=="remove")
@@ -640,10 +656,10 @@ class SalesOrder : Fragment(), RetrofitResponse {
                                            // Toast.makeText(ctx,"minimum limit crossed",Toast.LENGTH_SHORT).show()
                                         }
 
-                                        else
+                                         else
                                         {
                                             subList[pos].cartItem = (subList[pos].cartItem.toInt()-1).toString()
-                                            adapter3.notifyDataSetChanged()
+                                            adapter2.notifyItemChanged(pos)
                                         }
                                     }
                                 }
@@ -675,7 +691,9 @@ class SalesOrder : Fragment(), RetrofitResponse {
             list.add(SubCat(listCategories[i].catgroup,listCategories[i].catgroup,
                 listCategories[i].code,listCategories[i].description,
                 listCategories[i].price,listCategories[i].weight,
-                listCategories[i].ptrflag,"0"
+                listCategories[i].ptrflag,"0",
+                (listCategories[i].price.toFloat()+(listCategories[i].price.toFloat()*(45))/1000 ).toString(),
+                "0.0"
                 ))
         }
         }
