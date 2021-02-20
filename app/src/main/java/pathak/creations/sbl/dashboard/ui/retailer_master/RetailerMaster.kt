@@ -72,6 +72,7 @@ class RetailerMaster : Fragment(), RetrofitResponse {
         })
 
         return root
+
     }
 
 
@@ -82,34 +83,27 @@ class RetailerMaster : Fragment(), RetrofitResponse {
         tvDateValue.setOnClickListener { retailerMasterVM.datePicker(view) }
         tvAddRetailer.setOnClickListener {
 
-
             CommonMethods.hideKeyboard(rvRetailerVisit)
 
             Log.e("tvDistributor2","====${tvDistributor2.hint}")
 
             distributor = if(tvDistributor2.hint!="Select Distributor Name")
-            {
-                tvDistributor2.hint.toString()
-            }
+
+            { tvDistributor2.hint.toString() }
             else
             {""}
 
             Navigation.findNavController(view).navigate(R.id.action_add_retailer) }
 
-
         // callBeatList()
+
         setDistributor()
 
-
         setSearch()
-
-
-
 
         //set live data observer
         wordViewModel.allDistributor.observe(viewLifecycleOwner, Observer { dist ->
             // Update the cached copy of the words in the adapter.
-
 
             dist?.let {
 

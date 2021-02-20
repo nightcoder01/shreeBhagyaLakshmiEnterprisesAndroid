@@ -64,7 +64,7 @@
     <string name="transaction_no">Transaction No.</string>
     <string name="salesman">Salesman</string>
     <string name="category">Category</string>
-    <string name="price">Price:</string>
+    <string name="price">Item Price:</string>
     <string name="price_code">Price Code</string>
     <string name="log_in">LOG IN</string>
     <string name="total_tonnage">Total Tonnage</string>
@@ -90,6 +90,8 @@
     <string name="gstin">GSTIN</string>
     <string name="classification">Classification</string>
     <string name="retailer_type">Retailer Type</string>
+    <string name="overall_price">OverAll Price</string>
+    <string name="add_to_cart">Add to Cart</string>
 
 
     <string-array name="array_name">

@@ -21,5 +21,6 @@ class ForgotPassword : AppCompatActivity() {
         forgotPasswordBinding.forgotVM = forgotVM
 
 
+
     }
 }

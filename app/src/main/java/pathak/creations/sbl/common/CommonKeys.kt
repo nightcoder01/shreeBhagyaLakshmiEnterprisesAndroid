@@ -27,8 +27,8 @@ object CommonKeys {
 
     const val CATEGORIES = "v1/sblcats"
     const val CATEGORIES_CODE = 5
-/*
 
+/*
     const val CATEGORIES = "v1/categories"
     const val CATEGORIES_CODE = 5
 */

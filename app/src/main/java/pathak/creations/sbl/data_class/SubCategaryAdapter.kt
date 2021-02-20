@@ -1,5 +1,7 @@
 package pathak.creations.sbl.data_class
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,7 +46,6 @@ class SubCategaryAdapter(var list: List<SubCat>) :
         holder.itemView.tvPriceValue.text = list[position].price
         holder.itemView.tvCount.text = list[position].cartItem
 
-
         holder.itemView.flAdd.setOnClickListener{
 
             clicked.clickedSelected(position,"add")
@@ -54,6 +55,34 @@ class SubCategaryAdapter(var list: List<SubCat>) :
 
             clicked.clickedSelected(position,"remove")
         }
+
+
+        holder.itemView.etPriceEditedValue.addTextChangedListener(object :TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+
+
+
+               // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+               // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                if(!s.isNullOrBlank())
+                {
+
+                  ///  holder.itemView.tvPriceOverallValue.text  =
+
+                }
+
+
+              //  TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        })
+
 
     }
 
