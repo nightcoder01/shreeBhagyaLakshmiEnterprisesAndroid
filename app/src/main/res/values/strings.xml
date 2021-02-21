@@ -25,6 +25,7 @@
     <string name="menu_distributor_list">Distributor List</string>
     <string name="menu_sales_order">Sales Order</string>
     <string name="menu_retailer_master">Retailer Master</string>
+    <string name="my_cart">My Cart</string>
     <string name="menu_distributor_ptr">Distributor PTR</string>
     <string name="menu_home">Home</string>
     <string name="menu_cart">Cart</string>
@@ -92,7 +93,9 @@
     <string name="retailer_type">Retailer Type</string>
     <string name="overall_price">Overall Price:</string>
     <string name="add_to_cart">Add to Cart</string>
+    <string name="item_added">Item Added</string>
     <string name="custom_price">Custom Price</string>
+    <string name="clear_all">clear All</string>
 
 
     <string-array name="array_name">

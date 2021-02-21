@@ -21,7 +21,14 @@
         android:id="@+id/nav_retailer_master"
         android:name="pathak.creations.sbl.dashboard.ui.retailer_master.RetailerMaster"
         android:label="@string/menu_retailer_master"
-        tools:layout="@layout/retailer_master" >
+        tools:layout="@layout/retailer_master" />
+
+
+    <fragment
+        android:id="@+id/nav_cart"
+        android:name="pathak.creations.sbl.dashboard.ui.cart.MyCart"
+        android:label="@string/my_cart"
+        tools:layout="@layout/my_cart_layout" >
 
         <action
             android:id="@+id/action_add_retailer"

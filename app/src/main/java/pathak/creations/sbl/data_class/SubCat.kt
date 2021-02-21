@@ -12,5 +12,7 @@ data class SubCat(
     var ptrflag: String = "",
     var cartItem: String = "",
     var customPrice: String = "",
-    var overAllPrice: String = ""
+    var overAllPrice: String = "",
+    var distIDMain: String = "",
+    var editMode: Boolean = true
 ):Serializable

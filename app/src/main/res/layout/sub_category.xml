@@ -101,6 +101,7 @@
                 android:hint="@string/custom_price"
                 android:singleLine="true"
                 android:inputType="number"
+                android:imeOptions="actionDone"
                 android:maxLength="10"
                 android:textSize="@dimen/_10sdp"
                 app:layout_constraintStart_toEndOf="@id/cvImage"

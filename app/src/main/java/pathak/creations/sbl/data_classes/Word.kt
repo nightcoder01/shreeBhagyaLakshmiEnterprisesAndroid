@@ -15,3 +15,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "word_table")
 class Word(@PrimaryKey @ColumnInfo(name = "word") val word : String)
+
+@Entity(tableName = "cart_table")
+class Cart(@PrimaryKey @ColumnInfo(name = "cartId") val cartId : String, @ColumnInfo(name = "distID")var distID : String
+           , @ColumnInfo(name = "name")var name : String, @ColumnInfo(name = "price")var price : String
+           , @ColumnInfo(name = "customPrice")var customPrice : String, @ColumnInfo(name = "overAllPrice")var overAllPrice : String
+           , @ColumnInfo(name = "itemCount")var itemCount : String)

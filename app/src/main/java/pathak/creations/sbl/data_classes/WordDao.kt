@@ -38,4 +38,17 @@ interface WordDao {
     suspend fun deleteAllDist()
 
 
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertCart(cartItem: Cart)
+
+
+
+    @Query("SELECT * FROM cart_table ORDER BY cartId ASC ")
+    fun getCartList(): Flow<List<Cart>>
+
+    @Query("DELETE FROM cart_table")
+    suspend fun deleteAllCart()
+
+
 }

@@ -1,4 +1,4 @@
-package pathak.creations.sbl.data_class
+package pathak.creations.sbl.dashboard.ui.cart
 
 import android.text.Editable
 import android.util.Log
@@ -8,13 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.sub_category.view.*
 import pathak.creations.sbl.R
+import pathak.creations.sbl.data_classes.Cart
 
-class SubCategaryAdapter(var list: List<SubCat>) :
-    RecyclerView.Adapter<SubCategaryAdapter.CardsViewHolder>() {
+class MyCartAdapter(var list: List<Cart>) :
+    RecyclerView.Adapter<MyCartAdapter.CardsViewHolder>() {
 
 
     lateinit var clicked: CardInterface
@@ -22,7 +22,6 @@ class SubCategaryAdapter(var list: List<SubCat>) :
     interface CardInterface {
         fun clickedSelected(pos: Int,str: String)
         fun valueChanged(pos: Int,str: String)
-        fun changeEditMode(pos: Int,editMode: Boolean)
 
     }
 
@@ -49,55 +48,48 @@ class SubCategaryAdapter(var list: List<SubCat>) :
 
 
 
-        Log.e("SubCategoryDate======","==========${list[position]}")
+        Log.e("cartDate======","==========${list[position]}")
 
-        holder.itemView.tvName.text = list[position].description
-        holder.itemView.tvImageText.text = list[position].description
+        holder.itemView.tvName.text = list[position].name
+        holder.itemView.tvImageText.text = list[position].name
         holder.itemView.tvPriceValue.text = list[position].price
-        holder.itemView.tvCount.text = list[position].cartItem
-        holder.itemView.etPriceEditedValue.text =Editable.Factory.getInstance().newEditable(list[position].customPrice)
-        Log.e("dfad0","======${list[position].customPrice}")
-        Log.e("dfad0","======${(list[position].price.toFloat()*(45))/1000}")
+        holder.itemView.tvCount.text = list[position].itemCount
+        holder.itemView.etPriceEditedValue.text = Editable.Factory.getInstance().newEditable(list[position].customPrice)
         holder.itemView.tvPriceOverallValue.text  = (holder.itemView.etPriceEditedValue.text.toString().toFloat()*holder.itemView.tvCount.text.toString().toFloat()).toString()
-
+        holder.itemView.tvAddCart.visibility = View.GONE
         holder.itemView.flAdd.setOnClickListener{
-            if(list[position].editMode)
-            {
-            clicked.clickedSelected(position,"add")}
+
+                clicked.clickedSelected(position,"add")
+
         }
 
         holder.itemView.flMinus.setOnClickListener{
-            if(list[position].editMode) {
+
                 clicked.clickedSelected(position, "remove")
-            }
+
         }
 
 
-        holder.itemView.etPriceEditedValue.setOnEditorActionListener(object :TextView.OnEditorActionListener{
+        holder.itemView.etPriceEditedValue.setOnEditorActionListener(object : TextView.OnEditorActionListener{
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                if(actionId==EditorInfo.IME_ACTION_DONE)
+                if(actionId== EditorInfo.IME_ACTION_DONE)
                 {
-                    return if(list[position].editMode) {
+
                         //normal
                         val s = holder.itemView.etPriceEditedValue.text.toString()
                         clicked.valueChanged(position,s)
-                        true
-                    } else {
-                        val s = list[position].customPrice
-                        clicked.valueChanged(position, s)
-                        Toast.makeText(holder.itemView.etPriceEditedValue.context,"once added can't change , go to My cart to make changes.",Toast.LENGTH_SHORT).show()
-                        true
-                    }
+                    return  true
+
                 }
                 return false
             }
         })
 
 
-        holder.itemView.tvAddCart.setOnClickListener {
+        /*holder.itemView.tvAddCart.setOnClickListener {
             if(list[position].editMode)
             {
-            clicked.changeEditMode(position,false)}
+                clicked.changeEditMode(position,false)}
         }
 
         if(list[position].editMode)
@@ -114,7 +106,7 @@ class SubCategaryAdapter(var list: List<SubCat>) :
 
             //editmode removed
             ///and add cart
-        }
+        }*/
 
 
     }

@@ -11,6 +11,7 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
     // - Repository is completely separated from the UI through the ViewModel.
     val allWords: LiveData<List<Word>> = repository.allWords.asLiveData()
     val allDistributor: LiveData<List<Distributor>> = repository.allDistributors.asLiveData()
+    val allCart: LiveData<List<Cart>> = repository.allCarts.asLiveData()
 
     /**
      * Launching a new coroutine to insert the data in a non-blocking way
@@ -25,6 +26,10 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
         repository.insertDist(dist)
     }
 
+    fun insertCart(cart: Cart) = viewModelScope.launch {
+        repository.insertCart(cart)
+    }
+
 
     fun delete() = viewModelScope.launch {
         repository.delete()
@@ -32,6 +37,10 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
 
     fun deleteAllDist() = viewModelScope.launch {
         repository.deleteAllDist()
+    }
+
+    fun deleteAllCart() = viewModelScope.launch {
+        repository.deleteAllCart()
     }
 
 

@@ -47,7 +47,7 @@ class DashBoard : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_home, R.id.nav_sales_order, R.id.nav_retailer_master,
-                R.id.nav_tools, R.id.nav_retailer, R.id.nav_send
+                R.id.nav_tools, R.id.nav_retailer, R.id.nav_cart
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

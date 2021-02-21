@@ -32,6 +32,7 @@ import pathak.creations.sbl.custom_adapter.SpinnerCustomDistributorAdapter
 import pathak.creations.sbl.custom_adapter.SpinnerCustomRetailerAdapter
 import pathak.creations.sbl.dashboard.ui.retailer_visit.RetailerVisitAdapter
 import pathak.creations.sbl.data_class.*
+import pathak.creations.sbl.data_classes.Cart
 import pathak.creations.sbl.data_classes.Distributor
 import pathak.creations.sbl.data_classes.WordViewModel
 import pathak.creations.sbl.data_classes.WordViewModelFactory
@@ -40,6 +41,8 @@ import pathak.creations.sbl.retrofit.RetrofitService
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+
+
 
 
 class SalesOrder : Fragment(), RetrofitResponse {
@@ -62,6 +65,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
     var listCategories: ArrayList<CategoriesData> = ArrayList()
     var listSubCategories: ArrayList<SubCat> = ArrayList()
 
+    var distIDMain = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -152,7 +156,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
 
 
                 json.put("dist_id",distID)
-
+                distIDMain = distID!!
                 RetrofitService(
                     ctx,
                     this,
@@ -490,6 +494,27 @@ class SalesOrder : Fragment(), RetrofitResponse {
                     rvSubCategories.adapter = adapter2
 
                     adapter2.onClicked(object: SubCategaryAdapter.CardInterface{
+
+                        override fun changeEditMode(pos: Int, editMode: Boolean) {
+                            subList[pos].editMode = editMode
+                            adapter2.notifyItemChanged(pos)
+
+
+                                val dNow = Date()
+                                val ft = SimpleDateFormat("yyMMddhhmmssMs")
+                                val datetime = ft.format(dNow)
+
+
+
+                            wordViewModel.insertCart(Cart(
+                                datetime,
+                                subList[pos].distIDMain,
+                                subList[pos].category,subList[pos].price,subList[pos].customPrice,
+                                subList[pos].overAllPrice,subList[pos].cartItem))
+
+                            Toast.makeText(rvSubCategories.context,"Item Added to Cart Successfully.",Toast.LENGTH_SHORT).show()
+                        }
+
                         override fun valueChanged(pos: Int, str: String) {
                             subList[pos].customPrice = str
                             adapter2.notifyItemChanged(pos)                        }
@@ -559,9 +584,25 @@ class SalesOrder : Fragment(), RetrofitResponse {
 
                             adapter3.onClicked(object: SubCategaryAdapter.CardInterface{
 
+
+                                override fun changeEditMode(pos: Int, editMode: Boolean) {
+                                    subList[pos].editMode = editMode
+                                    adapter3.notifyItemChanged(pos)
+
+                                    val dNow = Date()
+                                    val ft = SimpleDateFormat("yyMMddhhmmssMs")
+                                    val datetime = ft.format(dNow)
+
+                                    wordViewModel.insertCart(Cart(datetime,subList[pos].distIDMain,
+                                        subList[pos].category,subList[pos].price,subList[pos].customPrice,
+                                        subList[pos].overAllPrice,subList[pos].cartItem))
+                                    Toast.makeText(rvSubCategories.context,"Item Added to Cart Successfully.",Toast.LENGTH_SHORT).show()
+
+                                }
+
                                 override fun valueChanged(pos: Int, str: String) {
                                     subList[pos].customPrice = str
-                                    adapter2.notifyItemChanged(pos)
+                                    adapter3.notifyItemChanged(pos)
                                 }
                                 override fun clickedSelected(pos: Int, str: String) {
                                     if(str=="add")
@@ -573,7 +614,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
                                         else
                                         {
                                             subList[pos].cartItem = (subList[pos].cartItem.toInt()+1).toString()
-                                            adapter2.notifyItemChanged(pos)
+                                            adapter3.notifyItemChanged(pos)
                                         }
                                     }
                                     if(str=="remove")
@@ -586,7 +627,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
                                         else
                                         {
                                             subList[pos].cartItem = (subList[pos].cartItem.toInt()-1).toString()
-                                            adapter2.notifyItemChanged(pos)
+                                            adapter3.notifyItemChanged(pos)
                                         }
                                     }
                                 }
@@ -630,9 +671,24 @@ class SalesOrder : Fragment(), RetrofitResponse {
 
                             adapter3.onClicked(object: SubCategaryAdapter.CardInterface{
 
+                                override fun changeEditMode(pos: Int, editMode: Boolean) {
+                                    subList[pos].editMode = editMode
+                                    adapter3.notifyItemChanged(pos)
+
+                                    val dNow = Date()
+                                    val ft = SimpleDateFormat("yyMMddhhmmssMs")
+                                    val datetime = ft.format(dNow)
+
+                                    wordViewModel.insertCart(Cart(datetime,subList[pos].distIDMain,
+                                        subList[pos].category,subList[pos].price,subList[pos].customPrice,
+                                        subList[pos].overAllPrice,subList[pos].cartItem))
+                                    Toast.makeText(rvSubCategories.context,"Item Added to Cart Successfully.",Toast.LENGTH_SHORT).show()
+
+                                }
+
                                 override fun valueChanged(pos: Int, str: String) {
                                     subList[pos].customPrice = str
-                                    adapter2.notifyItemChanged(pos)
+                                    adapter3.notifyItemChanged(pos)
                                 }
 
                                 override fun clickedSelected(pos: Int, str: String) {
@@ -645,7 +701,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
                                         else
                                         {
                                             subList[pos].cartItem = (subList[pos].cartItem.toInt()+1).toString()
-                                            adapter2.notifyItemChanged(pos)
+                                            adapter3.notifyItemChanged(pos)
 
                                         }
                                     }
@@ -659,7 +715,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
                                          else
                                         {
                                             subList[pos].cartItem = (subList[pos].cartItem.toInt()-1).toString()
-                                            adapter2.notifyItemChanged(pos)
+                                            adapter3.notifyItemChanged(pos)
                                         }
                                     }
                                 }
@@ -693,7 +749,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
                 listCategories[i].price,listCategories[i].weight,
                 listCategories[i].ptrflag,"0",
                 (listCategories[i].price.toFloat()+(listCategories[i].price.toFloat()*(45))/1000 ).toString(),
-                "0.0"
+                "0.0",distIDMain,true
                 ))
         }
         }

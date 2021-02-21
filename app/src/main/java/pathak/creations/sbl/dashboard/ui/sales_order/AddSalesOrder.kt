@@ -15,11 +15,13 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.add_sales_order.*
 import kotlinx.android.synthetic.main.custom_spinner.view.*
 import org.json.JSONObject
+import pathak.creations.sbl.AppController
 import pathak.creations.sbl.R
 import pathak.creations.sbl.common.CommonKeys
 import pathak.creations.sbl.common.CommonMethods
@@ -28,6 +30,9 @@ import pathak.creations.sbl.custom_adapter.SpinnerCustomCategoryAdapter
 import pathak.creations.sbl.data_class.CategoriesData
 import pathak.creations.sbl.data_class.SubCat
 import pathak.creations.sbl.data_class.SubCategaryAdapter
+import pathak.creations.sbl.data_classes.Cart
+import pathak.creations.sbl.data_classes.WordViewModel
+import pathak.creations.sbl.data_classes.WordViewModelFactory
 import pathak.creations.sbl.retrofit.RetrofitResponse
 import pathak.creations.sbl.retrofit.RetrofitService
 import java.text.SimpleDateFormat
@@ -240,6 +245,23 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
                 rvSubCategories.adapter = adapter2
 
                 adapter2.onClicked(object: SubCategaryAdapter.CardInterface{
+                    override fun changeEditMode(pos: Int, editMode: Boolean) {
+                        subList[pos].editMode = editMode
+                        adapter2.notifyItemChanged(pos)
+
+                        val dNow = Date()
+                        val ft = SimpleDateFormat("yyMMddhhmmssMs")
+                        val datetime = ft.format(dNow)
+
+                        wordViewModel.insertCart(
+                            Cart(datetime,subList[pos].distIDMain,
+                                subList[pos].category,subList[pos].price,subList[pos].customPrice,
+                                subList[pos].overAllPrice,subList[pos].cartItem)
+
+                        )
+                        Toast.makeText(rvSubCategories.context,"Item Added to Cart Successfully.",Toast.LENGTH_SHORT).show()
+
+                    }
                     override fun valueChanged(pos: Int, str: String) {
 
                         subList[pos].customPrice = str
@@ -312,6 +334,24 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
                             rvSubCategories.adapter = adapter3
 
                             adapter3.onClicked(object: SubCategaryAdapter.CardInterface{
+
+                                override fun changeEditMode(pos: Int, editMode: Boolean) {
+                                    subList[pos].editMode = editMode
+                                    adapter3.notifyItemChanged(pos)
+
+                                    val dNow = Date()
+                                    val ft = SimpleDateFormat("yyMMddhhmmssMs")
+                                    val datetime = ft.format(dNow)
+
+                                    wordViewModel.insertCart(Cart(
+                                        datetime,subList[pos].distIDMain,
+                                        subList[pos].category,subList[pos].price,subList[pos].customPrice,
+                                        subList[pos].overAllPrice,subList[pos].cartItem))
+
+                                    Toast.makeText(rvSubCategories.context,"Item Added to Cart Successfully.",Toast.LENGTH_SHORT).show()
+
+                                }
+
                                 override fun valueChanged(pos: Int, str: String) {
                                     subList[pos].customPrice = str
                                     adapter3.notifyDataSetChanged()
@@ -383,6 +423,23 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
                             rvSubCategories.adapter = adapter3
 
                             adapter3.onClicked(object: SubCategaryAdapter.CardInterface{
+
+                                override fun changeEditMode(pos: Int, editMode: Boolean) {
+                                    subList[pos].editMode = editMode
+                                    adapter3.notifyItemChanged(pos)
+
+                                    val dNow = Date()
+                                    val ft = SimpleDateFormat("yyMMddhhmmssMs")
+                                    val datetime = ft.format(dNow)
+
+                                    wordViewModel.insertCart(Cart(datetime,subList[pos].distIDMain,
+                                        subList[pos].category,subList[pos].price,subList[pos].customPrice,
+                                        subList[pos].overAllPrice,subList[pos].cartItem))
+                                    Toast.makeText(rvSubCategories.context,"Item Added to Cart Successfully.",Toast.LENGTH_SHORT).show()
+
+                                }
+
+
                                 override fun valueChanged(pos: Int, str: String) {
                                     //
                                     subList[pos].customPrice = str
@@ -473,6 +530,9 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
 
     }
 
-
+    //data base work
+    private val wordViewModel: WordViewModel by viewModels {
+        WordViewModelFactory(((context as Activity).application as AppController).repository)
+    }
 
 }
