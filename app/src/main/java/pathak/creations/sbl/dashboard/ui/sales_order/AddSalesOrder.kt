@@ -502,7 +502,7 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
                     listCategories[i].code,listCategories[i].description,
                     listCategories[i].price,listCategories[i].weight,
                     listCategories[i].ptrflag,"0",
-                    (listCategories[i].price.toFloat()+(list[i].price.toFloat()*(45))/1000 ).toString(),
+                    (listCategories[i].price.toFloat()+(listCategories[i].price.toFloat()*(45))/1000 ).toString(),
                     "0.0"
                 ))
             }
