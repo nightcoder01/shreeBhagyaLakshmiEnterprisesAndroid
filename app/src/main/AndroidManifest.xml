@@ -24,7 +24,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".welcome.ResetPassword"></activity>
+        <activity android:name=".welcome.ResetPassword" />
         <activity android:name=".welcome.ForgotPassword" />
         <activity
             android:name=".dashboard.DashBoard"

@@ -749,7 +749,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
                 listCategories[i].price,listCategories[i].weight,
                 listCategories[i].ptrflag,"0",
                 (listCategories[i].price.toFloat()+(listCategories[i].price.toFloat()*(45))/1000 ).toString(),
-                "0.0",distIDMain,true
+                "0.0"
                 ))
         }
         }
