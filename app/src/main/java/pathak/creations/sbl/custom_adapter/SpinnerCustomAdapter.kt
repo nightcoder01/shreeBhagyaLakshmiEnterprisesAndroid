@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.spinner_dropdown_item2.view.*
 import pathak.creations.sbl.R
-import pathak.creations.sbl.data_class.BeatData
+import pathak.creations.sbl.data_classes.Beat
 
-class SpinnerCustomAdapter(var listShort: ArrayList<BeatData>) :
+class SpinnerCustomAdapter(var listShort: List<Beat>) :
     RecyclerView.Adapter<SpinnerCustomAdapter.CardsViewHolder>() {
 
 

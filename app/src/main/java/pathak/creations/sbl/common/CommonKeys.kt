@@ -36,14 +36,17 @@ object CommonKeys {
     const val GET_RETAILERS = "v1/get-retailers"
     const val GET_RETAILERS_CODE = 6
 
-
     const val EDIT_RETAILER = "v1/edit-retailer"
     const val EDIT_RETAILER_CODE = 7
-
 
     const val ADD_RETAILER = "v1/add-retailer"
     const val ADD_RETAILER_CODE = 8
 
+    const val ALL_BEATS = "v1/all-beats"
+    const val ALL_BEATS_CODE = 9
+
+    const val ALL_RETAILERS = "v1/all-retailers"
+    const val ALL_RETAILERS_CODE = 10
 
 
     val ID = "id"
@@ -71,5 +74,9 @@ object CommonKeys {
     val TOKEN = "token"
     val NOTIFICATION_TOKEN = "notification_token"
     val EMAIL_VERIFIED = "email_verified"
+
+
+
+    val IS_LOCATION_CHECKED = "location_checked"
 
 }

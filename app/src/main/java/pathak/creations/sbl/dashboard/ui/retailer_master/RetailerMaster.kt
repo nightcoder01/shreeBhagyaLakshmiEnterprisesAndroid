@@ -171,7 +171,7 @@ class RetailerMaster : Fragment(), RetrofitResponse {
             // callBeatList(PreferenceFile.retrieveKey(ctx,CommonKeys.NAME)!!)
             callDistRetailer(PreferenceFile.retrieveKey(ctx, CommonKeys.NAME)!!)
         } else {
-            callDistributorList()
+         //   callDistributorList()
         }
     }
 
@@ -348,8 +348,6 @@ class RetailerMaster : Fragment(), RetrofitResponse {
                                         dataObj.getString("type"),
                                         dataObj.getString("updated"),
                                         dataObj.getString("vattin")
-
-
                                     )
                                 )
 
@@ -448,17 +446,15 @@ class RetailerMaster : Fragment(), RetrofitResponse {
                     }
 
 
-                    val adapter2 = SpinnerCustomDistributorAdapter(list)
+                    val adapter2 = SpinnerCustomDistributorAdapter(list2)
                     customView.rvSpinner.adapter = adapter2
                     adapter2.onClicked(object : SpinnerCustomDistributorAdapter.CardInterface {
                         override fun clickedSelected(position: Int) {
 
                             view.hint = list2[position].distName
                             popupWindow!!.dismiss()
-                            // callBeatList(list2[position])
                             callDistRetailer(list2[position].distID)
 
-                            // callBeatRetailer(list[position].dist_id,list[position].beatname)
                         } }) } }
         })
 

@@ -29,6 +29,7 @@ import pathak.creations.sbl.custom_adapter.SpinnerCustomAdapter
 import pathak.creations.sbl.custom_adapter.SpinnerCustomCategoryAdapter
 import pathak.creations.sbl.custom_adapter.SpinnerCustomDistributorAdapter
 import pathak.creations.sbl.data_class.BeatData
+import pathak.creations.sbl.data_classes.Beat
 import pathak.creations.sbl.data_classes.Distributor
 import pathak.creations.sbl.data_classes.WordViewModel
 import pathak.creations.sbl.data_classes.WordViewModelFactory
@@ -419,7 +420,7 @@ class AddRetailer : Fragment(), RetrofitResponse {
 
             distIDD = distID!!
             tvBeatName2.text = ""
-
+/*
             if (CommonMethods.isNetworkAvailable(ctx)) {
                 val json = JSONObject()
 
@@ -442,7 +443,28 @@ class AddRetailer : Fragment(), RetrofitResponse {
                     ctx,
                     getString(R.string.checkYourConnection)
                 )
-            }
+            }*/
+
+
+
+
+
+//            wordViewModel.getBeatFromDist(distIDD, this)
+
+
+
+            //set live data observer
+            wordViewModel.allBeat.observe(viewLifecycleOwner, Observer { dist ->
+                // Update the cached copy of the words in the adapter.
+
+
+                dist?.let {
+
+                    setBeatAdapter(it)
+
+                }
+            })
+
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -536,7 +558,7 @@ class AddRetailer : Fragment(), RetrofitResponse {
                             }
 
 
-                            setBeatAdapter(listBeats)
+                          //  setBeatAdapter(listBeats)
                         }
 
                         else {
@@ -587,7 +609,7 @@ class AddRetailer : Fragment(), RetrofitResponse {
 
 
 
-    private fun setBeatAdapter(listBeats: ArrayList<BeatData>) {
+    private fun setBeatAdapter(listBeats: List<Beat>) {
 
 
         tvBeatName2.setOnClickListener {
@@ -598,9 +620,9 @@ class AddRetailer : Fragment(), RetrofitResponse {
 
     var popupWindow: PopupWindow? = null
 
-    fun openPopShortBy(
+    private fun openPopShortBy(
         view: TextView,
-        listBeats: ArrayList<BeatData>
+        listBeats: List<Beat>
     ) {
         val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val customView = inflater.inflate(R.layout.custom_spinner, null)
@@ -654,7 +676,7 @@ class AddRetailer : Fragment(), RetrofitResponse {
                 else
                 {
 
-                    val list : ArrayList<BeatData> = ArrayList()
+                    val list : ArrayList<Beat> = ArrayList()
 
                     for(i in 0 until listBeats.size)
                     {

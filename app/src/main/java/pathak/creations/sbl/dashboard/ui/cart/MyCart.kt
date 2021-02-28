@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.custom_spinner.view.*
@@ -26,8 +27,27 @@ import pathak.creations.sbl.data_classes.Cart
 import pathak.creations.sbl.data_classes.Distributor
 import pathak.creations.sbl.data_classes.WordViewModel
 import pathak.creations.sbl.data_classes.WordViewModelFactory
+import pathak.creations.sbl.interfaces.DataChangeListener
 
-class MyCart : Fragment() {
+class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>> {
+
+
+
+
+
+    override fun DataChange(data: LiveData<List<Cart>>) {
+        data.observe(viewLifecycleOwner, Observer { dist ->
+            // Update the cached copy of the words in the adapter.
+
+
+            dist?.let {
+
+                setCartAdapter(it)
+
+            }
+        })
+    }
+
 
     private lateinit var myCartVM: MyCartVM
 
@@ -52,17 +72,10 @@ class MyCart : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
-
-
         tvClearCart.setOnClickListener {
             callDeleteAllDialog()
 
-
         }
-
-
 
         //set live data observer
         wordViewModel.allCart.observe(viewLifecycleOwner, Observer { dist ->
@@ -192,9 +205,9 @@ class MyCart : Fragment() {
 
                 view.hint = list[position].distName
                 popupWindow!!.dismiss()
-                // callBeatList(listDistId[position])
-               // callDistRetailer(list[position].distID)
-                // callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
+
+                wordViewModel.getCartFromDist(list[position].distID, this@MyCart)
+
             }
         })
 
@@ -221,6 +234,9 @@ class MyCart : Fragment() {
                            // callDistRetailer(list[position].distID)
 
                             //  callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
+
+                            wordViewModel.getCartFromDist(list[position].distID, this@MyCart)
+
                         }
                     })
                 } else {
@@ -235,7 +251,7 @@ class MyCart : Fragment() {
                     }
 
 
-                    val adapter2 = SpinnerCustomDistributorAdapter(list)
+                    val adapter2 = SpinnerCustomDistributorAdapter(list2)
                     customView.rvSpinner.adapter = adapter2
                     adapter2.onClicked(object : SpinnerCustomDistributorAdapter.CardInterface {
                         override fun clickedSelected(position: Int) {
@@ -246,6 +262,9 @@ class MyCart : Fragment() {
                           //  callDistRetailer(list2[position].distID)
 
                             // callBeatRetailer(list[position].dist_id,list[position].beatname)
+
+                            wordViewModel.getCartFromDist(list[position].distID, this@MyCart)
+
                         } }) } }
         })
 

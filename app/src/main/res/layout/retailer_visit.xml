@@ -144,7 +144,7 @@
         android:layout_marginEnd="@dimen/_10sdp"
         android:background="@drawable/round_bg"
         android:drawableEnd="@drawable/ic_arrow_drop"
-        android:hint="Select Beat Name"
+        android:hint="@string/select_beat_name"
         android:maxLength="30"
         android:padding="@dimen/_7sdp"
         android:textSize="@dimen/_12sdp"

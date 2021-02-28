@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -39,15 +40,18 @@ import pathak.creations.sbl.common.GPSTracker
 import pathak.creations.sbl.common.PreferenceFile
 import pathak.creations.sbl.custom_adapter.SpinnerCustomAdapter
 import pathak.creations.sbl.custom_adapter.SpinnerCustomDistributorAdapter
+import pathak.creations.sbl.dashboard.DashBoard
 import pathak.creations.sbl.data_class.BeatData
 import pathak.creations.sbl.data_class.BeatRetailerData
+import pathak.creations.sbl.data_classes.Beat
 import pathak.creations.sbl.data_classes.Distributor
 import pathak.creations.sbl.data_classes.WordViewModel
 import pathak.creations.sbl.data_classes.WordViewModelFactory
+import pathak.creations.sbl.interfaces.DataChangeListener
 import pathak.creations.sbl.retrofit.RetrofitResponse
 import pathak.creations.sbl.retrofit.RetrofitService
 
-class RetailerVisit : Fragment(), RetrofitResponse {
+class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<List<Beat>>> {
 
 
     private lateinit var retailerVisitVM: RetailerVisitVM
@@ -108,6 +112,8 @@ class RetailerVisit : Fragment(), RetrofitResponse {
 
             callBeatList(distributorId)
 
+
+
         }
 
 
@@ -130,6 +136,7 @@ class RetailerVisit : Fragment(), RetrofitResponse {
 
             }
         })
+
 
     }
 
@@ -187,7 +194,7 @@ class RetailerVisit : Fragment(), RetrofitResponse {
         }
         else
         {
-            callDistributorList()
+        //    callDistributorList()
         }
     }
 
@@ -222,7 +229,7 @@ class RetailerVisit : Fragment(), RetrofitResponse {
     private fun callBeatList(distID: String?) {
         try {
 
-            if (CommonMethods.isNetworkAvailable(ctx!!)) {
+/*            if (CommonMethods.isNetworkAvailable(ctx!!)) {
                 val json = JSONObject()
 
                 distributor =distID!!
@@ -244,11 +251,41 @@ class RetailerVisit : Fragment(), RetrofitResponse {
                     ctx!!,
                     getString(R.string.checkYourConnection)
                 )
-            }
+            }*/
+
+
+
+
+            wordViewModel.getBeatFromDist(distID!!, this)
+
+            //set live data observer
+           /* wordViewModel.allBeat.observe(viewLifecycleOwner, Observer { dist ->
+                // Update the cached copy of the words in the adapter.
+
+
+                dist?.let {
+                    setBeatAdapter(it)
+
+                }
+            })*/
+
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
+
+    override fun DataChange(data: LiveData<List<Beat>>) {
+        data.observe(viewLifecycleOwner, Observer { dist ->
+            // Update the cached copy of the words in the adapter.
+
+
+            dist?.let {
+                setBeatAdapter(it)
+
+            }
+        })
+    }
+
 
     lateinit var deleteDialog: Dialog
 
@@ -376,7 +413,7 @@ class RetailerVisit : Fragment(), RetrofitResponse {
                             }
 
 
-                            setBeatAdapter(listBeats)
+                        //    setBeatAdapter(listBeats)
                         }
 
                         else {
@@ -499,7 +536,23 @@ class RetailerVisit : Fragment(), RetrofitResponse {
 
 
 
-                    shareLocation(position)
+                    if(PreferenceFile.retrieveKey(ctx!!,CommonKeys.IS_LOCATION_CHECKED)=="false")
+                    {
+                        shareLocation(position)
+                    }
+                    else
+                    {
+                        val bundle = bundleOf("distributorName" to listBeatsRetailer[position].distributor,
+                            "beatName" to listBeatsRetailer[position].beatname,
+                            "retailer" to listBeatsRetailer[position].retailer_name,
+                            "retailerId" to listBeatsRetailer[position].retailer_id,
+                            "salesman" to listBeatsRetailer[position].client,
+                            "dist_id" to listBeatsRetailer[position].dist_id
+                        )
+                        Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_add_sales,bundle)
+                    }
+
+
 
 /*
                     gpsTracker = GPSTracker(ctx)
@@ -556,7 +609,9 @@ class RetailerVisit : Fragment(), RetrofitResponse {
 
     }
 
-    private fun setBeatAdapter(listBeats: ArrayList<BeatData>) {
+
+
+    private fun setBeatAdapter(listBeats: List<Beat>) {
 
 
         tvBeatName2.setOnClickListener {
@@ -569,7 +624,7 @@ class RetailerVisit : Fragment(), RetrofitResponse {
 
     fun openPopShortBy(
         view: TextView,
-        listBeats: ArrayList<BeatData>
+        listBeats: List<Beat>
     ) {
         val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val customView = inflater.inflate(R.layout.custom_spinner, null)
@@ -623,9 +678,9 @@ class RetailerVisit : Fragment(), RetrofitResponse {
                 else
                 {
 
-                    val list : ArrayList<BeatData> = ArrayList()
+                    val list : ArrayList<Beat> = ArrayList()
 
-                    for(i in 0 until listBeats.size)
+                    for(i in listBeats.indices)
                     {
                         if(listBeats[i].beatname.toLowerCase().contains(s.toString().toLowerCase(),false))
                         {
@@ -902,6 +957,12 @@ class RetailerVisit : Fragment(), RetrofitResponse {
     }
     private fun shareLocation(position: Int) {
         val alertDialog = AlertDialog.Builder(ctx!!)
+
+        PreferenceFile.storeKey(ctx!!,CommonKeys.IS_LOCATION_CHECKED,"true")
+
+        (ctx as DashBoard).isLocChecked.set(true)
+
+
         alertDialog.setTitle("share Location !!")
         alertDialog.setCancelable(false)
         alertDialog.setMessage("Please share location permission for area Preference.")
@@ -909,10 +970,6 @@ class RetailerVisit : Fragment(), RetrofitResponse {
             dialog.dismiss()
 
             gpsTracker = GPSTracker(ctx)
-
-
-
-
 
            if(permissions())
            {
@@ -961,9 +1018,6 @@ class RetailerVisit : Fragment(), RetrofitResponse {
                             "dist_id" to listBeatsRetailer[position].dist_id
                             )
                         Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_add_sales,bundle)
-
-
-
 
         }
 

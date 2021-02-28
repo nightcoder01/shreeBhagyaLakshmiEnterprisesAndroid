@@ -15,11 +15,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.custom_spinner.view.*
 import kotlinx.android.synthetic.main.sales_order.*
-import org.json.JSONArray
 import org.json.JSONObject
 import pathak.creations.sbl.AppController
 import pathak.creations.sbl.R
@@ -32,10 +32,8 @@ import pathak.creations.sbl.custom_adapter.SpinnerCustomDistributorAdapter
 import pathak.creations.sbl.custom_adapter.SpinnerCustomRetailerAdapter
 import pathak.creations.sbl.dashboard.ui.retailer_visit.RetailerVisitAdapter
 import pathak.creations.sbl.data_class.*
-import pathak.creations.sbl.data_classes.Cart
-import pathak.creations.sbl.data_classes.Distributor
-import pathak.creations.sbl.data_classes.WordViewModel
-import pathak.creations.sbl.data_classes.WordViewModelFactory
+import pathak.creations.sbl.data_classes.*
+import pathak.creations.sbl.interfaces.DataChangeListener
 import pathak.creations.sbl.retrofit.RetrofitResponse
 import pathak.creations.sbl.retrofit.RetrofitService
 import java.text.SimpleDateFormat
@@ -45,7 +43,7 @@ import kotlin.collections.ArrayList
 
 
 
-class SalesOrder : Fragment(), RetrofitResponse {
+class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<List<Beat>>> {
 
 
     private lateinit var salesOrderVM: SalesOrderVM
@@ -114,7 +112,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
         }
         else
         {
-            callDistributorList()
+          //  callDistributorList()
         }
     }
 
@@ -151,33 +149,39 @@ class SalesOrder : Fragment(), RetrofitResponse {
     private fun callBeatList(distID: String?) {
         try {
 
-            if (CommonMethods.isNetworkAvailable(ctx)) {
-                val json = JSONObject()
 
 
-                json.put("dist_id",distID)
-                distIDMain = distID!!
-                RetrofitService(
-                    ctx,
-                    this,
-                    CommonKeys.BEAT_LIST ,
-                    CommonKeys.BEAT_LIST_CODE,
-                    json,2
-                ).callService(true, PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!)
+            wordViewModel.getBeatFromDist(distID!!, this)
 
-                Log.e("callBeatList", "=====$json")
-                Log.e("callBeatList", "=token====${PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!}")
+            //set live data observer
+            /*wordViewModel.allBeat.observe(viewLifecycleOwner, Observer { dist ->
+                // Update the cached copy of the words in the adapter.
 
-            } else {
-                CommonMethods.alertDialog(
-                    ctx,
-                    getString(R.string.checkYourConnection)
-                )
-            }
+
+                dist?.let {
+
+                    setBeatAdapter(it)
+
+                }
+            })*/
+
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
+
+    override fun DataChange(data: LiveData<List<Beat>>) {
+        data.observe(viewLifecycleOwner, Observer { dist ->
+            // Update the cached copy of the words in the adapter.
+
+
+            dist?.let {
+                setBeatAdapter(it)
+
+            }
+        })
+    }
+
 
     private fun callCategories(id: String?) {
         try {
@@ -199,7 +203,8 @@ class SalesOrder : Fragment(), RetrofitResponse {
                 Log.e("callCategories", "=====$json")
                 Log.e("callCategories", "=token====${PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!}")
 
-            } else {
+            }
+            else {
                 CommonMethods.alertDialog(
                     ctx,
                     getString(R.string.checkYourConnection)
@@ -253,7 +258,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
                             }
 
 
-                            setBeatAdapter(listBeats)
+                         //   setBeatAdapter(listBeats)
                         }
 
                         else {
@@ -496,23 +501,50 @@ class SalesOrder : Fragment(), RetrofitResponse {
                     adapter2.onClicked(object: SubCategaryAdapter.CardInterface{
 
                         override fun changeEditMode(pos: Int, editMode: Boolean) {
-                            subList[pos].editMode = editMode
-                            adapter2.notifyItemChanged(pos)
-
-
-                                val dNow = Date()
-                                val ft = SimpleDateFormat("yyMMddhhmmssMs")
-                                val datetime = ft.format(dNow)
 
 
 
-                            wordViewModel.insertCart(Cart(
-                                datetime,
-                                subList[pos].distIDMain,
-                                subList[pos].category,subList[pos].price,subList[pos].customPrice,
-                                subList[pos].overAllPrice,subList[pos].cartItem))
+                            if (isValid()) {
+                                if(subList[pos].cartItem.toInt()!=0){
+                                if(subList[pos].price.toDouble()<=subList[pos].customPrice.toDouble()) {
+                                    subList[pos].editMode = editMode
+                                    adapter2.notifyItemChanged(pos)
 
-                            Toast.makeText(rvSubCategories.context,"Item Added to Cart Successfully.",Toast.LENGTH_SHORT).show()
+
+                                    val dNow = Date()
+                                    val ft = SimpleDateFormat("yyMMddhhmmssMs")
+                                    val datetime = ft.format(dNow)
+
+
+                                    wordViewModel.insertCart(
+                                        Cart(
+                                            datetime,
+                                            subList[pos].distIDMain,
+                                            subList[pos].category,
+                                            subList[pos].price,
+                                            subList[pos].customPrice,
+                                            subList[pos].overAllPrice,
+                                            subList[pos].cartItem,tvBeatName2.text.toString(),tvRetailer2.text.toString()
+                                        )
+                                    )
+
+                                    Toast.makeText(
+                                        rvSubCategories.context,
+                                        "Item Added to Cart Successfully.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                else
+                                {
+                                    CommonMethods.alertDialog(ctx,"Ptd price cannot be less than Ptr price")
+
+                                }}
+                                else
+                                {
+                                    CommonMethods.alertDialog(ctx,"Count cannot be 0")
+
+                                }
+                            }
                         }
 
                         override fun valueChanged(pos: Int, str: String) {
@@ -586,17 +618,55 @@ class SalesOrder : Fragment(), RetrofitResponse {
 
 
                                 override fun changeEditMode(pos: Int, editMode: Boolean) {
-                                    subList[pos].editMode = editMode
-                                    adapter3.notifyItemChanged(pos)
 
-                                    val dNow = Date()
-                                    val ft = SimpleDateFormat("yyMMddhhmmssMs")
-                                    val datetime = ft.format(dNow)
 
-                                    wordViewModel.insertCart(Cart(datetime,subList[pos].distIDMain,
-                                        subList[pos].category,subList[pos].price,subList[pos].customPrice,
-                                        subList[pos].overAllPrice,subList[pos].cartItem))
-                                    Toast.makeText(rvSubCategories.context,"Item Added to Cart Successfully.",Toast.LENGTH_SHORT).show()
+
+                                    if (isValid()) {
+
+
+                                        if(subList[pos].cartItem.toInt()!=0){
+                                            if(subList[pos].price.toDouble()<=subList[pos].customPrice.toDouble()) {
+
+                                                subList[pos].editMode = editMode
+                                                adapter3.notifyItemChanged(pos)
+
+                                                val dNow = Date()
+                                                val ft = SimpleDateFormat("yyMMddhhmmssMs")
+                                                val datetime = ft.format(dNow)
+
+                                                wordViewModel.insertCart(
+                                                    Cart(
+                                                        datetime,
+                                                        subList[pos].distIDMain,
+                                                        subList[pos].category,
+                                                        subList[pos].price,
+                                                        subList[pos].customPrice,
+                                                        subList[pos].overAllPrice,
+                                                        subList[pos].cartItem,tvBeatName2.text.toString(),tvRetailer2.text.toString()
+                                                    )
+                                                )
+
+                                                Toast.makeText(
+                                                    rvSubCategories.context,
+                                                    "Item Added to Cart Successfully.",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                            else
+                                            {
+                                                CommonMethods.alertDialog(ctx,"Ptd price cannot be less than Ptr price")
+
+                                            }}
+                                        else
+                                        {
+                                            CommonMethods.alertDialog(
+                                                ctx,
+                                                "Count cannot be 0"
+                                            )
+                                        }
+                                    }
+
+
 
                                 }
 
@@ -672,17 +742,53 @@ class SalesOrder : Fragment(), RetrofitResponse {
                             adapter3.onClicked(object: SubCategaryAdapter.CardInterface{
 
                                 override fun changeEditMode(pos: Int, editMode: Boolean) {
-                                    subList[pos].editMode = editMode
-                                    adapter3.notifyItemChanged(pos)
 
-                                    val dNow = Date()
-                                    val ft = SimpleDateFormat("yyMMddhhmmssMs")
-                                    val datetime = ft.format(dNow)
 
-                                    wordViewModel.insertCart(Cart(datetime,subList[pos].distIDMain,
-                                        subList[pos].category,subList[pos].price,subList[pos].customPrice,
-                                        subList[pos].overAllPrice,subList[pos].cartItem))
-                                    Toast.makeText(rvSubCategories.context,"Item Added to Cart Successfully.",Toast.LENGTH_SHORT).show()
+
+                                    if (isValid()) {
+
+                                        if(subList[pos].cartItem.toInt()!=0){
+                                            if(subList[pos].price.toDouble()<=subList[pos].customPrice.toDouble()) {
+
+                                                subList[pos].editMode = editMode
+                                                adapter3.notifyItemChanged(pos)
+
+                                                val dNow = Date()
+                                                val ft = SimpleDateFormat("yyMMddhhmmssMs")
+                                                val datetime = ft.format(dNow)
+
+                                                wordViewModel.insertCart(
+                                                    Cart(
+                                                        datetime,
+                                                        subList[pos].distIDMain,
+                                                        subList[pos].category,
+                                                        subList[pos].price,
+                                                        subList[pos].customPrice,
+                                                        subList[pos].overAllPrice,
+                                                        subList[pos].cartItem,tvBeatName2.text.toString(),tvRetailer2.text.toString()
+                                                    )
+                                                )
+
+                                                Toast.makeText(
+                                                    rvSubCategories.context,
+                                                    "Item Added to Cart Successfully.",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                            else
+                                            {
+                                                CommonMethods.alertDialog(ctx,"Ptd price cannot be less than Ptr price")
+
+                                            }}
+                                        else
+                                        {
+                                            CommonMethods.alertDialog(
+                                                ctx,
+                                                "Count cannot be 0"
+                                            )
+                                        }
+                                    }
+
 
                                 }
 
@@ -733,6 +839,21 @@ class SalesOrder : Fragment(), RetrofitResponse {
 
     }
 
+    private fun isValid(): Boolean {
+
+        return when {
+            tvBeatName2.text.isNullOrBlank() -> {
+                CommonMethods.alertDialog(ctx,"Please select Beat Name")
+                false
+            }
+            tvRetailer2.text.isNullOrBlank() -> {
+                CommonMethods.alertDialog(ctx,"Please select Retailer Name")
+                false
+            }
+            else -> true
+        }
+
+    }
 
 
     private fun getSubListFiltered(s: String, listCategories: ArrayList<CategoriesData>): ArrayList<SubCat> {
@@ -749,7 +870,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
                 listCategories[i].price,listCategories[i].weight,
                 listCategories[i].ptrflag,"0",
                 (listCategories[i].price.toFloat()+(listCategories[i].price.toFloat()*(45))/1000 ).toString(),
-                "0.0"
+                "0.0",distIDMain
                 ))
         }
         }
@@ -801,6 +922,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
 
                 view.text =listDist[position].distName
                 popupWindow!!.dismiss()
+                distIDMain = listDist[position].distID
                 callBeatList(listDist[position].distID)
                 callCategories(listDist[position].distID)
 
@@ -828,6 +950,8 @@ class SalesOrder : Fragment(), RetrofitResponse {
 
                             view.text =listDist[position].distName
                             popupWindow!!.dismiss()
+                            distIDMain = listDist[position].distID
+
                             callBeatList(listDist[position].distID)
                             callCategories(listDist[position].distID)
 
@@ -854,6 +978,9 @@ class SalesOrder : Fragment(), RetrofitResponse {
 
                             view.text =list[position].distName
                             popupWindow!!.dismiss()
+
+                            distIDMain = listDist[position].distID
+
                             callBeatList(list[position].distID)
                             callCategories(list[position].distID)
 
@@ -978,7 +1105,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
 
     }
 
-    private fun setBeatAdapter(listBeats: ArrayList<BeatData>) {
+    private fun setBeatAdapter(listBeats: List<Beat>) {
         tvBeatName2.setOnClickListener {
             openPopShortBy(tvBeatName2,listBeats)
         }
@@ -990,7 +1117,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
 
     fun openPopShortBy(
         view: TextView,
-        listBeats: ArrayList<BeatData>
+        listBeats: List<Beat>
     ) {
         val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val customView = inflater.inflate(R.layout.custom_spinner, null)
@@ -1046,7 +1173,7 @@ class SalesOrder : Fragment(), RetrofitResponse {
                 else
                 {
 
-                    val list : ArrayList<BeatData> = ArrayList()
+                    val list : ArrayList<Beat> = ArrayList()
 
                     for(i in 0 until listBeats.size)
                     {
@@ -1122,24 +1249,6 @@ class SalesOrder : Fragment(), RetrofitResponse {
         }
     }
 
-    private fun setSubList(arr: JSONArray): ArrayList<SubCat> {
-
-        listSubCategories.clear()
-        val list : ArrayList<SubCat> = ArrayList()
-
-
-        for(i in 0 until arr.length())
-        {
-            val obj = arr.getJSONObject(i)
-
-            list.add(SubCat(obj.getString("cat"),obj.getString("catgroup"),
-                obj.getString("code"),obj.getString("cunits"),
-                obj.getString("description"),obj.getString("sunits"),"0"
-            ))
-        }
-
-        return list
-    }
 
 
 

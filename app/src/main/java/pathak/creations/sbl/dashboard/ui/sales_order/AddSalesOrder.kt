@@ -246,20 +246,49 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
 
                 adapter2.onClicked(object: SubCategaryAdapter.CardInterface{
                     override fun changeEditMode(pos: Int, editMode: Boolean) {
-                        subList[pos].editMode = editMode
-                        adapter2.notifyItemChanged(pos)
 
-                        val dNow = Date()
-                        val ft = SimpleDateFormat("yyMMddhhmmssMs")
-                        val datetime = ft.format(dNow)
 
-                        wordViewModel.insertCart(
-                            Cart(datetime,subList[pos].distIDMain,
-                                subList[pos].category,subList[pos].price,subList[pos].customPrice,
-                                subList[pos].overAllPrice,subList[pos].cartItem)
 
-                        )
-                        Toast.makeText(rvSubCategories.context,"Item Added to Cart Successfully.",Toast.LENGTH_SHORT).show()
+                        if(subList[pos].cartItem.toInt()>0) {
+                            if(subList[pos].price.toDouble()<=subList[pos].customPrice.toDouble()) {
+
+                                subList[pos].editMode = editMode
+                                adapter2.notifyItemChanged(pos)
+
+                                val dNow = Date()
+                                val ft = SimpleDateFormat("yyMMddhhmmssMs")
+                                val datetime = ft.format(dNow)
+                                wordViewModel.insertCart(
+                                    Cart(
+                                        datetime,
+                                        subList[pos].distIDMain,
+                                        subList[pos].category,
+                                        subList[pos].price,
+                                        subList[pos].customPrice,
+                                        subList[pos].overAllPrice,
+                                        subList[pos].cartItem,etBeatName.text.toString(),etRetailerName.text.toString()
+                                    )
+                                )
+
+                                Toast.makeText(
+                                    rvSubCategories.context,
+                                    "Item Added to Cart Successfully.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            else
+                            {
+                                CommonMethods.alertDialog(ctx,"Ptd price cannot be less than Ptr price")
+
+                            }}
+                        else
+                        {
+                            CommonMethods.alertDialog(
+                                ctx,
+                                "Count cannot be 0"
+                            )
+                        }
+
 
                     }
                     override fun valueChanged(pos: Int, str: String) {
@@ -336,20 +365,51 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
                             adapter3.onClicked(object: SubCategaryAdapter.CardInterface{
 
                                 override fun changeEditMode(pos: Int, editMode: Boolean) {
-                                    subList[pos].editMode = editMode
-                                    adapter3.notifyItemChanged(pos)
 
-                                    val dNow = Date()
-                                    val ft = SimpleDateFormat("yyMMddhhmmssMs")
-                                    val datetime = ft.format(dNow)
+                                    if(subList[pos].cartItem.toInt()!=0) {
 
-                                    wordViewModel.insertCart(Cart(
-                                        datetime,subList[pos].distIDMain,
-                                        subList[pos].category,subList[pos].price,subList[pos].customPrice,
-                                        subList[pos].overAllPrice,subList[pos].cartItem))
+                                        if (subList[pos].price.toDouble() <= subList[pos].customPrice.toDouble()) {
 
-                                    Toast.makeText(rvSubCategories.context,"Item Added to Cart Successfully.",Toast.LENGTH_SHORT).show()
+                                            subList[pos].editMode = editMode
+                                            adapter3.notifyItemChanged(pos)
 
+                                            val dNow = Date()
+                                            val ft = SimpleDateFormat("yyMMddhhmmssMs")
+                                            val datetime = ft.format(dNow)
+                                            wordViewModel.insertCart(
+                                                Cart(
+                                                    datetime,
+                                                    subList[pos].distIDMain,
+                                                    subList[pos].category,
+                                                    subList[pos].price,
+                                                    subList[pos].customPrice,
+                                                    subList[pos].overAllPrice,
+                                                    subList[pos].cartItem,
+                                                    etBeatName.text.toString(),
+                                                    etRetailerName.text.toString()
+                                                )
+                                            )
+
+                                            Toast.makeText(
+                                                rvSubCategories.context,
+                                                "Item Added to Cart Successfully.",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        } else {
+                                            CommonMethods.alertDialog(
+                                                ctx,
+                                                "Ptd price cannot be less than Ptr price"
+                                            )
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        CommonMethods.alertDialog(
+                                            ctx,
+                                            "Count cannot be 0"
+                                        )
+                                    }
                                 }
 
                                 override fun valueChanged(pos: Int, str: String) {
@@ -425,18 +485,52 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
                             adapter3.onClicked(object: SubCategaryAdapter.CardInterface{
 
                                 override fun changeEditMode(pos: Int, editMode: Boolean) {
-                                    subList[pos].editMode = editMode
-                                    adapter3.notifyItemChanged(pos)
 
-                                    val dNow = Date()
-                                    val ft = SimpleDateFormat("yyMMddhhmmssMs")
-                                    val datetime = ft.format(dNow)
+                                    if(subList[pos].cartItem.toInt()!=0) {
+                                        if (subList[pos].price.toDouble() <= subList[pos].customPrice.toDouble()) {
 
-                                    wordViewModel.insertCart(Cart(datetime,subList[pos].distIDMain,
-                                        subList[pos].category,subList[pos].price,subList[pos].customPrice,
-                                        subList[pos].overAllPrice,subList[pos].cartItem))
-                                    Toast.makeText(rvSubCategories.context,"Item Added to Cart Successfully.",Toast.LENGTH_SHORT).show()
+                                            subList[pos].editMode = editMode
+                                            adapter3.notifyItemChanged(pos)
 
+                                            val dNow = Date()
+                                            val ft = SimpleDateFormat("yyMMddhhmmssMs")
+                                            val datetime = ft.format(dNow)
+
+
+                                            wordViewModel.insertCart(
+                                                Cart(
+                                                    datetime,
+                                                    subList[pos].distIDMain,
+                                                    subList[pos].category,
+                                                    subList[pos].price,
+                                                    subList[pos].customPrice,
+                                                    subList[pos].overAllPrice,
+                                                    subList[pos].cartItem,
+                                                    etBeatName.text.toString(),
+                                                    etRetailerName.text.toString()
+                                                )
+                                            )
+
+                                            Toast.makeText(
+                                                rvSubCategories.context,
+                                                "Item Added to Cart Successfully.",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        } else {
+                                            CommonMethods.alertDialog(
+                                                ctx,
+                                                "Ptd price cannot be less than Ptr price"
+                                            )
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        CommonMethods.alertDialog(
+                                            ctx,
+                                            "Count cannot be 0"
+                                        )
+                                    }
                                 }
 
 
@@ -488,7 +582,6 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
 
     }
 
-
     private fun getSubListFiltered(s: String, listCategories: ArrayList<CategoriesData>): ArrayList<SubCat> {
 
 
@@ -503,7 +596,7 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
                     listCategories[i].price,listCategories[i].weight,
                     listCategories[i].ptrflag,"0",
                     (listCategories[i].price.toFloat()+(listCategories[i].price.toFloat()*(45))/1000 ).toString(),
-                    "0.0"
+                    "0.0",dist_id
                 ))
             }
         }

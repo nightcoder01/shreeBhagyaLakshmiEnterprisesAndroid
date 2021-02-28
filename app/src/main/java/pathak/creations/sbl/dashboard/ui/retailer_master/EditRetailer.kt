@@ -23,6 +23,7 @@ import pathak.creations.sbl.common.CommonMethods
 import pathak.creations.sbl.common.PreferenceFile
 import pathak.creations.sbl.custom_adapter.SpinnerCustomAdapter
 import pathak.creations.sbl.data_class.BeatData
+import pathak.creations.sbl.data_classes.Beat
 import pathak.creations.sbl.retrofit.RetrofitResponse
 import pathak.creations.sbl.retrofit.RetrofitService
 
@@ -180,7 +181,7 @@ class EditRetailer : Fragment(), RetrofitResponse {
 
 
 
-    private fun setBeatAdapter(listBeats: ArrayList<BeatData>) {
+    private fun setBeatAdapter(listBeats: List<Beat>) {
 
 
         tvBeatName2.setOnClickListener {
@@ -193,7 +194,7 @@ class EditRetailer : Fragment(), RetrofitResponse {
 
     fun openPopShortBy(
         view: TextView,
-        listBeats: ArrayList<BeatData>
+        listBeats: List<Beat>
     ) {
         val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val customView = inflater.inflate(R.layout.custom_spinner, null)
@@ -247,9 +248,9 @@ class EditRetailer : Fragment(), RetrofitResponse {
                 else
                 {
 
-                    val list : ArrayList<BeatData> = ArrayList()
+                    val list : ArrayList<Beat> = ArrayList()
 
-                    for(i in 0 until listBeats.size)
+                    for(i in listBeats.indices)
                     {
                         if(listBeats[i].beatname.toLowerCase().contains(s.toString().toLowerCase(),false))
                         {
@@ -343,7 +344,7 @@ class EditRetailer : Fragment(), RetrofitResponse {
                             }
 
 
-                            setBeatAdapter(listBeats)
+                         //   setBeatAdapter(listBeats)
                         }
 
                         else {

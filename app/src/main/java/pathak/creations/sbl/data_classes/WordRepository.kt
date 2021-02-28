@@ -10,8 +10,6 @@ class WordRepository(private val wordDao: WordDao) {
     // Room executes all queries on a separate thread.
     // Observed Flow will notify the observer when the data has changed.
     val allWords: Flow<List<Word>> = wordDao.getAlphabetizedWords()
-    val allDistributors: Flow<List<Distributor>> = wordDao.getDistributors()
-    val allCarts: Flow<List<Cart>> = wordDao.getCartList()
 
     // By default Room runs suspend queries off the main thread, therefore, we don't need to
     // implement anything else to ensure we're not doing long running database work
@@ -22,6 +20,17 @@ class WordRepository(private val wordDao: WordDao) {
         wordDao.insert(word)
     }
 
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun delete() {
+        wordDao.deleteAll()
+    }
+
+
+    //distributor
+
+    val allDistributors: Flow<List<Distributor>> = wordDao.getDistributors()
+
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
@@ -31,14 +40,69 @@ class WordRepository(private val wordDao: WordDao) {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
+    suspend fun deleteAllDist() {
+        wordDao.deleteAllDist()
+    }
+
+    //beat
+
+    val allBeat: Flow<List<Beat>> = wordDao.getBeat()
+
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun insertBeat(beat: Beat) {
+        wordDao.insertBeat(beat)
+    }
+
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun getBeatFromDist(distId: String) : Flow<List<Beat>>{
+       return wordDao.getBeatFromDist(distId)
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun deleteAllBeat() {
+        wordDao.deleteAllBeat()
+    }
+
+
+    //retailer
+
+    val allRetailer: Flow<List<Retailer>> = wordDao.getRetailer()
+
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun insertRetailer(retailer: Retailer) {
+        wordDao.insertRetailer(retailer)
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun deleteAllRetailer() {
+        wordDao.deleteAllRetailer()
+    }
+
+
+
+    //cart
+
+    val allCarts: Flow<List<Cart>> = wordDao.getCartList()
+
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
     suspend fun insertCart(cart: Cart) {
         wordDao.insertCart(cart)
     }
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun delete() {
-        wordDao.deleteAll()
+    suspend fun getCartFromDist(distId: String) : Flow<List<Cart>>{
+        return wordDao.getCartFromDist(distId)
     }
 
     @Suppress("RedundantSuspendModifier")
@@ -47,9 +111,5 @@ class WordRepository(private val wordDao: WordDao) {
         wordDao.deleteAllCart()
     }
 
-    @Suppress("RedundantSuspendModifier")
-    @WorkerThread
-    suspend fun deleteAllDist() {
-        wordDao.deleteAllDist()
-    }
+
 }

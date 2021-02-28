@@ -96,6 +96,8 @@
     <string name="item_added">Item Added</string>
     <string name="custom_price">Custom Price</string>
     <string name="clear_all">clear All</string>
+    <string name="refresh">Refresh</string>
+    <string name="location">Location</string>
 
 
     <string-array name="array_name">

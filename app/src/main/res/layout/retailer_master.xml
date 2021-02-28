@@ -114,6 +114,7 @@
         android:drawableEnd="@drawable/ic_arrow_drop"
         android:hint="@string/select_distributor_name"
         android:maxLength="30"
+        android:singleLine="true"
         android:padding="@dimen/_7sdp"
         android:textSize="@dimen/_12sdp"
         app:layout_constraintEnd_toEndOf="parent"

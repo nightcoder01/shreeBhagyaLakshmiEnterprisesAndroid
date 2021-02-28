@@ -165,6 +165,12 @@ class WelcomeVM(
                                 userData.getString("status"),
                                 ""
                             )
+                            PreferenceFile.storeKeyNull(
+                                context,
+                                CommonKeys.IS_LOCATION_CHECKED,
+                                "false",
+                                ""
+                            )
 
                             CommonMethods.alertDialogIntentClear(
                                 context,
