@@ -34,10 +34,7 @@ import kotlinx.android.synthetic.main.retailer_visit.*
 import org.json.JSONObject
 import pathak.creations.sbl.AppController
 import pathak.creations.sbl.R
-import pathak.creations.sbl.common.CommonKeys
-import pathak.creations.sbl.common.CommonMethods
-import pathak.creations.sbl.common.GPSTracker
-import pathak.creations.sbl.common.PreferenceFile
+import pathak.creations.sbl.common.*
 import pathak.creations.sbl.custom_adapter.SpinnerCustomAdapter
 import pathak.creations.sbl.custom_adapter.SpinnerCustomDistributorAdapter
 import pathak.creations.sbl.dashboard.DashBoard
@@ -901,7 +898,7 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
 
                     }
                     else -> {
-                        showAlertMap()
+                        //showAlertMap()
                     }
                 }
                 return
@@ -929,7 +926,7 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
         val alertDialog = AlertDialog.Builder(ctx!!)
         alertDialog.setTitle("Enable GPS !!")
         alertDialog.setCancelable(false)
-        alertDialog.setMessage("Please enable location permission for area Preference.")
+        alertDialog.setMessage("Please enable your GPS setting.")
         alertDialog.setPositiveButton("ok") { dialog, which ->
            // permissions()
             dialog.dismiss()
@@ -955,17 +952,29 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
 
         alertDialog.show()
     }
+    lateinit var clickedd: LocationClicked
+
+    fun onClicked(clicked: LocationClicked)
+    {this.clickedd = clicked}
+
+
+
+
     private fun shareLocation(position: Int) {
         val alertDialog = AlertDialog.Builder(ctx!!)
 
         PreferenceFile.storeKey(ctx!!,CommonKeys.IS_LOCATION_CHECKED,"true")
 
-        (ctx as DashBoard).isLocChecked.set(true)
+        clickedd =  DashBoard()
+        clickedd.clicked(true)
+
+
+        (ctx as DashBoard).locationClickListener.value ="true"
 
 
         alertDialog.setTitle("share Location !!")
         alertDialog.setCancelable(false)
-        alertDialog.setMessage("Please share location permission for area Preference.")
+        alertDialog.setMessage("Please enable your GPS setting.")
         alertDialog.setPositiveButton("ok") { dialog, which ->
             dialog.dismiss()
 

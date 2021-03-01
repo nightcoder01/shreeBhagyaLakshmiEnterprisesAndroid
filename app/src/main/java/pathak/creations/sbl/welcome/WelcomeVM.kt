@@ -172,6 +172,13 @@ class WelcomeVM(
                                 ""
                             )
 
+                            PreferenceFile.storeKeyNull(
+                                context,
+                                CommonKeys.IS_FIRST_CHECKED,
+                                "false",
+                                ""
+                            )
+
                             CommonMethods.alertDialogIntentClear(
                                 context,
                                 msg,

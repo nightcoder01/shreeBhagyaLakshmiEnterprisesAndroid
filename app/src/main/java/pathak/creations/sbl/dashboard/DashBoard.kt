@@ -2,16 +2,23 @@ package pathak.creations.sbl.dashboard
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
+import android.view.View
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.MenuItemCompat
 import androidx.databinding.ObservableBoolean
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -25,18 +32,34 @@ import pathak.creations.sbl.AppController
 import pathak.creations.sbl.R
 import pathak.creations.sbl.common.CommonKeys
 import pathak.creations.sbl.common.CommonMethods
+import pathak.creations.sbl.common.LocationClicked
 import pathak.creations.sbl.common.PreferenceFile
 import pathak.creations.sbl.data_classes.*
 import pathak.creations.sbl.retrofit.RetrofitResponse
 import pathak.creations.sbl.retrofit.RetrofitService
 import pathak.creations.sbl.welcome.WelcomeActivity
 
-class DashBoard : AppCompatActivity(), RetrofitResponse {
+
+class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
+
+
+
+    override fun clicked(boolean: Boolean) {
+        Log.e("locationClicked=","")
+
+        locationClickListener.value = "true"
+    }
 
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     var isLocChecked: ObservableBoolean = ObservableBoolean(false)
+
+
+     var locationClickListener : MutableLiveData<String> = MutableLiveData()
+    var locationClicked : LiveData<String> = locationClickListener
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +96,11 @@ class DashBoard : AppCompatActivity(), RetrofitResponse {
             isLocChecked.set(false)
         }
 
+
+        if (PreferenceFile.retrieveKey(this, CommonKeys.IS_FIRST_CHECKED).equals("false", false)) {
+           callAllServices()
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -81,12 +109,42 @@ class DashBoard : AppCompatActivity(), RetrofitResponse {
 
         menuInflater.inflate(R.menu.dash_board, menu)
 
+
+        val item = menu.findItem(R.id.action_cart)
+        MenuItemCompat.setActionView(item, R.layout.badg_layout)
+
         val logOut = menu.findItem(R.id.action_LogOut)
         val refresh = menu.findItem(R.id.action_refresh)
         val locationIs = menu.findItem(R.id.action_loc)
 
+         locationIs.isVisible = isLocChecked.get()
 
-        locationIs.isVisible = isLocChecked.get()
+        locationClicked.observe(this , Observer {
+
+            Log.e("locationClicked=",it.toString())
+
+            locationIs.isVisible = true
+
+
+        })
+
+
+        val badgeLayout = menu.findItem(R.id.action_cart).actionView as RelativeLayout
+        val tv = badgeLayout.findViewById<View>(R.id.actionbar_notifcation_textview) as TextView
+
+        wordViewModel.allCart.observe(this, Observer { dist ->
+            // Update the cached copy of the words in the adapter.
+
+            dist?.let {
+
+                tv.text = dist.size.toString()
+
+            }
+        })
+
+
+
+
 
         logOut.setOnMenuItemClickListener {
 
@@ -97,7 +155,7 @@ class DashBoard : AppCompatActivity(), RetrofitResponse {
         }
         locationIs.setOnMenuItemClickListener {
 
-            callLogoutDialog()
+            showSettingsAlert()
 
             true
 
@@ -111,10 +169,36 @@ class DashBoard : AppCompatActivity(), RetrofitResponse {
         }
         return true
     }
+    private fun showSettingsAlert() {
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.setTitle("Enable GPS !!")
+        alertDialog.setCancelable(false)
+        alertDialog.setMessage("Please enable your GPS setting.")
+        alertDialog.setPositiveButton("ok") { dialog, which ->
+            // permissions()
+            dialog.dismiss()
+            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            startActivity(intent)
+        }
+        alertDialog.setNegativeButton("cancel")
+        {
+                dialog, which ->
+            dialog.dismiss()
+        }
+
+        alertDialog.show()
+    }
 
 
     private fun callAllServices() {
         try {
+
+            PreferenceFile.storeKeyNull(
+                this,
+                CommonKeys.IS_FIRST_CHECKED,
+                "true",
+                ""
+            )
 
             //distributor list
             if (CommonMethods.isNetworkAvailable(this)) {

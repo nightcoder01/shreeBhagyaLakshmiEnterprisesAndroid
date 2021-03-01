@@ -17,6 +17,13 @@
         android:title="@string/location"
         app:showAsAction="always"/>
 
+    <item
+        android:id="@+id/action_cart"
+        android:actionLayout="@layout/badg_layout"
+        android:orderInCategory="100"
+        android:title="@string/my_cart"
+        app:showAsAction="always"/>
+
 
     <item
         android:id="@+id/action_settings"

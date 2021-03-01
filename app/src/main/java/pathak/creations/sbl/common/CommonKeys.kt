@@ -78,5 +78,6 @@ object CommonKeys {
 
 
     val IS_LOCATION_CHECKED = "location_checked"
+    val IS_FIRST_CHECKED = "first_checked"
 
 }

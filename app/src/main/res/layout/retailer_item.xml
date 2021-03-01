@@ -36,6 +36,7 @@
                 android:layout_marginTop="@dimen/_5sdp"
                 android:singleLine="true"
                 android:text=""
+                android:visibility="invisible"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_10sdp"
                 app:layout_constraintEnd_toStartOf="@id/tvDate"
@@ -48,6 +49,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:text="@string/beat_name"
+                android:visibility="gone"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_10sdp"
                 app:layout_constraintStart_toStartOf="@id/tvDistributor"
@@ -61,6 +63,7 @@
                 android:layout_marginEnd="@dimen/_5sdp"
                 android:singleLine="true"
                 android:textSize="@dimen/_10sdp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/tvBeatTag"
                 app:layout_constraintTop_toTopOf="@id/tvBeatTag" />
