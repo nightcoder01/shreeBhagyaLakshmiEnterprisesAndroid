@@ -215,7 +215,10 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>>, RetrofitRes
 
             override fun valueChanged(pos: Int, str: String) {
                 list[pos].customPrice = str
+
+                wordViewModel.updateCart(list[pos])
                 adapter.notifyItemChanged(pos)
+
             }
 
             override fun clickedSelected(pos: Int, str: String) {
@@ -228,6 +231,8 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>>, RetrofitRes
                     else
                     {
                         list[pos].itemCount = (list[pos].itemCount.toInt()+1).toString()
+
+                        wordViewModel.updateCart(list[pos])
                         adapter.notifyItemChanged(pos)
                     }
                 }
@@ -241,6 +246,8 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>>, RetrofitRes
                     else
                     {
                         list[pos].itemCount = (list[pos].itemCount.toInt()-1).toString()
+
+                        wordViewModel.updateCart(list[pos])
                         adapter.notifyItemChanged(pos)
                     }
                 }
@@ -281,6 +288,8 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>>, RetrofitRes
 
             Toast.makeText(ctx,npItem.value.toString(),Toast.LENGTH_SHORT).show()
             subList[pos].itemCount = npItem.value.toString()
+
+            wordViewModel.updateCart(subList[pos])
             adapter2.notifyItemChanged(pos)
             dialogBuilderMain.dismiss()
         }

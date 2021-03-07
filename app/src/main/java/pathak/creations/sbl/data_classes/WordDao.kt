@@ -1,9 +1,6 @@
 package pathak.creations.sbl.data_classes
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 
@@ -63,6 +60,10 @@ interface WordDao {
     //cart
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertCart(cartItem: Cart)
+
+
+    @Update
+    suspend fun updateCart(cartItem: Cart)
 
     @Query("SELECT * FROM cart_table ORDER BY cartId ASC ")
     fun getCartList(): Flow<List<Cart>>
