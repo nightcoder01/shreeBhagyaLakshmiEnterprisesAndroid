@@ -129,6 +129,10 @@
                 app:layout_constraintTop_toBottomOf="@id/etPriceEditedValue"
                 />
 
+
+
+
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clCount"
                 android:layout_width="wrap_content"
@@ -136,18 +140,20 @@
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:background="@drawable/button_background_grey"
                 android:paddingStart="@dimen/_6sdp"
-                android:paddingTop="@dimen/_3sdp"
+                android:paddingTop="@dimen/_6sdp"
                 android:paddingEnd="@dimen/_6sdp"
-                android:paddingBottom="@dimen/_3sdp"
+                android:paddingBottom="@dimen/_6sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/tvPrice"
                 >
+
+
 
                 <TextView
                     android:id="@+id/tvCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLength="3"
+                    android:maxLength="4"
                     android:text="999"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12sdp"
@@ -165,7 +171,6 @@
                     app:layout_constraintBottom_toBottomOf="@id/tvCount"
                     app:layout_constraintEnd_toStartOf="@id/tvCount"
                     app:layout_constraintTop_toTopOf="@id/tvCount"
-
                     />
                 <ImageView
                     android:id="@+id/ivAdd"
@@ -180,6 +185,18 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <NumberPicker
+            android:id="@+id/npMain"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/clCount"
+            app:layout_constraintEnd_toEndOf="@id/clCount"
+            app:layout_constraintStart_toStartOf="@id/clCount"
+            app:layout_constraintTop_toTopOf="@id/clCount"
+            />
 
             <View
                 android:id="@+id/viewCentered"

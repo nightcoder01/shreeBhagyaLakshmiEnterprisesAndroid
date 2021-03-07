@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+ <data>
+        <variable
+            name="SalesHistoryVM"
+            type="pathak.creations.sbl.dashboard.ui.sales_history.SalesHistoryVM" />
+
+    </data>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:text="@string/date"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12sdp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/tvDateValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_20sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:text="@string/dateValue"
+        android:textAlignment="center"
+        android:textSize="@dimen/_11sdp"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/tvDate"
+        app:layout_constraintTop_toBottomOf="@id/etSearch"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+
+    <EditText
+        android:id="@+id/etSearch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:background="@drawable/round_bg"
+        android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="@dimen/_3sdp"
+        android:drawableTint="@color/colorPrimaryDark"
+        android:hint="@string/search"
+        android:imeOptions="actionDone"
+        android:maxLength="30"
+        android:padding="@dimen/_7sdp"
+        android:singleLine="true"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvDateValue"
+        />
+
+
+
+
+    <TextView
+        android:id="@+id/tvDistributor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/distributor"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etSearch" />
+
+
+    <Spinner
+        android:id="@+id/spBeatName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:background="@drawable/round_bg"
+        android:padding="@dimen/_7sdp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvDate"
+        app:layout_constraintTop_toBottomOf="@id/tvDistributor" />
+
+
+    <TextView
+        android:id="@+id/tvDistributor2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:background="@drawable/round_bg"
+        android:drawableEnd="@drawable/ic_arrow_drop"
+        android:hint="@string/select_distributor_name"
+        android:maxLength="30"
+        android:padding="@dimen/_7sdp"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvDistributor"
+        app:layout_constraintTop_toBottomOf="@id/tvDistributor" />
+
+    <TextView
+        android:id="@+id/tvBeatName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/beat_name2"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintStart_toStartOf="@id/tvDate"
+        app:layout_constraintTop_toBottomOf="@id/tvDistributor2" />
+
+
+
+
+
+    <TextView
+        android:id="@+id/tvBeatName2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:background="@drawable/round_bg"
+        android:drawableEnd="@drawable/ic_arrow_drop"
+        android:hint="Select Beat Name"
+        android:maxLength="30"
+        android:padding="@dimen/_7sdp"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvDate"
+        app:layout_constraintTop_toBottomOf="@id/tvBeatName" />
+
+
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSalesHistory"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/_5sdp"
+        android:paddingBottom="@dimen/_5sdp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvBeatName2"
+        />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

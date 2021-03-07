@@ -57,6 +57,9 @@ class MyCartAdapter(var list: List<Cart>) :
         holder.itemView.etPriceEditedValue.text = Editable.Factory.getInstance().newEditable(list[position].customPrice)
         holder.itemView.tvPriceOverallValue.text  = (holder.itemView.etPriceEditedValue.text.toString().toFloat()*holder.itemView.tvCount.text.toString().toFloat()).toString()
         holder.itemView.tvAddCart.visibility = View.GONE
+
+
+
         holder.itemView.flAdd.setOnClickListener{
 
                 clicked.clickedSelected(position,"add")
@@ -68,6 +71,20 @@ class MyCartAdapter(var list: List<Cart>) :
                 clicked.clickedSelected(position, "remove")
 
         }
+
+        holder.itemView.flAdd.setOnLongClickListener {
+
+                clicked.clickedSelected(position,"long")
+
+            true
+        }
+        holder.itemView.flMinus.setOnLongClickListener {
+
+                clicked.clickedSelected(position,"long")
+
+            true
+        }
+
 
 
         holder.itemView.etPriceEditedValue.setOnEditorActionListener(object : TextView.OnEditorActionListener{

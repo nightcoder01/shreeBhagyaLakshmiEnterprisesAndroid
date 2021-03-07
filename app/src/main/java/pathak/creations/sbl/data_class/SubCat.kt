@@ -14,5 +14,8 @@ data class SubCat(
     var customPrice: String = "",
     var overAllPrice: String = "",
     var distIDMain: String = "",
+    var distIDName: String = "",
+    var retailerIDMain: String = "",
+    var retailerIDName: String = "",
     var editMode: Boolean = true
 ):Serializable

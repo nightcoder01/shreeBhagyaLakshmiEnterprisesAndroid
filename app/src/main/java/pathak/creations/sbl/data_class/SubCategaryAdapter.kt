@@ -1,7 +1,6 @@
 package pathak.creations.sbl.data_class
 
 import android.text.Editable
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -47,17 +46,13 @@ class SubCategaryAdapter(var list: List<SubCat>) :
 
     override fun onBindViewHolder(holder: CardsViewHolder, position: Int) {
 
-
-
-        Log.e("SubCategoryDate======","==========${list[position]}")
-
+        holder.itemView.npMain.maxValue = 999
+        holder.itemView.npMain.minValue= 0
         holder.itemView.tvName.text = list[position].description
         holder.itemView.tvImageText.text = list[position].description
         holder.itemView.tvPriceValue.text = list[position].price
         holder.itemView.tvCount.text = list[position].cartItem
         holder.itemView.etPriceEditedValue.text =Editable.Factory.getInstance().newEditable(list[position].customPrice)
-        Log.e("dfad0","======${list[position].customPrice}")
-        Log.e("dfad0","======${(list[position].price.toFloat()*(45))/1000}")
         holder.itemView.tvPriceOverallValue.text  = (holder.itemView.etPriceEditedValue.text.toString().toFloat()*holder.itemView.tvCount.text.toString().toFloat()).toString()
 
         holder.itemView.flAdd.setOnClickListener{
@@ -66,12 +61,27 @@ class SubCategaryAdapter(var list: List<SubCat>) :
             clicked.clickedSelected(position,"add")}
         }
 
+
+        holder.itemView.flAdd.setOnLongClickListener {
+            if(list[position].editMode)
+            {
+                clicked.clickedSelected(position,"long")
+            }
+            true
+        }
+        holder.itemView.flMinus.setOnLongClickListener {
+            if(list[position].editMode)
+            {
+                clicked.clickedSelected(position,"long")
+            }
+            true
+        }
+
         holder.itemView.flMinus.setOnClickListener{
             if(list[position].editMode) {
                 clicked.clickedSelected(position, "remove")
             }
         }
-
 
         holder.itemView.etPriceEditedValue.setOnEditorActionListener(object :TextView.OnEditorActionListener{
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
@@ -102,23 +112,14 @@ class SubCategaryAdapter(var list: List<SubCat>) :
 
         if(list[position].editMode)
         {
-            //normal
             holder.itemView.tvAddCart.text  = holder.itemView.tvAddCart.context.getString(R.string.add_to_cart)
-
-
-
         }
         else
         {
             holder.itemView.tvAddCart.text  = holder.itemView.tvAddCart.context.getString(R.string.item_added)
-
-            //editmode removed
-            ///and add cart
         }
 
-
     }
-
 
     inner class CardsViewHolder(v: View) : RecyclerView.ViewHolder(v)
 

@@ -117,4 +117,23 @@
         android:name="pathak.creations.sbl.dashboard.ui.sales_order.AddSalesOrder"
         android:label="Add Sales Order" />
 
+
+    <fragment
+        android:id="@+id/nav_sales_history"
+        android:name="pathak.creations.sbl.dashboard.ui.sales_history.SalesHistory"
+        android:label="Sales History"
+        tools:layout="@layout/fragment_sales_history">
+        <action
+            android:id="@+id/action_add_shoptotal"
+            app:destination="@id/shoptotalpage"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+    </fragment>
+    <fragment
+        android:id="@+id/shoptotalpage"
+        android:name="pathak.creations.sbl.dashboard.ui.sales_history.SalesHistory"
+        android:label="Sales Total"/>
+
 </navigation>

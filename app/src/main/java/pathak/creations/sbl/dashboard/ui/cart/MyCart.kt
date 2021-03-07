@@ -3,16 +3,21 @@ package pathak.creations.sbl.dashboard.ui.cart
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.NumberPicker
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.AlertDialogLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
@@ -20,29 +25,34 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.custom_spinner.view.*
 import kotlinx.android.synthetic.main.my_cart_layout.*
+import org.json.JSONArray
+import org.json.JSONObject
 import pathak.creations.sbl.AppController
 import pathak.creations.sbl.R
-import pathak.creations.sbl.custom_adapter.SpinnerCustomDistributorAdapter
+import pathak.creations.sbl.common.CommonKeys
+import pathak.creations.sbl.common.CommonMethods
+import pathak.creations.sbl.common.PreferenceFile
+import pathak.creations.sbl.custom_adapter.SpinnerCustomRetailerAdapter
 import pathak.creations.sbl.data_classes.Cart
-import pathak.creations.sbl.data_classes.Distributor
+import pathak.creations.sbl.data_classes.Retailer
 import pathak.creations.sbl.data_classes.WordViewModel
 import pathak.creations.sbl.data_classes.WordViewModelFactory
 import pathak.creations.sbl.interfaces.DataChangeListener
+import pathak.creations.sbl.retrofit.RetrofitResponse
+import pathak.creations.sbl.retrofit.RetrofitService
 
-class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>> {
-
-
-
+class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>>, RetrofitResponse {
 
 
     override fun DataChange(data: LiveData<List<Cart>>) {
+       
+       
         data.observe(viewLifecycleOwner, Observer { dist ->
             // Update the cached copy of the words in the adapter.
-
-
+            listCart.clear()
             dist?.let {
-
-                setCartAdapter(it)
+                listCart.addAll(dist)
+                setCartAdapter(listCart)
 
             }
         })
@@ -52,6 +62,7 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>> {
     private lateinit var myCartVM: MyCartVM
 
     lateinit var ctx: Context
+     var listCart: ArrayList<Cart> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,24 +88,30 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>> {
 
         }
 
+        tvSubmitCart.setOnClickListener {
+            callAddCart()
+
+        }
+
         //set live data observer
         wordViewModel.allCart.observe(viewLifecycleOwner, Observer { dist ->
             // Update the cached copy of the words in the adapter.
-
+            listCart.clear()
             dist?.let {
 
-                setCartAdapter(it)
+                listCart.addAll(dist)
+                setCartAdapter(listCart)
 
             }
         })
 
         //set live data observer
-        wordViewModel.allDistributor.observe(viewLifecycleOwner, Observer { dist ->
+        wordViewModel.allRetailer.observe(viewLifecycleOwner, Observer { retail ->
             // Update the cached copy of the words in the adapter.
 
-            dist?.let {
+            retail?.let {
 
-                setDistributorAdapter(it)
+                setRetailerAdapter(it)
 
             }
         })
@@ -109,6 +126,62 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>> {
 
     }
 
+    private fun callAddCart() {
+        try {
+
+            if (CommonMethods.isNetworkAvailable(ctx)) {
+
+                val jsonMain = JSONObject()
+
+
+                val jsonArray = JSONArray()
+
+                val json = JSONObject()
+
+
+                for(i in 0 until listCart.size) {
+                    json.put("dist_code", listCart[i].distID)
+                    json.put("dist", listCart[i].dist_name)
+                    json.put("retailer_code", listCart[i].retailer_code)
+                    json.put("retailer", listCart[i].retailer_name)
+                    json.put("beatname", listCart[i].beatName)
+                    json.put("catgroup", listCart[i].cat_group)
+                    json.put("category", listCart[i].category)
+                    json.put("category_code", listCart[i].cat_code)
+                    json.put("category_description", listCart[i].name)
+                    json.put("qty", listCart[i].itemCount)
+                    json.put("ptr_price", listCart[i].ptr_price)
+                    json.put("ptd_price", listCart[i].ptd_price)
+                    json.put("total_ptr_price", listCart[i].overAllPrice)
+                    json.put("total_ptd_price", listCart[i].ptd_total)
+
+                }
+
+                jsonArray.put(json)
+                jsonMain.put("items",jsonArray)
+
+                Log.e("fasdfasfdfsd",jsonMain.toString())
+
+
+                RetrofitService(
+                    ctx,
+                    this,
+                    CommonKeys.ADD_CART ,
+                    CommonKeys.ADD_CART_CODE,
+                    jsonMain,2
+                ).callService(true, PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!)
+
+
+            } else {
+                CommonMethods.alertDialog(
+                    ctx,
+                    getString(R.string.checkYourConnection)
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
 
     private fun callDeleteAllDialog() {
@@ -142,12 +215,13 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>> {
 
             override fun valueChanged(pos: Int, str: String) {
                 list[pos].customPrice = str
-                adapter.notifyItemChanged(pos)                        }
+                adapter.notifyItemChanged(pos)
+            }
 
             override fun clickedSelected(pos: Int, str: String) {
                 if(str=="add")
                 {
-                    if(list[pos].itemCount.toInt()>999)
+                    if(list[pos].itemCount.toInt()>9999)
                     {
                         Toast.makeText(ctx,"max limit crossed", Toast.LENGTH_SHORT).show()
                     }
@@ -170,12 +244,55 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>> {
                         adapter.notifyItemChanged(pos)
                     }
                 }
+                if(str=="long")
+                {
+
+                    callNumberList(list,adapter,pos)
+
+                    Toast.makeText(ctx,"long",Toast.LENGTH_SHORT).show()
+                }
             }
         })
 
     }
 
-    private fun setDistributorAdapter(list: List<Distributor>) {
+    private lateinit var dialogBuilderMain  : AlertDialog
+
+    private fun callNumberList(
+        subList: List<Cart>,
+        adapter2: MyCartAdapter,
+        pos: Int
+    ) {
+
+
+        val dialogBuilder = AlertDialog.Builder(ctx)
+        val layout = AlertDialogLayout.inflate(ctx, R.layout.custom_count,null)
+        dialogBuilder.setView(layout)
+
+        val tvSubmit :TextView= layout.findViewById(R.id.tvSubmit)
+        val npItem : NumberPicker = layout.findViewById(R.id.npItem)
+
+        dialogBuilderMain = dialogBuilder.create()
+        dialogBuilderMain.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogBuilderMain.setCancelable(false)
+        dialogBuilderMain.setCanceledOnTouchOutside(true)
+
+        tvSubmit.setOnClickListener {
+
+            Toast.makeText(ctx,npItem.value.toString(),Toast.LENGTH_SHORT).show()
+            subList[pos].itemCount = npItem.value.toString()
+            adapter2.notifyItemChanged(pos)
+            dialogBuilderMain.dismiss()
+        }
+        npItem.maxValue = 9999
+        npItem.minValue = 0
+
+
+
+        dialogBuilderMain.show()
+    }
+
+    private fun setRetailerAdapter(list: List<Retailer>) {
         tvDistributor2.setOnClickListener {
             openDistributorShort(tvDistributor2,list)
         }
@@ -185,7 +302,7 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>> {
 
     private fun openDistributorShort(
         view: TextView,
-        list: List<Distributor>
+        list: List<Retailer>
 
     ) {
         val inflater =
@@ -198,15 +315,16 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>> {
             WindowManager.LayoutParams.WRAP_CONTENT
         )
 
-        val adapter = SpinnerCustomDistributorAdapter(list)
+        val adapter = SpinnerCustomRetailerAdapter(list)
         customView.rvSpinner.adapter = adapter
-        adapter.onClicked(object : SpinnerCustomDistributorAdapter.CardInterface {
+        adapter.onClicked(object : SpinnerCustomRetailerAdapter.CardInterface {
             override fun clickedSelected(position: Int) {
 
-                view.hint = list[position].distName
+                view.hint = list[position].retailer_name
                 popupWindow!!.dismiss()
+                Log.e("wordViewModel.allCart--",list[position].retailer_id)
 
-                wordViewModel.getCartFromDist(list[position].distID, this@MyCart)
+                wordViewModel.getCartFromDist(list[position].retailer_id, this@MyCart)
 
             }
         })
@@ -223,47 +341,47 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>> {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
                 if (s.isNullOrBlank()) {
-                    val adapter2 = SpinnerCustomDistributorAdapter(list)
+                    val adapter2 = SpinnerCustomRetailerAdapter(list)
                     customView.rvSpinner.adapter = adapter2
-                    adapter2.onClicked(object : SpinnerCustomDistributorAdapter.CardInterface {
+                    adapter2.onClicked(object : SpinnerCustomRetailerAdapter.CardInterface {
                         override fun clickedSelected(position: Int) {
 
-                            view.hint = list[position].distName
+                            view.hint = list[position].retailer_name
                             popupWindow!!.dismiss()
                             //callBeatList(listDistId[position])
                            // callDistRetailer(list[position].distID)
 
                             //  callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
 
-                            wordViewModel.getCartFromDist(list[position].distID, this@MyCart)
+                            wordViewModel.getCartFromDist(list[position].retailer_id, this@MyCart)
 
                         }
                     })
                 } else {
 
-                    val list2: ArrayList<Distributor> = ArrayList()
+                    val list2: ArrayList<Retailer> = ArrayList()
 
                     for (i in list.indices) {
-                        if (list[i].distName.toLowerCase().contains(s.toString().toLowerCase(),false)) {
+                        if (list[i].retailer_name.toLowerCase().contains(s.toString().toLowerCase(),false)) {
                             list2.add(list[i])
 
                         }
                     }
 
 
-                    val adapter2 = SpinnerCustomDistributorAdapter(list2)
+                    val adapter2 = SpinnerCustomRetailerAdapter(list2)
                     customView.rvSpinner.adapter = adapter2
-                    adapter2.onClicked(object : SpinnerCustomDistributorAdapter.CardInterface {
+                    adapter2.onClicked(object : SpinnerCustomRetailerAdapter.CardInterface {
                         override fun clickedSelected(position: Int) {
 
-                            view.hint = list2[position].distName
+                            view.hint = list2[position].retailer_name
                             popupWindow!!.dismiss()
                             // callBeatList(list2[position])
                           //  callDistRetailer(list2[position].distID)
 
                             // callBeatRetailer(list[position].dist_id,list[position].beatname)
 
-                            wordViewModel.getCartFromDist(list[position].distID, this@MyCart)
+                            wordViewModel.getCartFromDist(list2[position].retailer_id, this@MyCart)
 
                         } }) } }
         })
@@ -274,6 +392,55 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>> {
         popupWindow!!.update()
 
     }
+
+
+    override fun response(code: Int, response: String) {
+        try {
+            when (code) {
+                CommonKeys.ADD_CART_CODE -> {
+                    try {
+
+                        Log.e("ADD_CART_CODE", "=====$code==$response")
+
+                        val json = JSONObject(response)
+                        val status = json.optBoolean("status")
+                        val msg = json.getString("message")
+                        if (status) {
+
+
+
+                            // listDistName.clear()
+                            // listDistId.clear()
+
+                            wordViewModel.deleteAllCart()
+
+
+
+                            Toast.makeText(ctx,msg,Toast.LENGTH_SHORT).show()
+
+                        }
+
+                        else {
+                            CommonMethods.alertDialog(ctx, msg)
+                        }
+
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+
+
+
+
 
     //data base work
     private val wordViewModel: WordViewModel by viewModels {

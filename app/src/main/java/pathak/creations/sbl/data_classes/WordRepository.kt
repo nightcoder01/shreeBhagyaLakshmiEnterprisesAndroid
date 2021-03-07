@@ -101,8 +101,8 @@ class WordRepository(private val wordDao: WordDao) {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun getCartFromDist(distId: String) : Flow<List<Cart>>{
-        return wordDao.getCartFromDist(distId)
+    suspend fun getCartFromDist(retailer_code: String) : Flow<List<Cart>>{
+        return wordDao.getCartFromDist(retailer_code)
     }
 
     @Suppress("RedundantSuspendModifier")

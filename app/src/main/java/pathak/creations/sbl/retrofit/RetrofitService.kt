@@ -99,7 +99,6 @@ class RetrofitService {
         tvRetryDialog = layout.findViewById(R.id.tvRetryDialog)
         tvCancelDialog = layout.findViewById(R.id.tvCancelDialog)
 
-
         dialogBuilderMain = dialogBuilder.create()
         dialogBuilderMain.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialogBuilderMain.setCancelable(false)

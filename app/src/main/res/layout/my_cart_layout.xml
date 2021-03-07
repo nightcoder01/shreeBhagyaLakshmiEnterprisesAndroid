@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_10sdp"
         android:layout_marginTop="@dimen/_10sdp"
-        android:text="@string/distributor"
+        android:text="@string/retailer2"
         android:textColor="@color/black"
         android:textSize="@dimen/_12sdp"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,7 +72,7 @@
         android:layout_marginEnd="@dimen/_10sdp"
         android:background="@drawable/round_bg"
         android:drawableEnd="@drawable/ic_arrow_drop"
-        android:hint="@string/select_distributor_name"
+        android:hint="@string/select_retailer_name"
         android:maxLength="30"
         android:padding="@dimen/_7sdp"
         android:textSize="@dimen/_12sdp"
@@ -90,14 +90,31 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
         android:orientation="vertical"
         android:paddingTop="@dimen/_5sdp"
         android:paddingBottom="@dimen/_5sdp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tvSubmitCart"
         app:layout_constraintTop_toBottomOf="@id/tvDistributor2"
         />
 
-
+    <TextView
+        android:id="@+id/tvSubmitCart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:background="@drawable/button_background"
+        android:paddingStart="@dimen/_30sdp"
+        android:paddingTop="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_30sdp"
+        android:paddingBottom="@dimen/_10sdp"
+        android:text="@string/submit"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_10sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

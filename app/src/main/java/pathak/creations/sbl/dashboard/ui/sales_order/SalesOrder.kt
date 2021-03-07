@@ -2,6 +2,8 @@ package pathak.creations.sbl.dashboard.ui.sales_order
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,9 +12,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.NumberPicker
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AlertDialogLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
@@ -31,7 +36,10 @@ import pathak.creations.sbl.custom_adapter.SpinnerCustomCategoryAdapter
 import pathak.creations.sbl.custom_adapter.SpinnerCustomDistributorAdapter
 import pathak.creations.sbl.custom_adapter.SpinnerCustomRetailerAdapter
 import pathak.creations.sbl.dashboard.ui.retailer_visit.RetailerVisitAdapter
-import pathak.creations.sbl.data_class.*
+import pathak.creations.sbl.data_class.BeatData
+import pathak.creations.sbl.data_class.CategoriesData
+import pathak.creations.sbl.data_class.SubCat
+import pathak.creations.sbl.data_class.SubCategaryAdapter
 import pathak.creations.sbl.data_classes.*
 import pathak.creations.sbl.interfaces.DataChangeListener
 import pathak.creations.sbl.retrofit.RetrofitResponse
@@ -39,8 +47,6 @@ import pathak.creations.sbl.retrofit.RetrofitService
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-
-
 
 
 class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<List<Beat>>> {
@@ -53,7 +59,7 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
 
 
     var listBeats : ArrayList<BeatData> = ArrayList()
-    var listBeatsRetailer : ArrayList<BeatRetailerData> = ArrayList()
+    var listBeatsRetailer : ArrayList<Retailer> = ArrayList()
 
 
    // var listDistName : ArrayList<String> = ArrayList()
@@ -64,6 +70,10 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
     var listSubCategories: ArrayList<SubCat> = ArrayList()
 
     var distIDMain = ""
+    var distIDName = ""
+
+    var retailerIDMain = ""
+    var retailerIDName = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -84,12 +94,9 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
 
         setDistributor()
 
-
-
         //set live data observer
         wordViewModel.allDistributor.observe(viewLifecycleOwner, Observer { dist ->
             // Update the cached copy of the words in the adapter.
-
 
             dist?.let {
 
@@ -97,10 +104,6 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
 
             }
         })
-
-
-
-
     }
 
     private fun setDistributor() {
@@ -109,42 +112,8 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
             tvDistributor2.hint = PreferenceFile.retrieveKey(ctx,CommonKeys.NAME)
             callCategories(PreferenceFile.retrieveKey(ctx,CommonKeys.NAME))
             callBeatList(PreferenceFile.retrieveKey(ctx,CommonKeys.NAME))
-        }
-        else
-        {
-          //  callDistributorList()
-        }
-    }
+        } }
 
-    private fun callDistributorList() {
-        try {
-
-            if (CommonMethods.isNetworkAvailable(ctx)) {
-                val json = JSONObject()
-
-
-
-                RetrofitService(
-                    ctx,
-                    this,
-                    CommonKeys.RETAILER_LIST ,
-                    CommonKeys.RETAILER_LIST_CODE,
-                    1
-                ).callService(true, PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!)
-
-                Log.e("callDistributorList", "=====$json")
-                Log.e("callDistributorList", "=token====${PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!}")
-
-            } else {
-                CommonMethods.alertDialog(
-                    ctx,
-                    getString(R.string.checkYourConnection)
-                )
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
 
     private fun callBeatList(distID: String?) {
         try {
@@ -181,7 +150,6 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
             }
         })
     }
-
 
     private fun callCategories(id: String?) {
         try {
@@ -294,46 +262,46 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
 
                                 if(dataObj.getString("beatname").isNotEmpty()) {
                                     listBeatsRetailer.add(
-                                        BeatRetailerData(
-                                            dataObj.getString("address"),
-                                            dataObj.getString("areaname"),
-                                            dataObj.getString("beatname"),
-                                            dataObj.getString("ca"),
-                                            dataObj.getString("cac"),
-                                            dataObj.getString("classification"),
-                                            dataObj.getString("client"),
-                                            dataObj.getString("country"),
-                                            dataObj.getString("cperson"),
-                                            dataObj.getString("cst"),
-                                            dataObj.getString("cst_registerationdate"),
-                                            dataObj.getString("csttin"),
+                                        Retailer(
+                                            dataObj.getString("id"),
                                             dataObj.getString("date"),
                                             dataObj.getString("dist_id"),
                                             dataObj.getString("distributor"),
-                                            dataObj.getString("dvisit"),
-                                            dataObj.getString("email"),
-                                            dataObj.getString("empname"),
-                                            dataObj.getString("firstname"),
-                                            dataObj.getString("gstin"),
-                                            dataObj.getString("id"),
-                                            dataObj.getString("lastname"),
-                                            dataObj.getString("latitude"),
-                                            dataObj.getString("longitude"),
-                                            dataObj.getString("mobile"),
-                                            dataObj.getString("note"),
-                                            dataObj.getString("pan"),
-                                            dataObj.getString("phone"),
-                                            dataObj.getString("pincode"),
-                                            dataObj.getString("place"),
                                             dataObj.getString("retailer_id"),
                                             dataObj.getString("retailer_name"),
-                                            dataObj.getString("retailer_type"),
-                                            dataObj.getString("rid"),
-                                            dataObj.getString("sno"),
-                                            dataObj.getString("state"),
+                                            dataObj.getString("beatname"),
+                                            dataObj.getString("address"),
+                                            dataObj.getString("phone"),
+                                            dataObj.getString("mobile"),
                                             dataObj.getString("type"),
+                                            dataObj.getString("note"),
+                                            dataObj.getString("place"),
+                                            dataObj.getString("firstname"),
+                                            dataObj.getString("lastname"),
+                                            dataObj.getString("state"),
+                                            dataObj.getString("areaname"),
+                                            dataObj.getString("country"),
+                                            dataObj.getString("pincode"),
+                                            dataObj.getString("cst"),
+                                            dataObj.getString("cst_registerationdate"),
+                                            dataObj.getString("vattin"),
+                                            dataObj.getString("csttin"),
+                                            dataObj.getString("pan"),
                                             dataObj.getString("updated"),
-                                            dataObj.getString("vattin")
+                                            dataObj.getString("client"),
+                                            dataObj.getString("empname"),
+                                            dataObj.getString("ca"),
+                                            dataObj.getString("cac"),
+                                            dataObj.getString("rid"),
+                                            dataObj.getString("classification"),
+                                            dataObj.getString("retailer_type"),
+                                            dataObj.getString("dvisit"),
+                                            dataObj.getString("cperson"),
+                                            dataObj.getString("email"),
+                                            dataObj.getString("gstin"),
+                                            dataObj.getString("sno"),
+                                            dataObj.getString("latitude"),
+                                            dataObj.getString("longitude")
                                         )
                                     )
                                 }
@@ -467,19 +435,13 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
         val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val customView = inflater.inflate(R.layout.custom_spinner, null)
 
-
-
         popupWindow = PopupWindow(
             customView,
             view.width,
             WindowManager.LayoutParams.WRAP_CONTENT
         )
 
-
         val listFiltered : ArrayList<String> = getListFiltered(listCategories)
-
-
-
 
         val adapter = SpinnerCustomCategoryAdapter(listFiltered)
         customView.rvSpinner.adapter = adapter
@@ -524,7 +486,19 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
                                             subList[pos].price,
                                             subList[pos].customPrice,
                                             subList[pos].overAllPrice,
-                                            subList[pos].cartItem,tvBeatName2.text.toString(),tvRetailer2.text.toString()
+                                            subList[pos].cartItem,
+                                            tvBeatName2.text.toString(),
+                                            subList[pos].retailerIDName,
+                                            subList[pos].retailerIDMain,
+                                            subList[pos].distIDName,
+                                            subList[pos].catgroup,
+                                            subList[pos].category,
+                                            subList[pos].code,
+                                            subList[pos].customPrice,
+                                            subList[pos].price,
+                                            subList[pos].overAllPrice,
+                                            (subList[pos].price.toFloat()*subList[pos].cartItem.toFloat()).toString()
+
                                         )
                                     )
 
@@ -554,7 +528,7 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
                         override fun clickedSelected(pos: Int, str: String) {
                             if(str=="add")
                             {
-                                if(subList[pos].cartItem.toInt()>999)
+                                if(subList[pos].cartItem.toInt()>9999)
                                 {
                                     Toast.makeText(ctx,"max limit crossed", Toast.LENGTH_SHORT).show()
                                 }
@@ -566,6 +540,7 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
                             }
                             if(str=="remove")
                             {
+
                                 if(subList[pos].cartItem.toInt()<1)
                                 {
                                   //  Toast.makeText(ctx,"minimum limit crossed",Toast.LENGTH_SHORT).show()
@@ -576,6 +551,13 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
                                     subList[pos].cartItem = (subList[pos].cartItem.toInt()-1).toString()
                                     adapter2.notifyItemChanged(pos)
                                 }
+                            }
+                            if(str=="long")
+                            {
+
+                                callNumberList(subList,adapter2,pos)
+
+                               Toast.makeText(ctx,"long",Toast.LENGTH_SHORT).show()
                             }
                         }
                     })
@@ -642,7 +624,19 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
                                                         subList[pos].price,
                                                         subList[pos].customPrice,
                                                         subList[pos].overAllPrice,
-                                                        subList[pos].cartItem,tvBeatName2.text.toString(),tvRetailer2.text.toString()
+                                                        subList[pos].cartItem,
+                                                        tvBeatName2.text.toString(),
+                                                        subList[pos].retailerIDName,
+                                                        subList[pos].retailerIDMain,
+                                                        subList[pos].distIDName,
+                                                        subList[pos].catgroup,
+                                                        subList[pos].category,
+                                                        subList[pos].code,
+                                                        subList[pos].customPrice,
+                                                        subList[pos].price,
+                                                        subList[pos].overAllPrice,
+                                                        (subList[pos].price.toFloat()*subList[pos].cartItem.toFloat()).toString()
+
                                                     )
                                                 )
 
@@ -677,7 +671,7 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
                                 override fun clickedSelected(pos: Int, str: String) {
                                     if(str=="add")
                                     {
-                                        if(subList[pos].cartItem.toInt()>999)
+                                        if(subList[pos].cartItem.toInt()>9999)
                                         {
                                             Toast.makeText(ctx,"max limit crossed", Toast.LENGTH_SHORT).show()
                                         }
@@ -699,6 +693,13 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
                                             subList[pos].cartItem = (subList[pos].cartItem.toInt()-1).toString()
                                             adapter3.notifyItemChanged(pos)
                                         }
+                                    }
+                                    if(str=="long")
+                                    {
+
+                                        callNumberList(subList,adapter3,pos)
+
+                                        Toast.makeText(ctx,"long",Toast.LENGTH_SHORT).show()
                                     }
                                 }
                             })
@@ -765,7 +766,19 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
                                                         subList[pos].price,
                                                         subList[pos].customPrice,
                                                         subList[pos].overAllPrice,
-                                                        subList[pos].cartItem,tvBeatName2.text.toString(),tvRetailer2.text.toString()
+                                                        subList[pos].cartItem,
+                                                        tvBeatName2.text.toString(),
+                                                        subList[pos].retailerIDName,
+                                                        subList[pos].retailerIDMain,
+                                                        subList[pos].distIDName,
+                                                        subList[pos].catgroup,
+                                                        subList[pos].category,
+                                                        subList[pos].code,
+                                                        subList[pos].customPrice,
+                                                        subList[pos].price,
+                                                        subList[pos].overAllPrice,
+                                                        (subList[pos].price.toFloat()*subList[pos].cartItem.toFloat()).toString()
+
                                                     )
                                                 )
 
@@ -800,7 +813,7 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
                                 override fun clickedSelected(pos: Int, str: String) {
                                     if(str=="add")
                                     {
-                                        if(subList[pos].cartItem.toInt()>999)
+                                        if(subList[pos].cartItem.toInt()>9999)
                                         {
                                             Toast.makeText(ctx,"max limit crossed", Toast.LENGTH_SHORT).show()
                                         }
@@ -824,6 +837,13 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
                                             adapter3.notifyItemChanged(pos)
                                         }
                                     }
+                                    if(str=="long")
+                                    {
+
+                                        callNumberList(subList,adapter3,pos)
+
+                                        Toast.makeText(ctx,"long",Toast.LENGTH_SHORT).show()
+                                    }
                                 }
                             })
                         }
@@ -837,6 +857,43 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
         popupWindow!!.isFocusable = true
         popupWindow!!.update()
 
+    }
+
+
+    private lateinit var dialogBuilderMain  : AlertDialog
+
+    private fun callNumberList(
+        subList: ArrayList<SubCat>,
+        adapter2: SubCategaryAdapter,
+        pos: Int
+    ) {
+
+
+        val dialogBuilder = AlertDialog.Builder(ctx)
+        val layout = AlertDialogLayout.inflate(ctx, R.layout.custom_count,null)
+        dialogBuilder.setView(layout)
+
+        val tvSubmit :TextView= layout.findViewById(R.id.tvSubmit)
+        val npItem :NumberPicker= layout.findViewById(R.id.npItem)
+
+        dialogBuilderMain = dialogBuilder.create()
+        dialogBuilderMain.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogBuilderMain.setCancelable(false)
+        dialogBuilderMain.setCanceledOnTouchOutside(true)
+
+        tvSubmit.setOnClickListener {
+
+            Toast.makeText(ctx,npItem.value.toString(),Toast.LENGTH_SHORT).show()
+            subList[pos].cartItem = npItem.value.toString()
+            adapter2.notifyItemChanged(pos)
+            dialogBuilderMain.dismiss()
+        }
+        npItem.maxValue = 9999
+        npItem.minValue = 0
+
+
+
+        dialogBuilderMain.show()
     }
 
     private fun isValid(): Boolean {
@@ -855,7 +912,6 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
 
     }
 
-
     private fun getSubListFiltered(s: String, listCategories: ArrayList<CategoriesData>): ArrayList<SubCat> {
 
 
@@ -870,7 +926,7 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
                 listCategories[i].price,listCategories[i].weight,
                 listCategories[i].ptrflag,"0",
                 (listCategories[i].price.toFloat()+(listCategories[i].price.toFloat()*(45))/1000 ).toString(),
-                "0.0",distIDMain
+                "0.0",distIDMain,distIDName,retailerIDMain,retailerIDName
                 ))
         }
         }
@@ -901,9 +957,7 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
 
     private fun openDistributorShort(
         view: TextView,
-        listDist: List<Distributor>
-
-        ) {
+        listDist: List<Distributor>) {
         val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val customView = inflater.inflate(R.layout.custom_spinner, null)
 
@@ -923,6 +977,7 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
                 view.text =listDist[position].distName
                 popupWindow!!.dismiss()
                 distIDMain = listDist[position].distID
+                distIDName = listDist[position].distName
                 callBeatList(listDist[position].distID)
                 callCategories(listDist[position].distID)
 
@@ -951,6 +1006,7 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
                             view.text =listDist[position].distName
                             popupWindow!!.dismiss()
                             distIDMain = listDist[position].distID
+                            distIDName = listDist[position].distName
 
                             callBeatList(listDist[position].distID)
                             callCategories(listDist[position].distID)
@@ -980,6 +1036,7 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
                             popupWindow!!.dismiss()
 
                             distIDMain = listDist[position].distID
+                            distIDName = listDist[position].distName
 
                             callBeatList(list[position].distID)
                             callCategories(list[position].distID)
@@ -998,13 +1055,13 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
 
     }
 
-    private fun setBeatRetailerAdapter(listBeatsRetailer: ArrayList<BeatRetailerData>) {
+    private fun setBeatRetailerAdapter(listBeatsRetailer: ArrayList<Retailer>) {
         tvRetailer2.setOnClickListener {
             openRetailerSpinner(tvRetailer2,listBeatsRetailer)
         }
     }
 
-    private fun openRetailerSpinner(view: TextView, listBeatsRetailer: ArrayList<BeatRetailerData>) {
+    private fun openRetailerSpinner(view: TextView, listBeatsRetailer: ArrayList<Retailer>) {
         val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val customView = inflater.inflate(R.layout.custom_spinner, null)
 
@@ -1021,6 +1078,10 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
 
                 view.text =listBeatsRetailer[position].retailer_name
                 popupWindow!!.dismiss()
+
+                retailerIDMain =listBeatsRetailer[position].retailer_id
+                retailerIDName =listBeatsRetailer[position].retailer_name
+
                // callCategory(listBeatsRetailer[position].retailer_id)
             }
 
@@ -1048,6 +1109,8 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
 
                             view.text =listBeatsRetailer[position].retailer_name
                             popupWindow!!.dismiss()
+                            retailerIDMain =listBeatsRetailer[position].retailer_id
+                            retailerIDName =listBeatsRetailer[position].retailer_name
 
                           //  callCategory(listBeatsRetailer[position].retailer_id)
                           //  callBeatRetailer(listBeatsRetailer[position].dist_id,listBeats[position].beatname)
@@ -1059,7 +1122,7 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
                 else
                 {
 
-                    val list : ArrayList<BeatRetailerData> = ArrayList()
+                    val list : ArrayList<Retailer> = ArrayList()
 
                     for(i in 0 until listBeatsRetailer.size)
                     {
@@ -1078,6 +1141,9 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
 
                             view.text =list[position].retailer_name
                             popupWindow!!.dismiss()
+
+                            retailerIDMain =list[position].retailer_id
+                            retailerIDName =list[position].retailer_name
                           //  callCategory(listBeatsRetailer[position].retailer_id)
                             //callBeatRetailer(list[position].dist_id,list[position].beatname)
                         }
@@ -1086,8 +1152,6 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
                     })
 
                 }
-
-
 
                 // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
@@ -1111,9 +1175,7 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
         }
     }
 
-
     var popupWindow: PopupWindow? = null
-
 
     fun openPopShortBy(
         view: TextView,
@@ -1121,8 +1183,6 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
     ) {
         val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val customView = inflater.inflate(R.layout.custom_spinner, null)
-
-
 
         popupWindow = PopupWindow(
             customView,
@@ -1142,7 +1202,6 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
 
 
         })
-
 
         customView.etSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -1175,7 +1234,7 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
 
                     val list : ArrayList<Beat> = ArrayList()
 
-                    for(i in 0 until listBeats.size)
+                    for(i in listBeats.indices)
                     {
                         if(listBeats[i].beatname.toLowerCase().contains(s.toString().toLowerCase(),false))
                         {
@@ -1206,10 +1265,6 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
             }
         })
 
-
-
-
-
         popupWindow!!.isOutsideTouchable = true
 
         popupWindow!!.showAsDropDown(view)
@@ -1217,8 +1272,6 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
         popupWindow!!.update()
 
     }
-
-
 
     private fun callBeatRetailer(distId: String, beatname: String) {
         try {
@@ -1248,10 +1301,6 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
             e.printStackTrace()
         }
     }
-
-
-
-
 
     //data base work
     private val wordViewModel: WordViewModel by viewModels {

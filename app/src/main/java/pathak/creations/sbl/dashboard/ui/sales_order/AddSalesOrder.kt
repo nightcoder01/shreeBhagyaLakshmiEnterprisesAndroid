@@ -2,6 +2,8 @@ package pathak.creations.sbl.dashboard.ui.sales_order
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,10 +12,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.ArrayAdapter
-import android.widget.PopupWindow
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AlertDialogLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -49,6 +50,11 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
     var listCategories: ArrayList<CategoriesData> = ArrayList()
     var listSubCategories: ArrayList<SubCat> = ArrayList()
     var dist_id: String =""
+    var distIDName = ""
+
+    var retailerIDMain = ""
+    var retailerIDName = ""
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -126,6 +132,9 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
         etRetailerId.text = Editable.Factory.getInstance().newEditable(arguments?.getString("retailerId"))
 
         dist_id = arguments?.getString("dist_id")!!
+        distIDName = arguments?.getString("distributorName")!!
+        retailerIDMain = arguments?.getString("retailerId")!!
+        retailerIDName = arguments?.getString("retailer")!!
 
         etDate.text =Editable.Factory.getInstance().newEditable(SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()))
         tvDateMain.text =SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
@@ -266,7 +275,19 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
                                         subList[pos].price,
                                         subList[pos].customPrice,
                                         subList[pos].overAllPrice,
-                                        subList[pos].cartItem,etBeatName.text.toString(),etRetailerName.text.toString()
+                                        subList[pos].cartItem,
+                                        etBeatName.text.toString(),
+                                        subList[pos].retailerIDName,
+                                        subList[pos].retailerIDMain,
+                                        subList[pos].distIDName,
+                                        subList[pos].catgroup,
+                                        subList[pos].category,
+                                        subList[pos].code,
+                                        subList[pos].customPrice,
+                                        subList[pos].price,
+                                        subList[pos].overAllPrice,
+                                        (subList[pos].price.toFloat()*subList[pos].cartItem.toFloat()).toString()
+
                                     )
                                 )
 
@@ -302,7 +323,7 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
                     override fun clickedSelected(pos: Int, str: String) {
                         if(str=="add")
                         {
-                            if(subList[pos].cartItem.toInt()>999)
+                            if(subList[pos].cartItem.toInt()>9999)
                             {
                                 Toast.makeText(ctx,"max limit crossed", Toast.LENGTH_SHORT).show()
                             }
@@ -324,6 +345,13 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
                                 subList[pos].cartItem = (subList[pos].cartItem.toInt()-1).toString()
                                 adapter2.notifyDataSetChanged()
                             }
+                        }
+                        if(str=="long")
+                        {
+
+                            callNumberList(subList,adapter2,pos)
+
+                            Toast.makeText(ctx,"long",Toast.LENGTH_SHORT).show()
                         }
                     }
                 })
@@ -386,7 +414,17 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
                                                     subList[pos].overAllPrice,
                                                     subList[pos].cartItem,
                                                     etBeatName.text.toString(),
-                                                    etRetailerName.text.toString()
+                                                    subList[pos].retailerIDName,
+                                                    subList[pos].retailerIDMain,
+                                                    subList[pos].distIDName,
+                                                    subList[pos].catgroup,
+                                                    subList[pos].category,
+                                                    subList[pos].code,
+                                                    subList[pos].customPrice,
+                                                    subList[pos].price,
+                                                    subList[pos].overAllPrice,
+                                                    (subList[pos].price.toFloat()*subList[pos].cartItem.toFloat()).toString()
+
                                                 )
                                             )
 
@@ -420,7 +458,7 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
                                 override fun clickedSelected(pos: Int, str: String) {
                                     if(str=="add")
                                     {
-                                        if(subList[pos].cartItem.toInt()>999)
+                                        if(subList[pos].cartItem.toInt()>9999)
                                         {
                                             Toast.makeText(ctx,"max limit crossed", Toast.LENGTH_SHORT).show()
                                         }
@@ -442,6 +480,13 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
                                             subList[pos].cartItem = (subList[pos].cartItem.toInt()-1).toString()
                                             adapter3.notifyDataSetChanged()
                                         }
+                                    }
+                                    if(str=="long")
+                                    {
+
+                                        callNumberList(subList,adapter3,pos)
+
+                                        Toast.makeText(ctx,"long",Toast.LENGTH_SHORT).show()
                                     }
                                 }
                             })
@@ -507,7 +552,17 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
                                                     subList[pos].overAllPrice,
                                                     subList[pos].cartItem,
                                                     etBeatName.text.toString(),
-                                                    etRetailerName.text.toString()
+                                                    subList[pos].retailerIDName,
+                                                    subList[pos].retailerIDMain,
+                                                    subList[pos].distIDName,
+                                                    subList[pos].catgroup,
+                                                    subList[pos].category,
+                                                    subList[pos].code,
+                                                    subList[pos].customPrice,
+                                                    subList[pos].price,
+                                                    subList[pos].overAllPrice,
+                                                    (subList[pos].price.toFloat()*subList[pos].cartItem.toFloat()).toString()
+
                                                 )
                                             )
 
@@ -543,7 +598,7 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
                                 override fun clickedSelected(pos: Int, str: String) {
                                     if(str=="add")
                                     {
-                                        if(subList[pos].cartItem.toInt()>999)
+                                        if(subList[pos].cartItem.toInt()>9999)
                                         {
                                             Toast.makeText(ctx,"max limit crossed", Toast.LENGTH_SHORT).show()
                                         }
@@ -566,6 +621,13 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
                                             adapter3.notifyDataSetChanged()
                                         }
                                     }
+                                    if(str=="long")
+                                    {
+
+                                        callNumberList(subList,adapter3,pos)
+
+                                        Toast.makeText(ctx,"long",Toast.LENGTH_SHORT).show()
+                                    }
                                 }
                             })
                         }
@@ -582,6 +644,46 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
 
     }
 
+
+    private lateinit var dialogBuilderMain  : AlertDialog
+
+    private fun callNumberList(
+        subList: ArrayList<SubCat>,
+        adapter2: SubCategaryAdapter,
+        pos: Int
+    ) {
+
+
+        val dialogBuilder = AlertDialog.Builder(ctx)
+        val layout = AlertDialogLayout.inflate(ctx, R.layout.custom_count,null)
+        dialogBuilder.setView(layout)
+
+        val tvSubmit :TextView= layout.findViewById(R.id.tvSubmit)
+        val npItem : NumberPicker = layout.findViewById(R.id.npItem)
+
+        dialogBuilderMain = dialogBuilder.create()
+        dialogBuilderMain.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogBuilderMain.setCancelable(false)
+        dialogBuilderMain.setCanceledOnTouchOutside(true)
+
+        tvSubmit.setOnClickListener {
+
+            Toast.makeText(ctx,npItem.value.toString(),Toast.LENGTH_SHORT).show()
+            subList[pos].cartItem = npItem.value.toString()
+            adapter2.notifyItemChanged(pos)
+            dialogBuilderMain.dismiss()
+        }
+        npItem.maxValue = 9999
+        npItem.minValue = 0
+
+
+
+        dialogBuilderMain.show()
+    }
+
+
+
+
     private fun getSubListFiltered(s: String, listCategories: ArrayList<CategoriesData>): ArrayList<SubCat> {
 
 
@@ -596,7 +698,7 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
                     listCategories[i].price,listCategories[i].weight,
                     listCategories[i].ptrflag,"0",
                     (listCategories[i].price.toFloat()+(listCategories[i].price.toFloat()*(45))/1000 ).toString(),
-                    "0.0",dist_id
+                    "0.0",dist_id,distIDName,retailerIDMain,retailerIDName
                 ))
             }
         }

@@ -28,10 +28,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="2"
+        android:visibility="visible"
         android:orientation="vertical"
-
         />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

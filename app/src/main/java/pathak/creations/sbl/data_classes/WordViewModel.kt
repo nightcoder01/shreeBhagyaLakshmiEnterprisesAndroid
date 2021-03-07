@@ -74,9 +74,9 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
     val allCart: LiveData<List<Cart>> = repository.allCarts.asLiveData()
 
 
-    fun getCartFromDist(distID: String, listener: MyCart) {
+    fun getCartFromDist(retailer_code: String, listener: MyCart) {
         viewModelScope.launch {
-            listener.DataChange(repository.getCartFromDist(distID).asLiveData())
+            listener.DataChange(repository.getCartFromDist(retailer_code).asLiveData())
         }
     }
 

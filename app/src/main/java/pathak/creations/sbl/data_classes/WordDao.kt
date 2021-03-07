@@ -68,8 +68,8 @@ interface WordDao {
     fun getCartList(): Flow<List<Cart>>
 
 
-    @Query("SELECT * FROM cart_table  WHERE distID = :distId ORDER BY cartId ASC ")
-    fun getCartFromDist(distId :String): Flow<List<Cart>>
+    @Query("SELECT * FROM cart_table  WHERE retailer_code = :retailer_code ORDER BY cartId ASC ")
+    fun getCartFromDist(retailer_code :String): Flow<List<Cart>>
 
 
 

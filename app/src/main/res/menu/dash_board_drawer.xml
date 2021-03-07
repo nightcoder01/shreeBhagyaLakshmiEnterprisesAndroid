@@ -4,6 +4,7 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
+
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_widgets"
@@ -20,10 +21,16 @@
             android:id="@+id/nav_retailer_master"
             android:icon="@drawable/ic_user"
             android:title="@string/menu_retailer_master" />
+
        <!-- <item
             android:id="@+id/nav_tools"
             android:icon="@drawable/ic_customer"
             android:title="@string/menu_distributor_ptr" />-->
+
+        <item
+            android:id="@+id/nav_sales_history"
+            android:icon="@drawable/ic_notepad"
+            android:title="@string/sales_history" />
 
         <item
             android:id="@+id/nav_cart"
