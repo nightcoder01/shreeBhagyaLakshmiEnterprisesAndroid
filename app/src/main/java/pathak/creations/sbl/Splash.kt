@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import pathak.creations.sbl.common.CommonKeys
 import pathak.creations.sbl.common.PreferenceFile
 import pathak.creations.sbl.dashboard.DashBoard
+import pathak.creations.sbl.select_distributor.SelectDistributor
 import pathak.creations.sbl.welcome.WelcomeActivity
 
 class Splash : AppCompatActivity() {
@@ -27,8 +28,19 @@ class Splash : AppCompatActivity() {
                 finish()
             } else {
 
+                if (PreferenceFile.retrieveKey(this, CommonKeys.SELECTED_DISTRIBUTOR) == null)
+                {
+
+                    startActivity(Intent(this, SelectDistributor::class.java))
+                    finish()
+                }
+                    else
+                    {
                 startActivity(Intent(this, DashBoard::class.java))
                 finish()
+                    }
+
+
 
             }
 

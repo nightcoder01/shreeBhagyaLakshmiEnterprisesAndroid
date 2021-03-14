@@ -53,8 +53,25 @@ interface WordDao {
     @Query("SELECT * FROM retailer_table ORDER BY retailer_table_id ASC")
     fun getRetailer(): Flow<List<Retailer>>
 
+    @Query("SELECT * FROM retailer_table  WHERE beatname = :beatName  ORDER BY retailer_table_id ASC ")
+    fun getBeatRetailer(beatName :String): Flow<List<Retailer>>
+
+
     @Query("DELETE FROM retailer_table")
     suspend fun deleteAllRetailer()
+
+
+    //retailer
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertCategories(categories: Categories)
+
+    @Query("SELECT * FROM categories_table ORDER BY categories_table_id ASC")
+    fun getCategories(): Flow<List<Categories>>
+
+
+
+    @Query("DELETE FROM categories_table")
+    suspend fun deleteAllCategories()
 
 
     //cart

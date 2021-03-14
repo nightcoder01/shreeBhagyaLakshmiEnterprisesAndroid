@@ -42,6 +42,13 @@ import androidx.room.PrimaryKey
             )
 
 
+@Entity(tableName = "categories_table")
+class Categories(@PrimaryKey @ColumnInfo(name = "categories_table_id") val categories_table_id : String, @ColumnInfo(name = "catgroup")val catgroup: String,
+           @ColumnInfo(name = "category")val category: String, @ColumnInfo(name = "code")val code: String,
+           @ColumnInfo(name = "description")val description: String, @ColumnInfo(name = "price")val price: String,
+           @ColumnInfo(name = "weight")val weight: String, @ColumnInfo(name = "ptrflag")val ptrflag: String)
+
+
 @Entity(tableName = "word_table")
 class Word(@PrimaryKey @ColumnInfo(name = "word") val word : String)
 

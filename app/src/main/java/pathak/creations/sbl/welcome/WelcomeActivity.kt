@@ -21,11 +21,6 @@ class WelcomeActivity:AppCompatActivity(){
         welcomeVM = WelcomeVM(this, validator)
         welcomeBinding.welcomeVM = welcomeVM
 
-
-
-
-
-
     }
 
 }

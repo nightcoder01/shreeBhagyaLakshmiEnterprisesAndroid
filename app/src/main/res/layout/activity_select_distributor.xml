@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="pathak.creations.sbl.select_distributor.SelectDistributor">
+
+
+    <include
+        android:id="@+id/topToolbar"
+        layout="@layout/toolbar" />
+
+    <TextView
+        android:id="@+id/tvDistributor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:text="@string/distributor"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topToolbar" />
+
+
+
+
+    <TextView
+        android:id="@+id/tvDistributor2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:background="@drawable/round_bg"
+        android:drawableEnd="@drawable/ic_arrow_drop"
+        android:hint="@string/select_distributor_name"
+        android:maxLength="30"
+        android:padding="@dimen/_7sdp"
+        android:singleLine="true"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvDistributor"
+        app:layout_constraintTop_toBottomOf="@id/tvDistributor" />
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

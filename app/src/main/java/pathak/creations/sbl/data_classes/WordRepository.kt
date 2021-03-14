@@ -80,10 +80,39 @@ class WordRepository(private val wordDao: WordDao) {
         wordDao.insertRetailer(retailer)
     }
 
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun getBeatRetailer(beatName: String) : Flow<List<Retailer>>{
+        return wordDao.getBeatRetailer(beatName)
+    }
+
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun deleteAllRetailer() {
         wordDao.deleteAllRetailer()
+    }
+
+
+
+    //retailer
+
+    val allCategories: Flow<List<Categories>> = wordDao.getCategories()
+
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun insertCategories(categories: Categories) {
+        wordDao.insertCategories(categories)
+    }
+
+
+
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun deleteAllCategories() {
+        wordDao.deleteAllCategories()
     }
 
 

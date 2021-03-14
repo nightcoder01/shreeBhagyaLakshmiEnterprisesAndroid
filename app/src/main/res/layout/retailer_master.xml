@@ -103,7 +103,6 @@
         app:layout_constraintStart_toStartOf="@id/tvDate"
         app:layout_constraintTop_toBottomOf="@id/tvDistributor" />
 
-
     <TextView
         android:id="@+id/tvDistributor2"
         android:layout_width="0dp"
@@ -120,10 +119,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/tvDistributor"
         app:layout_constraintTop_toBottomOf="@id/tvDistributor" />
-
-
-
-
 
 
     <androidx.recyclerview.widget.RecyclerView

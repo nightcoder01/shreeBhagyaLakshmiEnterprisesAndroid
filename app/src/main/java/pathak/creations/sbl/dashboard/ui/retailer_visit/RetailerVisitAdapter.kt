@@ -7,9 +7,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.retailer_item.view.*
 import pathak.creations.sbl.R
-import pathak.creations.sbl.data_class.BeatRetailerData
+import pathak.creations.sbl.data_classes.Retailer
 
-class RetailerVisitAdapter(var list: ArrayList<BeatRetailerData>) :
+class RetailerVisitAdapter(var list: List<Retailer>) :
     RecyclerView.Adapter<RetailerVisitAdapter.CardsViewHolder>() {
 
 

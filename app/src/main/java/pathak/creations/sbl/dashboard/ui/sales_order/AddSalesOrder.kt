@@ -7,7 +7,6 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,34 +20,27 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.add_sales_order.*
 import kotlinx.android.synthetic.main.custom_spinner.view.*
-import org.json.JSONObject
 import pathak.creations.sbl.AppController
 import pathak.creations.sbl.R
-import pathak.creations.sbl.common.CommonKeys
 import pathak.creations.sbl.common.CommonMethods
-import pathak.creations.sbl.common.PreferenceFile
 import pathak.creations.sbl.custom_adapter.SpinnerCustomCategoryAdapter
-import pathak.creations.sbl.data_class.CategoriesData
 import pathak.creations.sbl.data_class.SubCat
 import pathak.creations.sbl.data_class.SubCategaryAdapter
 import pathak.creations.sbl.data_classes.Cart
+import pathak.creations.sbl.data_classes.Categories
 import pathak.creations.sbl.data_classes.WordViewModel
 import pathak.creations.sbl.data_classes.WordViewModelFactory
-import pathak.creations.sbl.retrofit.RetrofitResponse
-import pathak.creations.sbl.retrofit.RetrofitService
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class AddSalesOrder : Fragment(), RetrofitResponse {
+class AddSalesOrder : Fragment() {
 
     private lateinit var addSalesOrderVM: AddSalesOrderVM
     private lateinit var ctx: Context
 
 
-    var listCategories: ArrayList<CategoriesData> = ArrayList()
-    var listSubCategories: ArrayList<SubCat> = ArrayList()
     var dist_id: String =""
     var distIDName = ""
 
@@ -87,42 +79,11 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
         spBeatName.adapter = adapter
         spDistributor.adapter = adapter
         spDistributorId.adapter = adapter
-       /// spCategory.adapter = adapter
 
         tvCancel.setOnClickListener { (view.context as Activity).onBackPressed() }
 
     }
 
-    private fun callCategories(str:String) {
-        try {
-
-            if (CommonMethods.isNetworkAvailable(ctx)) {
-                val json = JSONObject()
-
-                json.put("dist_id",str)
-
-                RetrofitService(
-                    ctx,
-                    this,
-                    CommonKeys.CATEGORIES ,
-                    CommonKeys.CATEGORIES_CODE
-                    ,json,
-                    2
-                ).callService(true, PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!)
-
-                Log.e("callCategories", "=====$json")
-                Log.e("callCategories", "=token====${PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!}")
-
-            } else {
-                CommonMethods.alertDialog(
-                    ctx,
-                    getString(R.string.checkYourConnection)
-                )
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
 
     private fun getArgumentedData() {
 
@@ -139,75 +100,18 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
         etDate.text =Editable.Factory.getInstance().newEditable(SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()))
         tvDateMain.text =SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
-        callCategories(dist_id)
+        wordViewModel.allCategories.observe(viewLifecycleOwner, Observer { cat ->
+            // Update the cached copy of the words in the adapter.
 
-    }
+            cat?.let {
 
-
-    override fun response(code: Int, response: String) {
-        try {
-            when (code) {
-                CommonKeys.CATEGORIES_CODE -> {
-                    try {
-
-                        Log.e("CATEGORIES_CODE", "=====$code==$response")
-
-                        val json = JSONObject(response)
-                        val status = json.optBoolean("status")
-                        val msg = json.getString("message")
-                        if (status) {
-
-                            val data = json.getJSONArray("data")
-
-                            listCategories.clear()
-
-                            for (i in 0 until data.length()) {
-
-                                val dataObj = data.getJSONObject(i)
-
-
-                                if(dataObj.getString("catgroup").isNotEmpty()) {
-
-                                    listCategories.add(
-                                        CategoriesData(
-                                            dataObj.getString("catgroup"),
-                                            dataObj.getString("category"),
-                                            dataObj.getString("code"),
-                                            dataObj.getString("description"),
-                                            dataObj.getString("price"),
-                                            dataObj.getString("weight"),
-                                            dataObj.getString("ptrflag")
-
-                                        )
-                                    )
-                                }
-
-
-                                Log.e("data in list ","======${listCategories[i]}")
-                            }
-
-
-                            setCategories(listCategories)
-                        }
-
-                        else {
-                            CommonMethods.alertDialog(ctx, msg)
-                        }
-
-
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
+                setCategories(it)
             }
+        })
 
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
     }
 
-
-    private fun setCategories(listCategories: ArrayList<CategoriesData>) {
+    private fun setCategories(listCategories: List<Categories>) {
         tvCategory2.setOnClickListener {
             openCategoryShort(tvCategory2,listCategories)
         }
@@ -217,7 +121,7 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
     var popupWindow: PopupWindow? = null
 
 
-    private fun openCategoryShort(view: TextView, listCategories: ArrayList<CategoriesData>)
+    private fun openCategoryShort(view: TextView, listCategories: List<Categories>)
     {
         val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val customView = inflater.inflate(R.layout.custom_spinner, null)
@@ -499,13 +403,16 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
                 else
                 {
 
-                    val list : ArrayList<CategoriesData> = ArrayList()
+                    val list : List<Categories> = ArrayList()
 
-                    for(i in 0 until listCategories.size)
+                    for(i in listCategories.indices)
                     {
                         if(listCategories[i].catgroup.toLowerCase().contains(s.toString().toLowerCase(),false))
                         {
-                            list.add(listCategories[i])
+
+                            list.plus(listCategories[i])
+
+                            //list.add(listCategories[i])
 
                         }
                     }
@@ -684,12 +591,12 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
 
 
 
-    private fun getSubListFiltered(s: String, listCategories: ArrayList<CategoriesData>): ArrayList<SubCat> {
+    private fun getSubListFiltered(s: String, listCategories: List<Categories>): ArrayList<SubCat> {
 
 
         val list :ArrayList<SubCat>  = ArrayList()
 
-        for(i in 0 until listCategories.size)
+        for(i in listCategories.indices)
         {
             if(listCategories[i].catgroup==s)
             {
@@ -706,13 +613,13 @@ class AddSalesOrder : Fragment(), RetrofitResponse {
 
     }
 
-    private fun getListFiltered(listCategories: ArrayList<CategoriesData>): ArrayList<String> {
+    private fun getListFiltered(listCategories: List<Categories>): ArrayList<String> {
 
 
         var list :ArrayList<String> = ArrayList()
-        for(i in 0 until listCategories.size)
+        for(element in listCategories)
         {
-            list.add(listCategories[i].catgroup)
+            list.add(element.catgroup)
         }
 
         if(list.isNotEmpty()) {

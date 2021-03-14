@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import kotlinx.coroutines.launch
 import pathak.creations.sbl.dashboard.ui.cart.MyCart
 import pathak.creations.sbl.interfaces.DataChangeListener
+import pathak.creations.sbl.interfaces.RetailerDataChangeListener
 
 class WordViewModel(private val repository: WordRepository) : ViewModel() {
 
@@ -65,8 +66,30 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
         repository.insertRetailer(retailer)
     }
 
+    fun getBeatRetailer(beatName: String, listener : RetailerDataChangeListener<LiveData<List<Retailer>>>) {
+        viewModelScope.launch {
+            listener.RetailerDataChange(repository.getBeatRetailer(beatName).asLiveData())
+        }
+    }
+
+
     fun deleteAllRetailer() = viewModelScope.launch {
         repository.deleteAllRetailer()
+    }
+
+    //Categories
+
+    val allCategories: LiveData<List<Categories>> = repository.allCategories.asLiveData()
+
+    fun insertCategories(categories: Categories) = viewModelScope.launch {
+        repository.insertCategories(categories)
+    }
+
+
+
+
+    fun deleteAllCategories() = viewModelScope.launch {
+        repository.deleteAllCategories()
     }
 
     //cart

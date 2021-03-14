@@ -209,6 +209,19 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>>, RetrofitRes
 
     private fun setCartAdapter(list: List<Cart>) {
         val adapter  = MyCartAdapter(list)
+
+
+        if(list.isEmpty())
+        {
+            tvSubmitCart.visibility = View.GONE
+            tvClearCart.visibility = View.INVISIBLE
+        }
+        else
+        {
+            tvSubmitCart.visibility = View.VISIBLE
+            tvClearCart.visibility = View.VISIBLE
+        }
+
         rvMyCart.adapter = adapter
         adapter.onClicked(object: MyCartAdapter.CardInterface{
 
@@ -271,7 +284,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>>, RetrofitRes
         pos: Int
     ) {
 
-
         val dialogBuilder = AlertDialog.Builder(ctx)
         val layout = AlertDialogLayout.inflate(ctx, R.layout.custom_count,null)
         dialogBuilder.setView(layout)
@@ -296,8 +308,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>>, RetrofitRes
         npItem.maxValue = 9999
         npItem.minValue = 0
 
-
-
         dialogBuilderMain.show()
     }
 
@@ -312,7 +322,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>>, RetrofitRes
     private fun openDistributorShort(
         view: TextView,
         list: List<Retailer>
-
     ) {
         val inflater =
             view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -357,10 +366,7 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>>, RetrofitRes
 
                             view.hint = list[position].retailer_name
                             popupWindow!!.dismiss()
-                            //callBeatList(listDistId[position])
-                           // callDistRetailer(list[position].distID)
 
-                            //  callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
 
                             wordViewModel.getCartFromDist(list[position].retailer_id, this@MyCart)
 
@@ -385,10 +391,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>>, RetrofitRes
 
                             view.hint = list2[position].retailer_name
                             popupWindow!!.dismiss()
-                            // callBeatList(list2[position])
-                          //  callDistRetailer(list2[position].distID)
-
-                            // callBeatRetailer(list[position].dist_id,list[position].beatname)
 
                             wordViewModel.getCartFromDist(list2[position].retailer_id, this@MyCart)
 

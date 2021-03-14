@@ -25,7 +25,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.custom_spinner.view.*
 import kotlinx.android.synthetic.main.sales_order.*
-import org.json.JSONObject
 import pathak.creations.sbl.AppController
 import pathak.creations.sbl.R
 import pathak.creations.sbl.common.CommonKeys
@@ -36,20 +35,33 @@ import pathak.creations.sbl.custom_adapter.SpinnerCustomCategoryAdapter
 import pathak.creations.sbl.custom_adapter.SpinnerCustomDistributorAdapter
 import pathak.creations.sbl.custom_adapter.SpinnerCustomRetailerAdapter
 import pathak.creations.sbl.dashboard.ui.retailer_visit.RetailerVisitAdapter
-import pathak.creations.sbl.data_class.BeatData
-import pathak.creations.sbl.data_class.CategoriesData
 import pathak.creations.sbl.data_class.SubCat
 import pathak.creations.sbl.data_class.SubCategaryAdapter
 import pathak.creations.sbl.data_classes.*
 import pathak.creations.sbl.interfaces.DataChangeListener
-import pathak.creations.sbl.retrofit.RetrofitResponse
-import pathak.creations.sbl.retrofit.RetrofitService
+import pathak.creations.sbl.interfaces.RetailerDataChangeListener
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<List<Beat>>> {
+class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
+    RetailerDataChangeListener<LiveData<List<Retailer>>> {
+
+
+
+    override fun RetailerDataChange(data: LiveData<List<Retailer>>) {
+        data.observe(viewLifecycleOwner, Observer { retailer ->
+            // Update the cached copy of the words in the adapter.
+            Log.e("callBeatRetailer", "==33===${retailer.size}===")
+
+            retailer?.let {
+                listBeatsRetailer.addAll(it)
+                setBeatRetailerAdapter(it)
+
+            }
+        })
+    }
 
 
     private lateinit var salesOrderVM: SalesOrderVM
@@ -58,16 +70,9 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
 
 
 
-    var listBeats : ArrayList<BeatData> = ArrayList()
     var listBeatsRetailer : ArrayList<Retailer> = ArrayList()
 
 
-   // var listDistName : ArrayList<String> = ArrayList()
-   // var listDistId : ArrayList<String> = ArrayList()
-
-
-    var listCategories: ArrayList<CategoriesData> = ArrayList()
-    var listSubCategories: ArrayList<SubCat> = ArrayList()
 
     var distIDMain = ""
     var distIDName = ""
@@ -122,18 +127,6 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
 
             wordViewModel.getBeatFromDist(distID!!, this)
 
-            //set live data observer
-            /*wordViewModel.allBeat.observe(viewLifecycleOwner, Observer { dist ->
-                // Update the cached copy of the words in the adapter.
-
-
-                dist?.let {
-
-                    setBeatAdapter(it)
-
-                }
-            })*/
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -154,283 +147,30 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
     private fun callCategories(id: String?) {
         try {
 
-            if (CommonMethods.isNetworkAvailable(ctx)) {
-                val json = JSONObject()
+            wordViewModel.allCategories.observe(viewLifecycleOwner, Observer { cat ->
+                // Update the cached copy of the words in the adapter.
 
-                json.put("dist_id",id)
+                cat?.let {
 
-                RetrofitService(
-                    ctx,
-                    this,
-                    CommonKeys.CATEGORIES ,
-                    CommonKeys.CATEGORIES_CODE
-                    ,json,
-                    2
-                ).callService(true, PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!)
-
-                Log.e("callCategories", "=====$json")
-                Log.e("callCategories", "=token====${PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!}")
-
-            }
-            else {
-                CommonMethods.alertDialog(
-                    ctx,
-                    getString(R.string.checkYourConnection)
-                )
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    override fun response(code: Int, response: String) {
-        try {
-            Log.e("SalesOrder", "=====$code=====$response")
-
-
-            when (code) {
-                CommonKeys.BEAT_LIST_CODE -> {
-                    try {
-
-                        Log.e("BEAT_LIST_CODE", "=====$code==$response")
-
-                        val json = JSONObject(response)
-                        val status = json.optBoolean("status")
-                        val msg = json.getString("message")
-                        if (status) {
-
-                            val data = json.getJSONArray("data")
-
-
-
-                            listBeats.clear()
-
-
-
-                            for (i in 0 until data.length()) {
-
-                                val dataObj = data.getJSONObject(i)
-
-                                if(dataObj.getString("beatname").isNotEmpty()) {
-                                    listBeats.add(
-                                        BeatData(
-                                            dataObj.getString("areaname"),
-                                            dataObj.getString("beatname"),
-                                            dataObj.getString("dist_id"),
-                                            dataObj.getString("distributor"),
-                                            dataObj.getString("id"),
-                                            dataObj.getString("state")
-                                        )
-                                    )
-                                }
-                            }
-
-
-                         //   setBeatAdapter(listBeats)
-                        }
-
-                        else {
-                            CommonMethods.alertDialog(ctx, msg)
-                        }
-
-
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                    setCategories(it)
                 }
-                CommonKeys.BEAT_RETAILER_LIST_CODE -> {
-                    try {
+            })
 
-                        Log.e("BEAT_RETAILER_LIST_CODE", "=====$code==$response")
-
-                        val json = JSONObject(response)
-                        val status = json.optBoolean("status")
-                        val msg = json.getString("message")
-                        if (status) {
-
-                            val data = json.getJSONArray("data")
-
-
-
-                            listBeatsRetailer.clear()
-
-
-
-                            for (i in 0 until data.length()) {
-
-                                val dataObj = data.getJSONObject(i)
-
-                                if(dataObj.getString("beatname").isNotEmpty()) {
-                                    listBeatsRetailer.add(
-                                        Retailer(
-                                            dataObj.getString("id"),
-                                            dataObj.getString("date"),
-                                            dataObj.getString("dist_id"),
-                                            dataObj.getString("distributor"),
-                                            dataObj.getString("retailer_id"),
-                                            dataObj.getString("retailer_name"),
-                                            dataObj.getString("beatname"),
-                                            dataObj.getString("address"),
-                                            dataObj.getString("phone"),
-                                            dataObj.getString("mobile"),
-                                            dataObj.getString("type"),
-                                            dataObj.getString("note"),
-                                            dataObj.getString("place"),
-                                            dataObj.getString("firstname"),
-                                            dataObj.getString("lastname"),
-                                            dataObj.getString("state"),
-                                            dataObj.getString("areaname"),
-                                            dataObj.getString("country"),
-                                            dataObj.getString("pincode"),
-                                            dataObj.getString("cst"),
-                                            dataObj.getString("cst_registerationdate"),
-                                            dataObj.getString("vattin"),
-                                            dataObj.getString("csttin"),
-                                            dataObj.getString("pan"),
-                                            dataObj.getString("updated"),
-                                            dataObj.getString("client"),
-                                            dataObj.getString("empname"),
-                                            dataObj.getString("ca"),
-                                            dataObj.getString("cac"),
-                                            dataObj.getString("rid"),
-                                            dataObj.getString("classification"),
-                                            dataObj.getString("retailer_type"),
-                                            dataObj.getString("dvisit"),
-                                            dataObj.getString("cperson"),
-                                            dataObj.getString("email"),
-                                            dataObj.getString("gstin"),
-                                            dataObj.getString("sno"),
-                                            dataObj.getString("latitude"),
-                                            dataObj.getString("longitude")
-                                        )
-                                    )
-                                }
-                            }
-
-
-                            setBeatRetailerAdapter(listBeatsRetailer)
-                        }
-
-                        else {
-                            CommonMethods.alertDialog(ctx, msg)
-                        }
-
-
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
-                CommonKeys.RETAILER_LIST_CODE -> {
-                    try {
-
-                        Log.e("RETAILER_LIST_CODE", "=====$code==$response")
-
-                        val json = JSONObject(response)
-                        val status = json.optBoolean("status")
-                        val msg = json.getString("message")
-                        if (status) {
-
-                            //val data = json.getJSONObject("data")
-
-                            val dataArray = json.getJSONArray("data")
-
-                          //  listDistName.clear()
-                          //  listDistId.clear()
-
-                            wordViewModel.deleteAllDist()
-
-                            for(i in 0 until dataArray.length())
-                            {
-                                val dataObj = dataArray.getJSONObject(i)
-                            //    listDistId.add(dataObj.getString("dist_id"))
-                             //   listDistName.add(dataObj.getString("name"))
-
-
-                                wordViewModel.insertDist(
-                                    Distributor(dataObj.getString("dist_id")
-                                        ,dataObj.getString("name"))
-                                )
-
-                            }
-
-                           // setDistributorAdapter(listDistName,listDistId)
-
-                        }
-
-                        else {
-                            CommonMethods.alertDialog(ctx, msg)
-                        }
-
-
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
-                CommonKeys.CATEGORIES_CODE -> {
-                    try {
-
-                        Log.e("CATEGORIES_CODE", "=====$code==$response")
-
-                        val json = JSONObject(response)
-                        val status = json.optBoolean("status")
-                        val msg = json.getString("message")
-                        if (status) {
-
-                            val data = json.getJSONArray("data")
-
-                            listCategories.clear()
-
-                            for (i in 0 until data.length()) {
-
-                                val dataObj = data.getJSONObject(i)
-
-                                if(dataObj.getString("catgroup").isNotEmpty()) {
-
-                                    listCategories.add(
-                                        CategoriesData(
-                                            dataObj.getString("catgroup"),
-                                            dataObj.getString("category"),
-                                            dataObj.getString("code"),
-                                            dataObj.getString("description"),
-                                            dataObj.getString("price"),
-                                            dataObj.getString("weight"),
-                                            dataObj.getString("ptrflag")
-
-                                        )
-                                    )
-                                }
-
-
-                                Log.e("data in list ","======${listCategories[i]}")
-                            }
-
-
-                            setCategories(listCategories)
-                        }
-
-                        else {
-                            CommonMethods.alertDialog(ctx, msg)
-                        }
-
-
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
-            }
 
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    private fun setCategories(listCategories: ArrayList<CategoriesData>) {
+
+
+    private fun setCategories(listCategories: List<Categories>) {
         tvCategory2.setOnClickListener {
             openCategoryShort(tvCategory2,listCategories)
         }
     }
 
-    private fun openCategoryShort(view: TextView, listCategories: ArrayList<CategoriesData>)
+    private fun openCategoryShort(view: TextView, listCategories: List<Categories>)
     {
         val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val customView = inflater.inflate(R.layout.custom_spinner, null)
@@ -712,13 +452,13 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
                 else
                 {
 
-                    val list : ArrayList<CategoriesData> = ArrayList()
+                    val list : List<Categories> = ArrayList()
 
-                    for(i in 0 until listCategories.size)
+                    for(i in listCategories.indices)
                     {
                         if(listCategories[i].catgroup.toLowerCase().contains(s.toString().toLowerCase(),false))
                         {
-                            list.add(listCategories[i])
+                            list.plus(listCategories[i])
 
                         }
                     }
@@ -912,12 +652,12 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
 
     }
 
-    private fun getSubListFiltered(s: String, listCategories: ArrayList<CategoriesData>): ArrayList<SubCat> {
+    private fun getSubListFiltered(s: String, listCategories: List<Categories>): ArrayList<SubCat> {
 
 
         val list :ArrayList<SubCat>  = ArrayList()
 
-        for(i in 0 until listCategories.size)
+        for(i in listCategories.indices)
         {
             if(listCategories[i].catgroup==s)
             {
@@ -934,13 +674,13 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
 
     }
 
-    private fun getListFiltered(listCategories: ArrayList<CategoriesData>): ArrayList<String> {
+    private fun getListFiltered(listCategories: List<Categories>): ArrayList<String> {
 
 
         var list :ArrayList<String> = ArrayList()
-        for(i in 0 until listCategories.size)
+        for(element in listCategories)
         {
-            list.add(listCategories[i].catgroup)
+            list.add(element.catgroup)
         }
 
         if(list.isNotEmpty()) {
@@ -951,9 +691,16 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
     }
 
     private fun setDistributorAdapter(listDist: List<Distributor>) {
-        tvDistributor2.setOnClickListener {
+
+        tvDistributor2.text =PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_DISTRIBUTOR_NAME)
+        callBeatList(PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_DISTRIBUTOR))
+        callCategories(PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_DISTRIBUTOR))
+
+        /*tvDistributor2.setOnClickListener {
             openDistributorShort(tvDistributor2,listDist)
-        }    }
+        }*/
+
+    }
 
     private fun openDistributorShort(
         view: TextView,
@@ -1055,13 +802,13 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
 
     }
 
-    private fun setBeatRetailerAdapter(listBeatsRetailer: ArrayList<Retailer>) {
+    private fun setBeatRetailerAdapter(listBeatsRetailer: List<Retailer>) {
         tvRetailer2.setOnClickListener {
             openRetailerSpinner(tvRetailer2,listBeatsRetailer)
         }
     }
 
-    private fun openRetailerSpinner(view: TextView, listBeatsRetailer: ArrayList<Retailer>) {
+    private fun openRetailerSpinner(view: TextView, listBeatsRetailer: List<Retailer>) {
         val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val customView = inflater.inflate(R.layout.custom_spinner, null)
 
@@ -1276,27 +1023,13 @@ class SalesOrder : Fragment(), RetrofitResponse, DataChangeListener<LiveData<Lis
     private fun callBeatRetailer(distId: String, beatname: String) {
         try {
 
-            if (CommonMethods.isNetworkAvailable(ctx)) {
-                val json = JSONObject()
 
-                json.put("dist_id",distId)
-                json.put("beatname",beatname)
-
-                RetrofitService(
-                    ctx,
-                    this,
-                    CommonKeys.BEAT_RETAILER_LIST ,
-                    CommonKeys.BEAT_RETAILER_LIST_CODE,
-                    json,2
-                ).callService(true, PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!)
+            Log.e("callBeatRetailer", "=====$distId===$beatname")
+            wordViewModel.getBeatRetailer(beatname, this)
 
 
-            } else {
-                CommonMethods.alertDialog(
-                    ctx,
-                    getString(R.string.checkYourConnection)
-                )
-            }
+
+
         } catch (e: Exception) {
             e.printStackTrace()
         }

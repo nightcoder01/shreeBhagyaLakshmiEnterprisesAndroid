@@ -31,40 +31,34 @@ import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.custom_spinner.view.*
 import kotlinx.android.synthetic.main.logout_alert.*
 import kotlinx.android.synthetic.main.retailer_visit.*
-import org.json.JSONObject
 import pathak.creations.sbl.AppController
 import pathak.creations.sbl.R
 import pathak.creations.sbl.common.*
 import pathak.creations.sbl.custom_adapter.SpinnerCustomAdapter
 import pathak.creations.sbl.custom_adapter.SpinnerCustomDistributorAdapter
 import pathak.creations.sbl.dashboard.DashBoard
-import pathak.creations.sbl.data_class.BeatData
-import pathak.creations.sbl.data_class.BeatRetailerData
-import pathak.creations.sbl.data_classes.Beat
-import pathak.creations.sbl.data_classes.Distributor
-import pathak.creations.sbl.data_classes.WordViewModel
-import pathak.creations.sbl.data_classes.WordViewModelFactory
+import pathak.creations.sbl.data_classes.*
 import pathak.creations.sbl.interfaces.DataChangeListener
+import pathak.creations.sbl.interfaces.RetailerDataChangeListener
 import pathak.creations.sbl.retrofit.RetrofitResponse
-import pathak.creations.sbl.retrofit.RetrofitService
 
-class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<List<Beat>>> {
+class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<List<Beat>>>,
+    RetailerDataChangeListener<LiveData<List<Retailer>>> {
+
 
 
     private lateinit var retailerVisitVM: RetailerVisitVM
 
     var list : ArrayList<RetailerVisitData> = ArrayList()
-    var listBeats : ArrayList<BeatData> = ArrayList()
+
 
 
     var distributor: String = ""
     var distributorId: String = ""
     var beat: String = ""
-    var listBeatsRetailer : ArrayList<BeatRetailerData> = ArrayList()
-    var listBeatsRetailerFilter : ArrayList<BeatRetailerData> = ArrayList()
+    var listBeatsRetailer : ArrayList<Retailer> = ArrayList()
+    var listBeatsRetailerFilter : ArrayList<Retailer> = ArrayList()
 
-  //  var listDistName : ArrayList<String> = ArrayList()
-  //  var listDistId : ArrayList<String> = ArrayList()
 
     var ctx : Context? = null
 
@@ -99,8 +93,6 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
         tvAdd.setOnClickListener { Navigation.findNavController(view).navigate(R.id.action_add_visit) }
 
 
-        //callBeatList(PreferenceFile.retrieveKey(ctx!!,CommonKeys.NAME))
-
         setDistributor()
         if(beat.isNotEmpty()) {
 
@@ -109,28 +101,17 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
 
             callBeatList(distributorId)
 
-
-
         }
 
-
-
-        // setCountList()
-
         setSearch()
-
-
-
 
         //set live data observer
         wordViewModel.allDistributor.observe(viewLifecycleOwner, Observer { dist ->
             // Update the cached copy of the words in the adapter.
 
-
             dist?.let {
 
                 setDistributorAdapter(it)
-
             }
         })
 
@@ -152,7 +133,7 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
 
                 if(s.isNullOrEmpty())
                 {
-                    setBeatRetailerAdapter(listBeatsRetailer)
+                   // setBeatRetailerAdapter(listBeatsRetailer)
                 }
                 else
                 {
@@ -191,82 +172,17 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
         }
         else
         {
-        //    callDistributorList()
         }
     }
 
-    private fun callDistributorList() {
-        try {
-
-            if (CommonMethods.isNetworkAvailable(ctx!!)) {
-                val json = JSONObject()
-
-                RetrofitService(
-                    ctx!!,
-                    this,
-                    CommonKeys.RETAILER_LIST ,
-                    CommonKeys.RETAILER_LIST_CODE,
-                    1
-                ).callService(true, PreferenceFile.retrieveKey(ctx!!, CommonKeys.TOKEN)!!)
-
-                Log.e("callDistributorList", "=====$json")
-                Log.e("callDistributorList", "=token====${PreferenceFile.retrieveKey(ctx!!, CommonKeys.TOKEN)!!}")
-
-            } else {
-                CommonMethods.alertDialog(
-                    ctx!!,
-                    getString(R.string.checkYourConnection)
-                )
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
 
     private fun callBeatList(distID: String?) {
         try {
 
-/*            if (CommonMethods.isNetworkAvailable(ctx!!)) {
-                val json = JSONObject()
-
-                distributor =distID!!
-                json.put("dist_id",distID)
-
-                RetrofitService(
-                    ctx!!,
-                    this,
-                    CommonKeys.BEAT_LIST ,
-                    CommonKeys.BEAT_LIST_CODE,
-                    json,2
-                ).callService(true, PreferenceFile.retrieveKey(ctx!!, CommonKeys.TOKEN)!!)
-
-                Log.e("callBeatList", "=====$json")
-                Log.e("callBeatList", "=token====${PreferenceFile.retrieveKey(ctx!!, CommonKeys.TOKEN)!!}")
-
-            } else {
-                CommonMethods.alertDialog(
-                    ctx!!,
-                    getString(R.string.checkYourConnection)
-                )
-            }*/
-
-
-
-
             wordViewModel.getBeatFromDist(distID!!, this)
 
-            //set live data observer
-           /* wordViewModel.allBeat.observe(viewLifecycleOwner, Observer { dist ->
-                // Update the cached copy of the words in the adapter.
-
-
-                dist?.let {
-                    setBeatAdapter(it)
-
-                }
-            })*/
-
-        } catch (e: Exception) {
+        }
+        catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -275,14 +191,25 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
         data.observe(viewLifecycleOwner, Observer { dist ->
             // Update the cached copy of the words in the adapter.
 
-
             dist?.let {
                 setBeatAdapter(it)
-
             }
         })
     }
 
+
+    override fun RetailerDataChange(data: LiveData<List<Retailer>>) {
+        data.observe(viewLifecycleOwner, Observer { retailer ->
+            // Update the cached copy of the words in the adapter.
+            Log.e("callBeatRetailer", "==33===${retailer.size}===")
+
+            retailer?.let {
+                listBeatsRetailer.addAll(it)
+                setBeatRetailerAdapter(it)
+
+            }
+        })
+    }
 
     lateinit var deleteDialog: Dialog
 
@@ -326,178 +253,8 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
     override fun response(code: Int, response: String) {
         try {
             when (code) {
-                CommonKeys.RETAILER_LIST_CODE -> {
-                    try {
-
-                        Log.e("RETAILER_LIST_CODE", "=====$code==$response")
-
-                        val json = JSONObject(response)
-                        val status = json.optBoolean("status")
-                        val msg = json.getString("message")
-                        if (status) {
-
-
-                            val dataArray = json.getJSONArray("data")
-
-                           // listDistName.clear()
-                           // listDistId.clear()
-
-                            wordViewModel.deleteAllDist()
-
-                            for(i in 0 until dataArray.length())
-                            {
-                                val dataObj = dataArray.getJSONObject(i)
-                               // listDistId.add(dataObj.getString("dist_id"))
-                               // listDistName.add(dataObj.getString("name"))
-
-                                wordViewModel.insertDist(
-                                    Distributor(dataObj.getString("dist_id")
-                                    ,dataObj.getString("name")))
-
-                            }
-
-                           // setDistributorAdapter(listDistName,listDistId)
-
-                        }
-
-                        else {
-                            CommonMethods.alertDialog(ctx!!, msg)
-                        }
-
-
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
-                CommonKeys.BEAT_LIST_CODE -> {
-                    try {
-
-                        Log.e("BEAT_LIST_CODE", "=====$code==$response")
-
-                        val json = JSONObject(response)
-                        val status = json.optBoolean("status")
-                        val msg = json.getString("message")
-                        if (status) {
-
-                            val data = json.getJSONArray("data")
-
-                            listBeats.clear()
-
-                           /* listBeats.add(BeatData(
-                                "","Select Beat","","","",""
-                            ))*/
-
-
-
-
-
-                            for (i in 0 until data.length()) {
-
-                                val dataObj = data.getJSONObject(i)
-
-                                if(dataObj.getString("beatname").isNotEmpty()) {
-                                    listBeats.add(
-                                        BeatData(
-                                            dataObj.getString("areaname"),
-                                            dataObj.getString("beatname"),
-                                            dataObj.getString("dist_id"),
-                                            dataObj.getString("distributor"),
-                                            dataObj.getString("id"),
-                                            dataObj.getString("state")
-                                        )
-                                    )
-                                }
-                            }
-
-
-                        //    setBeatAdapter(listBeats)
-                        }
-
-                        else {
-                            CommonMethods.alertDialog(ctx!!, msg)
-                        }
-
-
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                }
                 CommonKeys.BEAT_RETAILER_LIST_CODE -> {
                     try {
-
-                        Log.e("BEAT_RETAILER_LIST_CODE", "=====$code==$response")
-
-                        val json = JSONObject(response)
-                        val status = json.optBoolean("status")
-                        val msg = json.getString("message")
-                        if (status) {
-
-                            val data = json.getJSONArray("data")
-
-
-
-                            listBeatsRetailer.clear()
-
-
-
-                            for (i in 0 until data.length()) {
-
-                                val dataObj = data.getJSONObject(i)
-
-                                if(dataObj.getString("beatname").isNotEmpty()) {
-                                    listBeatsRetailer.add(
-                                        BeatRetailerData(
-                                            dataObj.getString("address"),
-                                            dataObj.getString("areaname"),
-                                            dataObj.getString("beatname"),
-                                            dataObj.getString("ca"),
-                                            dataObj.getString("cac"),
-                                            dataObj.getString("classification"),
-                                            dataObj.getString("client"),
-                                            dataObj.getString("country"),
-                                            dataObj.getString("cperson"),
-                                            dataObj.getString("cst"),
-                                            dataObj.getString("cst_registerationdate"),
-                                            dataObj.getString("csttin"),
-                                            dataObj.getString("date"),
-                                            dataObj.getString("dist_id"),
-                                            dataObj.getString("distributor"),
-                                            dataObj.getString("dvisit"),
-                                            dataObj.getString("email"),
-                                            dataObj.getString("empname"),
-                                            dataObj.getString("firstname"),
-                                            dataObj.getString("gstin"),
-                                            dataObj.getString("id"),
-                                            dataObj.getString("lastname"),
-                                            dataObj.getString("latitude"),
-                                            dataObj.getString("longitude"),
-                                            dataObj.getString("mobile"),
-                                            dataObj.getString("note"),
-                                            dataObj.getString("pan"),
-                                            dataObj.getString("phone"),
-                                            dataObj.getString("pincode"),
-                                            dataObj.getString("place"),
-                                            dataObj.getString("retailer_id"),
-                                            dataObj.getString("retailer_name"),
-                                            dataObj.getString("retailer_type"),
-                                            dataObj.getString("rid"),
-                                            dataObj.getString("sno"),
-                                            dataObj.getString("state"),
-                                            dataObj.getString("type"),
-                                            dataObj.getString("updated"),
-                                            dataObj.getString("vattin")
-                                        )
-                                    )
-                                }
-                            }
-
-
-                            setBeatRetailerAdapter(listBeatsRetailer)
-                        }
-
-                        else {
-                            CommonMethods.alertDialog(ctx!!, msg)
-                        }
 
 
                     } catch (e: Exception) {
@@ -511,7 +268,7 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
         }
     }
 
-    private fun setBeatRetailerAdapter(listBeatsRetailer: ArrayList<BeatRetailerData>) {
+    private fun setBeatRetailerAdapter(listBeatsRetailer: List<Retailer>) {
 
 
         adapter  = RetailerVisitAdapter(listBeatsRetailer)
@@ -548,52 +305,6 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
                         )
                         Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_add_sales,bundle)
                     }
-
-
-
-/*
-                    gpsTracker = GPSTracker(ctx)
-
-
-                    if (gpsTracker!!.canGetLocation()) {
-
-
-                        Log.e("ifffff", "==else===" + gpsTracker!!.canGetLocation())
-
-                        val gpsTracker = GPSTracker(ctx)
-                        latitude = gpsTracker.latitude
-                        longitude = gpsTracker.longitude
-
-                        Toast.makeText(
-                            ctx,
-                            "lattitude==$latitude    longitude==$longitude",
-                            Toast.LENGTH_SHORT
-                        ).show()
-
-                        val bundle = bundleOf("distributorName" to listBeatsRetailer[position].distributor,
-                            "beatName" to listBeatsRetailer[position].beatname,
-                            "retailer" to listBeatsRetailer[position].retailer_name,
-                            "retailerId" to listBeatsRetailer[position].retailer_id,
-                            "salesman" to listBeatsRetailer[position].client,
-                            "dist_id" to listBeatsRetailer[position].dist_id
-                        )
-                        Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_add_sales,bundle)
-                    }
-                    else {
-
-                        Log.e("iffffff", "===iff==" + gpsTracker!!.canGetLocation())
-                        showSettingsAlert()
-                    }
-*/
-
-                   /* val bundle = bundleOf("distributorName" to listBeatsRetailer[position].distributor,
-                        "beatName" to listBeatsRetailer[position].beatname,
-                        "retailer" to listBeatsRetailer[position].retailer_name,
-                        "retailerId" to listBeatsRetailer[position].retailer_id,
-                        "salesman" to listBeatsRetailer[position].client,
-                        "dist_id" to listBeatsRetailer[position].dist_id
-                        )
-                    Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_add_sales,bundle)*/
 
                 }
 
@@ -641,6 +352,10 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
 
                 view.text =listBeats[position].beatname
                 popupWindow!!.dismiss()
+
+
+
+
                 callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
             }
 
@@ -686,7 +401,6 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
                         }
                     }
 
-
                     val adapter2 = SpinnerCustomAdapter(list)
                     customView.rvSpinner.adapter = adapter2
                     adapter2.onClicked(object :SpinnerCustomAdapter.CardInterface{
@@ -702,14 +416,9 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
 
                 }
 
-
-
                // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         })
-
-
-
 
 
         popupWindow!!.isOutsideTouchable = true
@@ -723,30 +432,10 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
     private fun callBeatRetailer(distId: String, beatname: String) {
         try {
 
-            if (CommonMethods.isNetworkAvailable(ctx!!)) {
-                val json = JSONObject()
+            Log.e("callBeatRetailer", "=====$distId===$beatname")
+            wordViewModel.getBeatRetailer(beatname, this)
 
-                beat = beatname
 
-                json.put("dist_id",distId)
-                json.put("beatname",beatname)
-
-                RetrofitService(
-                    ctx!!,
-                    this,
-                    CommonKeys.BEAT_RETAILER_LIST ,
-                    CommonKeys.BEAT_RETAILER_LIST_CODE,
-                    json,2
-                ).callService(true, PreferenceFile.retrieveKey(ctx!!, CommonKeys.TOKEN)!!)
-
-                Log.e("callBeatList", "=====$json")
-
-            } else {
-                CommonMethods.alertDialog(
-                    ctx!!,
-                    getString(R.string.checkYourConnection)
-                )
-            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -756,9 +445,14 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
         list: List<Distributor>
 
     ) {
-        tvDistributor2.setOnClickListener {
+
+        tvDistributor2.text =PreferenceFile.retrieveKey(ctx!!,CommonKeys.SELECTED_DISTRIBUTOR_NAME)
+        callBeatList(PreferenceFile.retrieveKey(ctx!!,CommonKeys.SELECTED_DISTRIBUTOR))
+        /*tvDistributor2.setOnClickListener {
             openDistributorShort(tvDistributor2,list)
-        }    }
+        }*/
+
+    }
 
     private fun openDistributorShort(
         view: TextView,
@@ -904,24 +598,6 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
                 return
             }
         }}
-    private fun showAlertMap() {
-        val alertDialog = AlertDialog.Builder(ctx!!)
-        alertDialog.setTitle("Location required !!")
-        alertDialog.setCancelable(false)
-        alertDialog.setMessage("Please accept location permission for area Preference.")
-        alertDialog.setPositiveButton("ok") { dialog, which ->
-            permissions()
-            dialog.dismiss()
-        }
-        alertDialog.setNegativeButton("cancel")
-        {
-                dialog, which ->
-            dialog.dismiss()
-
-        }
-
-        alertDialog.show()
-    }
     private fun showSettingsAlert(position: Int) {
         val alertDialog = AlertDialog.Builder(ctx!!)
         alertDialog.setTitle("Enable GPS !!")

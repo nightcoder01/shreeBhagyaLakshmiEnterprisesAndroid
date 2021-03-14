@@ -42,11 +42,7 @@ import pathak.creations.sbl.welcome.WelcomeActivity
 
 class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
-
-
     override fun clicked(boolean: Boolean) {
-        Log.e("locationClicked=","")
-
         locationClickListener.value = "true"
     }
 
@@ -200,7 +196,6 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
                 ""
             )
 
-            //distributor list
             if (CommonMethods.isNetworkAvailable(this)) {
                 val json = JSONObject()
 
@@ -213,12 +208,11 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
                 ).callService(true, PreferenceFile.retrieveKey(this, CommonKeys.TOKEN)!!)
 
                 Log.e("callDistributorList", "=====$json")
-                Log.e(
-                    "callDistributorList",
-                    "=token====${PreferenceFile.retrieveKey(this, CommonKeys.TOKEN)!!}"
-                )
 
-            } else {
+                Log.e("callDistributorList", "=token====${PreferenceFile.retrieveKey(this, CommonKeys.TOKEN)!!}")
+
+            }
+            else {
                 CommonMethods.alertDialog(
                     this,
                     getString(R.string.checkYourConnection)
@@ -267,13 +261,13 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
             //retailer list
             if (CommonMethods.isNetworkAvailable(this)) {
                 val json = JSONObject()
-
+                json.put("dist_id", PreferenceFile.retrieveKey(this,CommonKeys.SELECTED_DISTRIBUTOR))
                 RetrofitService(
                     this,
                     this,
-                    CommonKeys.ALL_RETAILERS,
-                    CommonKeys.ALL_RETAILERS_CODE,
-                    1
+                    CommonKeys.GET_RETAILERS,
+                    CommonKeys.GET_RETAILERS_CODE,
+                    json,2
                 ).callService(true, PreferenceFile.retrieveKey(this, CommonKeys.TOKEN)!!)
 
                 Log.e("callRetailer", "=====$json")
@@ -281,6 +275,36 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
                     "callRetailer",
                     "=token====${PreferenceFile.retrieveKey(this, CommonKeys.TOKEN)!!}"
                 )
+
+            } else {
+                CommonMethods.alertDialog(
+                    this,
+                    getString(R.string.checkYourConnection)
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+    private fun callCategories() {
+        try {
+
+            if (CommonMethods.isNetworkAvailable(this)) {
+                val json = JSONObject()
+
+                json.put("dist_id",PreferenceFile.retrieveKey(this,CommonKeys.SELECTED_DISTRIBUTOR))
+
+                RetrofitService(
+                    this,
+                    this,
+                    CommonKeys.CATEGORIES ,
+                    CommonKeys.CATEGORIES_CODE
+                    ,json,
+                    2
+                ).callService(true, PreferenceFile.retrieveKey(this, CommonKeys.TOKEN)!!)
+
+                Log.e("callCategories", "=====$json")
+                Log.e("callCategories", "=token====${PreferenceFile.retrieveKey(this, CommonKeys.TOKEN)!!}")
 
             } else {
                 CommonMethods.alertDialog(
@@ -410,7 +434,7 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
                         e.printStackTrace()
                     }
                 }
-                CommonKeys.ALL_RETAILERS_CODE -> {
+                CommonKeys.GET_RETAILERS_CODE -> {
                     try {
 
                         Log.e("ALL_RETAILERS_CODE", "=====$code==$response")
@@ -474,9 +498,57 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
                                     )
                                 )
                             }
-                            //callBeat()
-
+                            callCategories()
                         } else {
+                            CommonMethods.alertDialog(this, msg)
+                        }
+
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+                CommonKeys.CATEGORIES_CODE -> {
+                    try {
+
+                        Log.e("CATEGORIES_CODE", "=====$code==$response")
+
+                        val json = JSONObject(response)
+                        val status = json.optBoolean("status")
+                        val msg = json.getString("message")
+                        if (status) {
+
+                            val data = json.getJSONArray("data")
+                            wordViewModel.deleteAllCategories()
+                           // listCategories.clear()
+
+                            for (i in 0 until data.length()) {
+
+                                val dataObj = data.getJSONObject(i)
+
+
+                                if(dataObj.getString("catgroup").isNotEmpty()) {
+
+                                    wordViewModel.insertCategories(
+                                        Categories(i.toString(),
+                                            dataObj.getString("catgroup"),
+                                            dataObj.getString("category"),
+                                            dataObj.getString("code"),
+                                            dataObj.getString("description"),
+                                            dataObj.getString("price"),
+                                            dataObj.getString("weight"),
+                                            dataObj.getString("ptrflag")))
+
+
+                                }
+
+
+                            }
+
+
+                        }
+
+                        else {
                             CommonMethods.alertDialog(this, msg)
                         }
 
