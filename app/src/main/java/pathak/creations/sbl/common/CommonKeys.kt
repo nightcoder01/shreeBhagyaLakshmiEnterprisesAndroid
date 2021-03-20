@@ -84,5 +84,6 @@ object CommonKeys {
     val IS_FIRST_CHECKED = "first_checked"
     val SELECTED_DISTRIBUTOR = "selected_distributor"
     val SELECTED_DISTRIBUTOR_NAME = "selected_distributor_name"
+    val CURRENT_DATE = "current_date"
 
 }

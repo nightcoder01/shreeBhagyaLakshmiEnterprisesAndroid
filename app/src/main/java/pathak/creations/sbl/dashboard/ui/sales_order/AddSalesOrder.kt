@@ -583,16 +583,10 @@ class AddSalesOrder : Fragment() {
         npItem.maxValue = 9999
         npItem.minValue = 0
 
-
-
         dialogBuilderMain.show()
     }
 
-
-
-
     private fun getSubListFiltered(s: String, listCategories: List<Categories>): ArrayList<SubCat> {
-
 
         val list :ArrayList<SubCat>  = ArrayList()
 
@@ -614,7 +608,6 @@ class AddSalesOrder : Fragment() {
     }
 
     private fun getListFiltered(listCategories: List<Categories>): ArrayList<String> {
-
 
         var list :ArrayList<String> = ArrayList()
         for(element in listCategories)

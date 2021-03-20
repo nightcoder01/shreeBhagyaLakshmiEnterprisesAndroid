@@ -37,7 +37,11 @@ import pathak.creations.sbl.common.PreferenceFile
 import pathak.creations.sbl.data_classes.*
 import pathak.creations.sbl.retrofit.RetrofitResponse
 import pathak.creations.sbl.retrofit.RetrofitService
+import pathak.creations.sbl.select_distributor.SelectDistributor
 import pathak.creations.sbl.welcome.WelcomeActivity
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.time.ExperimentalTime
 
 
 class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
@@ -57,9 +61,44 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
 
 
+
+
+
+
+    @ExperimentalTime
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dash_board)
+
+
+        val dNow = Date()
+        val ft = SimpleDateFormat("yyMMddhhmmssMs")
+        val currentDate = ft.format(dNow)
+
+
+        val diff = CommonMethods.getDateDiff(ft,currentDate,PreferenceFile.retrieveKey(this,CommonKeys.CURRENT_DATE)!!)
+        Log.e("dfadsfafd","======${PreferenceFile.retrieveKey(this,CommonKeys.CURRENT_DATE)!!}===$dNow==$currentDate==$diff")
+
+
+
+        if(diff>0)
+        {
+            PreferenceFile.removekey(this,CommonKeys.SELECTED_DISTRIBUTOR_NAME)
+            PreferenceFile.removekey(this,CommonKeys.SELECTED_DISTRIBUTOR)
+            wordViewModel.deleteAllCart()
+            startActivity(Intent(this, SelectDistributor::class.java))
+            finish()
+        }
+        else
+        {
+          /*  PreferenceFile.removekey(this,CommonKeys.SELECTED_DISTRIBUTOR_NAME)
+            PreferenceFile.removekey(this,CommonKeys.SELECTED_DISTRIBUTOR)
+            wordViewModel.deleteAllCart()
+            startActivity(Intent(this, SelectDistributor::class.java))
+            finish()*/
+        }
+
+
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         val fab: FloatingActionButton = findViewById(R.id.fab)
@@ -342,6 +381,10 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
     }
 
     private fun callLogout() {
+
+
+        wordViewModel.deleteAllCart()
+
 
         PreferenceFile.removeAll(this)
         startActivity(Intent(this, WelcomeActivity::class.java))

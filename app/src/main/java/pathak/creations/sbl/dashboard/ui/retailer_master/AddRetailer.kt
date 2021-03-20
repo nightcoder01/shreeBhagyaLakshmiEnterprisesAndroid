@@ -211,6 +211,7 @@ class AddRetailer : Fragment(), RetrofitResponse {
                 json.put("areaname",etAreaName.text.toString())
                 json.put("classification",tvClassification2.text.toString())
                 json.put("retailer_type",tvRetailerType2.text.toString())
+                json.put("remarks",etRemarks.text.toString())
 
                 RetrofitService(
                     ctx,

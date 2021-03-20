@@ -33,7 +33,10 @@ import kotlinx.android.synthetic.main.logout_alert.*
 import kotlinx.android.synthetic.main.retailer_visit.*
 import pathak.creations.sbl.AppController
 import pathak.creations.sbl.R
-import pathak.creations.sbl.common.*
+import pathak.creations.sbl.common.CommonKeys
+import pathak.creations.sbl.common.CommonMethods
+import pathak.creations.sbl.common.LocationClicked
+import pathak.creations.sbl.common.PreferenceFile
 import pathak.creations.sbl.custom_adapter.SpinnerCustomAdapter
 import pathak.creations.sbl.custom_adapter.SpinnerCustomDistributorAdapter
 import pathak.creations.sbl.dashboard.DashBoard
@@ -152,13 +155,6 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
                     setBeatRetailerAdapter(listBeatsRetailerFilter)
 
                 }
-
-
-
-
-
-
-                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         })
     }
@@ -318,9 +314,7 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
     }
 
 
-
     private fun setBeatAdapter(listBeats: List<Beat>) {
-
 
         tvBeatName2.setOnClickListener {
             openPopShortBy(tvBeatName2,listBeats)
@@ -352,9 +346,6 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
 
                 view.text =listBeats[position].beatname
                 popupWindow!!.dismiss()
-
-
-
 
                 callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
             }
@@ -410,7 +401,6 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
                             popupWindow!!.dismiss()
                             callBeatRetailer(list[position].dist_id,list[position].beatname)
                         }
-
 
                     })
 

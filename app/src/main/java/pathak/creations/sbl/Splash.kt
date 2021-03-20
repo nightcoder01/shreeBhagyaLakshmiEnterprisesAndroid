@@ -26,7 +26,8 @@ class Splash : AppCompatActivity() {
             if (PreferenceFile.retrieveKey(this, CommonKeys.ID) == null) {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
-            } else {
+            }
+            else {
 
                 if (PreferenceFile.retrieveKey(this, CommonKeys.SELECTED_DISTRIBUTOR) == null)
                 {

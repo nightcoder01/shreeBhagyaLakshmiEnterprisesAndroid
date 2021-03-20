@@ -29,6 +29,9 @@ import pathak.creations.sbl.data_classes.WordViewModel
 import pathak.creations.sbl.data_classes.WordViewModelFactory
 import pathak.creations.sbl.retrofit.RetrofitResponse
 import pathak.creations.sbl.retrofit.RetrofitService
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class SelectDistributor : AppCompatActivity(), RetrofitResponse {
 
@@ -90,6 +93,13 @@ class SelectDistributor : AppCompatActivity(), RetrofitResponse {
                 PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.SELECTED_DISTRIBUTOR,listDist[position].distID)
                 PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.SELECTED_DISTRIBUTOR_NAME,listDist[position].distName)
 
+
+                val dNow = Date()
+                val ft = SimpleDateFormat("yyMMddhhmmssMs")
+                val currentDate = ft.format(dNow)
+                PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.CURRENT_DATE,currentDate)
+
+
                 val it = Intent(this@SelectDistributor, DashBoard::class.java)
                 it.flags =
                     Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -123,6 +133,12 @@ class SelectDistributor : AppCompatActivity(), RetrofitResponse {
                             popupWindow!!.dismiss()
                             PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.SELECTED_DISTRIBUTOR,listDist[position].distID)
                             PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.SELECTED_DISTRIBUTOR_NAME,listDist[position].distName)
+
+                            val dNow = Date()
+                            val ft = SimpleDateFormat("yyMMddhhmmssMs")
+                            val currentDate = ft.format(dNow)
+                            PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.CURRENT_DATE,currentDate)
+
 
                             val it = Intent(this@SelectDistributor, DashBoard::class.java)
                             it.flags =
@@ -158,6 +174,13 @@ class SelectDistributor : AppCompatActivity(), RetrofitResponse {
                             popupWindow!!.dismiss()
                             PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.SELECTED_DISTRIBUTOR,list[position].distID)
                             PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.SELECTED_DISTRIBUTOR_NAME,list[position].distName)
+
+                            val dNow = Date()
+                            val ft = SimpleDateFormat("yyMMddhhmmssMs")
+                            val currentDate = ft.format(dNow)
+                            PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.CURRENT_DATE,currentDate)
+
+
 
                             val it = Intent(this@SelectDistributor, DashBoard::class.java)
                             it.flags =
