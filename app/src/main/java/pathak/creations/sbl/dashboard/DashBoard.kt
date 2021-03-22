@@ -89,14 +89,7 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
             startActivity(Intent(this, SelectDistributor::class.java))
             finish()
         }
-        else
-        {
-          /*  PreferenceFile.removekey(this,CommonKeys.SELECTED_DISTRIBUTOR_NAME)
-            PreferenceFile.removekey(this,CommonKeys.SELECTED_DISTRIBUTOR)
-            wordViewModel.deleteAllCart()
-            startActivity(Intent(this, SelectDistributor::class.java))
-            finish()*/
-        }
+
 
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
@@ -110,9 +103,6 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
-
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
@@ -133,7 +123,7 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
 
         if (PreferenceFile.retrieveKey(this, CommonKeys.IS_FIRST_CHECKED).equals("false", false)) {
-           callAllServices()
+           //callAllServices()
         }
 
     }

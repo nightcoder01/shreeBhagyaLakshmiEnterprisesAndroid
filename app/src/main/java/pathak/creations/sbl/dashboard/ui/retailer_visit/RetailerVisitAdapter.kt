@@ -50,6 +50,8 @@ class RetailerVisitAdapter(var list: List<Retailer>) :
         holder.itemView.ivDelete.setOnClickListener { clicked.clickedSelected(position,"delete") }
         holder.itemView.ivEdit.setOnClickListener { clicked.clickedSelected(position,"edit") }
         holder.itemView.tvAdd.setOnClickListener { clicked.clickedSelected(position,"add") }
+        holder.itemView.tvRemarksTag.setOnClickListener { clicked.clickedSelected(position,"remarks") }
+        holder.itemView.tvRemarks.setOnClickListener { clicked.clickedSelected(position,"remarks") }
     }
 
 

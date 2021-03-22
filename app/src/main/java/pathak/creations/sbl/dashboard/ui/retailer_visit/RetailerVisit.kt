@@ -15,10 +15,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.*
+import android.widget.EditText
 import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AlertDialogLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -31,12 +33,10 @@ import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.custom_spinner.view.*
 import kotlinx.android.synthetic.main.logout_alert.*
 import kotlinx.android.synthetic.main.retailer_visit.*
+import org.json.JSONObject
 import pathak.creations.sbl.AppController
 import pathak.creations.sbl.R
-import pathak.creations.sbl.common.CommonKeys
-import pathak.creations.sbl.common.CommonMethods
-import pathak.creations.sbl.common.LocationClicked
-import pathak.creations.sbl.common.PreferenceFile
+import pathak.creations.sbl.common.*
 import pathak.creations.sbl.custom_adapter.SpinnerCustomAdapter
 import pathak.creations.sbl.custom_adapter.SpinnerCustomDistributorAdapter
 import pathak.creations.sbl.dashboard.DashBoard
@@ -44,6 +44,7 @@ import pathak.creations.sbl.data_classes.*
 import pathak.creations.sbl.interfaces.DataChangeListener
 import pathak.creations.sbl.interfaces.RetailerDataChangeListener
 import pathak.creations.sbl.retrofit.RetrofitResponse
+import pathak.creations.sbl.retrofit.RetrofitService
 
 class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<List<Beat>>>,
     RetailerDataChangeListener<LiveData<List<Retailer>>> {
@@ -103,7 +104,7 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
             tvBeatName2.hint = beat
 
             callBeatList(distributorId)
-
+            callBeatRetailer(distributorId,beat)
         }
 
         setSearch()
@@ -249,8 +250,26 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
     override fun response(code: Int, response: String) {
         try {
             when (code) {
-                CommonKeys.BEAT_RETAILER_LIST_CODE -> {
+                CommonKeys.ADD_VISIT_CODE -> {
                     try {
+
+                        Log.e("RETAILER_LIST_CODE", "=====$code==$response")
+
+                        val json = JSONObject(response)
+                        val status = json.optBoolean("status")
+                        val msg = json.getString("message")
+                        if (status) {
+
+
+
+
+                            CommonMethods.alertDialog(ctx!!, msg)
+
+
+
+                        } else {
+                            CommonMethods.alertDialog(ctx!!, msg)
+                        }
 
 
                     } catch (e: Exception) {
@@ -276,6 +295,11 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
                     Log.e("====delete==","==11==$position")
 
                     deleteMethod(position)
+                }
+                if(str=="remarks") {
+                    Log.e("====remarks==","==11==$position")
+
+                    addRemarks(listBeatsRetailer[position])
                 }
                 if(str=="add")
                 {
@@ -311,6 +335,95 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
             }
         })
 
+    }
+
+
+    private lateinit var dialogBuilderMain  : AlertDialog
+
+    private fun addRemarks(retailer: Retailer) {
+
+
+        val dialogBuilder = AlertDialog.Builder(ctx!!)
+        val layout = AlertDialogLayout.inflate(ctx, R.layout.custom_remarks,null)
+        dialogBuilder.setView(layout)
+
+        val tvSubmit :TextView= layout.findViewById(R.id.tvSubmittt)
+        val etRemarks : EditText = layout.findViewById(R.id.etRemarks)
+
+        dialogBuilderMain = dialogBuilder.create()
+        dialogBuilderMain.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogBuilderMain.setCancelable(false)
+        dialogBuilderMain.setCanceledOnTouchOutside(true)
+
+        tvSubmit.setOnClickListener {
+
+
+
+            if(etRemarks.text.toString().isNotEmpty())
+            {Toast.makeText(ctx,"remarks added successfully",Toast.LENGTH_SHORT).show()
+                dialogBuilderMain.dismiss()
+            callRemarksAdd(retailer,etRemarks.text.toString())
+            }
+            else
+            {
+                Toast.makeText(ctx,"remarks is empty",Toast.LENGTH_SHORT).show()
+                dialogBuilderMain.dismiss()
+            }
+
+        }
+
+
+        dialogBuilderMain.show()
+    }
+
+    private fun callRemarksAdd(
+        retailer: Retailer,
+        toString: String
+    ) {
+        try {
+
+            if (CommonMethods.isNetworkAvailable(ctx!!)) {
+                val json = JSONObject()
+
+                json.put("beatname",retailer.beatname)
+                json.put("dist_id",retailer.dist_id)
+                json.put("distributor",retailer.distributor)
+                json.put("retailer_name",retailer.retailer_name)
+                json.put("retailer_id",retailer.retailer_id)
+                json.put("remarks",toString)
+                json.put("latitude","0.0")
+                json.put("longitude","0.0")
+                // //beatname:
+                //    //dist_id:
+                //    //distributor:
+                //    //retailer_name:
+                //    //retailer_id:
+                //    //latitude:
+                //    //longitude:
+                //    //remarks:
+
+
+                RetrofitService(
+                    ctx!!,
+                    this,
+                    CommonKeys.ADD_VISIT,
+                    CommonKeys.ADD_VISIT_CODE,
+                    json,2
+                ).callService(true, PreferenceFile.retrieveKey(ctx!!, CommonKeys.TOKEN)!!)
+
+                Log.e("callDistributorList", "=====$json")
+                Log.e("callDistributorList", "=token====${PreferenceFile.retrieveKey(ctx!!, CommonKeys.TOKEN)!!}")
+
+            }
+            else {
+                CommonMethods.alertDialog(
+                    ctx!!,
+                    getString(R.string.checkYourConnection)
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
 

@@ -51,6 +51,18 @@ object CommonKeys {
     const val ADD_CART = "v1/create-sale-order"
     const val ADD_CART_CODE = 11
 
+    const val ADD_VISIT = "v1/add-visit"
+    const val ADD_VISIT_CODE = 12
+
+    //beatname:
+    //dist_id:
+    //distributor:
+    //retailer_name:
+    //retailer_id:
+    //latitude:
+    //longitude:
+    //remarks:
+
 
     val ID = "id"
     val ROLE = "role"
