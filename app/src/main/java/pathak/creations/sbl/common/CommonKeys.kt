@@ -12,11 +12,14 @@ object CommonKeys {
     //http://3.13.214.27:8011/uploads/movieMembers/
     // http://3.13.214.27:8011/uploads/users/
 
-    const val LOGIN = "v1/login"
-    //const val LOGIN = "v1/app-login"
+   // const val LOGIN = "v1/login"
+    const val LOGIN = "v1/app-login"
     const val LOGIN_CODE = 1
 
-    const val RETAILER_LIST = "v1/dists"
+    /*const val RETAILER_LIST = "v1/dists"
+    const val RETAILER_LIST_CODE = 2*/
+
+    const val RETAILER_LIST = "v1/emp-distributors"
     const val RETAILER_LIST_CODE = 2
 
     const val BEAT_LIST = "v1/beats"

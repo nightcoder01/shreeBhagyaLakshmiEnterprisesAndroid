@@ -101,7 +101,7 @@
                     app:validateEmpty="@{true}"
                     app:validateEmptyAutoDismiss="@{true}"
                     app:validateEmptyMessage="@{@string/emptyPassword}"
-                    app:validateMinLength="@{6}"
+                    app:validateMinLength="@{5}"
                     app:validateMinLengthAutoDismiss="@{true}"
                     app:validateMinLengthMessage="@{@string/minPassword}" />
             </com.google.android.material.textfield.TextInputLayout>

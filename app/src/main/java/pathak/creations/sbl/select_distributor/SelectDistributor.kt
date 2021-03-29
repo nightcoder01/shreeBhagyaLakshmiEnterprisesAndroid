@@ -234,12 +234,12 @@ class SelectDistributor : AppCompatActivity(), RetrofitResponse {
                 PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.CURRENT_DATE,currentDate)
 
 
+                callRetailer()
 
-
-                val it = Intent(this@SelectDistributor, DashBoard::class.java)
+                /*val it = Intent(this@SelectDistributor, DashBoard::class.java)
                 it.flags =
                     Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                startActivity(it)
+                startActivity(it)*/
 
 
 
@@ -278,10 +278,13 @@ class SelectDistributor : AppCompatActivity(), RetrofitResponse {
                             /*if (PreferenceFile.retrieveKey(this@SelectDistributor, CommonKeys.IS_FIRST_CHECKED).equals("false", false)) {
                                // callAllServices()
                             }*/
-                            val it = Intent(this@SelectDistributor, DashBoard::class.java)
+
+                            callRetailer()
+
+                            /*val it = Intent(this@SelectDistributor, DashBoard::class.java)
                             it.flags =
                                 Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                            startActivity(it)
+                            startActivity(it)*/
 
                           //  callBeatList(listDist[position].distID)
                             //  callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
@@ -322,10 +325,12 @@ class SelectDistributor : AppCompatActivity(), RetrofitResponse {
                                 callAllServices()
                             }*/
 
-                            val it = Intent(this@SelectDistributor, DashBoard::class.java)
+                            callRetailer()
+
+                            /*val it = Intent(this@SelectDistributor, DashBoard::class.java)
                             it.flags =
                                 Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                            startActivity(it)
+                            startActivity(it)*/
 
                           //  callBeatList(list[position].distID)
 
@@ -442,7 +447,7 @@ class SelectDistributor : AppCompatActivity(), RetrofitResponse {
                                 )
                             }
 
-                            callRetailer()
+
                         } else {
                             CommonMethods.alertDialog(this, msg)
                         }
@@ -565,6 +570,13 @@ class SelectDistributor : AppCompatActivity(), RetrofitResponse {
                             }
 
 
+
+
+
+                            val it = Intent(this@SelectDistributor, DashBoard::class.java)
+                            it.flags =
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                            startActivity(it)
                         }
 
                         else {
