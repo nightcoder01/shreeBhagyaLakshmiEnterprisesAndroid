@@ -57,6 +57,9 @@ interface WordDao {
     fun getBeatRetailer(beatName :String): Flow<List<Retailer>>
 
 
+    @Update
+    suspend fun updateRetailer(retailerItem: Retailer)
+
     @Query("DELETE FROM retailer_table")
     suspend fun deleteAllRetailer()
 
@@ -93,6 +96,26 @@ interface WordDao {
 
     @Query("DELETE FROM cart_table")
     suspend fun deleteAllCart()
+
+    //order
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertOrders(orders: Orders)
+
+
+    @Update
+    suspend fun updateOrders(orders: Orders)
+
+    @Query("SELECT * FROM order_table ORDER BY id ASC ")
+    fun getOrdersList(): Flow<List<Orders>>
+
+
+    @Query("SELECT * FROM order_table  WHERE vendorid = :vendorId ORDER BY id ASC ")
+    fun getOrdersFromDist(vendorId :String): Flow<List<Orders>>
+
+
+
+    @Query("DELETE FROM order_table")
+    suspend fun deleteAllOrders()
 
 
 }

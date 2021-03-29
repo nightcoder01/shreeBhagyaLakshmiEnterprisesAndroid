@@ -26,6 +26,7 @@
     <string name="menu_sales_order">Sales Order</string>
     <string name="menu_retailer_master">Retailer Master</string>
     <string name="my_cart">My Cart</string>
+    <string name="orders_summary">Orders/Summary</string>
     <string name="menu_distributor_ptr">Distributor PTR</string>
     <string name="menu_home">Home</string>
     <string name="menu_cart">Cart</string>

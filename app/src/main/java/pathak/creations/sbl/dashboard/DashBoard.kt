@@ -374,6 +374,7 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
 
         wordViewModel.deleteAllCart()
+        wordViewModel.deleteAllOrders()
 
 
         PreferenceFile.removeAll(this)
@@ -469,6 +470,16 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
                 }
                 CommonKeys.GET_RETAILERS_CODE -> {
                     try {
+
+                        /*{"id":98,"date":"2017-10-10","dist_id":"DST-080","distributor":"H.S.R.TRADERS - HSR LAYOUT",
+                            "retailer_id":"DST-080-RM-98","retailer_name":"BANGLORE RICE TRADERS",
+                            "beatname":"AGARA, PARIGAPALYA","address":"NO 799 23 RD CROSS SECTOR 2 HSR LAYOUT BLORE- 560102",
+                            "phone":null,"mobile":"8025727657","type":"Retailer","note":"","place":"AGARA, PARIGAPALYA",
+                            "firstname":null,"lastname":null,"state":"Karnataka","areaname":"Bangalore City","country":"India",
+                            "pincode":null,"cst":"","cst_registerationdate":null,"vattin":"","csttin":null,"pan":null,
+                            "updated":"2020-06-19 12:20:42","client":"SBL","empname":"secondary","ca":"SAS002","cac":"SLI002",
+                            "rid":98,"classification":"A","retailer_type":null,"dvisit":"YES","cperson":null,"email":null,
+                            "gstin":null,"sno":9999,"latitude":null,"longitude":null}*/
 
                         Log.e("ALL_RETAILERS_CODE", "=====$code==$response")
 

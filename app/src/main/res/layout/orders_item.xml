@@ -16,7 +16,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clMain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,13 +38,13 @@
                     android:layout_height="wrap_content"
                     >
 
-                <ImageView
-                    android:id="@+id/ivImage"
-                    android:layout_width="@dimen/_40sdp"
-                    android:layout_height="@dimen/_40sdp"
-                    android:layout_centerInParent="true"
-                    android:background="@color/colorAccent"
-                    />
+                    <ImageView
+                        android:id="@+id/ivImage"
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_centerInParent="true"
+                        android:background="@color/colorAccent"
+                        />
 
                     <TextView
                         android:id="@+id/tvImageText"
@@ -93,16 +93,15 @@
 
 
 
-            <EditText
-                android:id="@+id/etPriceEditedValue"
+            <TextView
+                android:id="@+id/tvPriceEditedValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:hint="@string/custom_price"
-                android:singleLine="true"
-                android:inputType="number"
-                android:imeOptions="actionDone"
                 android:maxLength="10"
+                android:singleLine="true"
                 android:textSize="@dimen/_10sdp"
                 app:layout_constraintStart_toEndOf="@id/cvImage"
                 app:layout_constraintTop_toBottomOf="@id/tvPrice"/>
@@ -116,7 +115,7 @@
                 android:singleLine="true"
                 android:text="@string/overall_price"
                 app:layout_constraintStart_toEndOf="@id/cvImage"
-                app:layout_constraintTop_toBottomOf="@id/etPriceEditedValue"/>
+                app:layout_constraintTop_toBottomOf="@id/tvPriceEditedValue"/>
 
             <TextView
                 android:id="@+id/tvPriceOverallValue"
@@ -126,7 +125,7 @@
                 android:maxLength="10"
                 android:singleLine="true"
                 app:layout_constraintStart_toEndOf="@id/tvPriceOverall"
-                app:layout_constraintTop_toBottomOf="@id/etPriceEditedValue"
+                app:layout_constraintTop_toBottomOf="@id/tvPriceEditedValue"
                 />
 
 
@@ -168,6 +167,7 @@
                     android:layout_height="@dimen/_12sdp"
                     android:layout_marginEnd="@dimen/_5sdp"
                     android:src="@drawable/ic_remove"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/tvCount"
                     app:layout_constraintEnd_toStartOf="@id/tvCount"
                     app:layout_constraintTop_toTopOf="@id/tvCount"
@@ -178,6 +178,7 @@
                     android:layout_height="@dimen/_12sdp"
                     android:layout_marginStart="@dimen/_5sdp"
                     android:src="@drawable/ic_add"
+                    android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="@id/tvCount"
                     app:layout_constraintStart_toEndOf="@id/tvCount"
                     app:layout_constraintTop_toTopOf="@id/tvCount"
@@ -186,17 +187,17 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <NumberPicker
-            android:id="@+id/npMain"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/clCount"
-            app:layout_constraintEnd_toEndOf="@id/clCount"
-            app:layout_constraintStart_toStartOf="@id/clCount"
-            app:layout_constraintTop_toTopOf="@id/clCount"
-            />
+            <NumberPicker
+                android:id="@+id/npMain"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@id/clCount"
+                app:layout_constraintEnd_toEndOf="@id/clCount"
+                app:layout_constraintStart_toStartOf="@id/clCount"
+                app:layout_constraintTop_toTopOf="@id/clCount"
+                />
 
             <View
                 android:id="@+id/viewCentered"
@@ -238,11 +239,11 @@
                 android:paddingTop="@dimen/_5sdp"
                 android:paddingEnd="@dimen/_10sdp"
                 android:paddingBottom="@dimen/_5sdp"
-
                 android:text="@string/add_to_cart"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_10sdp"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 

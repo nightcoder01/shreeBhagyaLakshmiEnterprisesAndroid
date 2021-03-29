@@ -299,7 +299,7 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
                 if(str=="remarks") {
                     Log.e("====remarks==","==11==$position")
 
-                    addRemarks(listBeatsRetailer[position])
+                    addRemarks(listBeatsRetailer,position)
                 }
                 if(str=="add")
                 {
@@ -340,7 +340,10 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
 
     private lateinit var dialogBuilderMain  : AlertDialog
 
-    private fun addRemarks(retailer: Retailer) {
+    private fun addRemarks(
+        retailer: List<Retailer>,
+        position: Int
+    ) {
 
 
         val dialogBuilder = AlertDialog.Builder(ctx!!)
@@ -361,8 +364,13 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
 
             if(etRemarks.text.toString().isNotEmpty())
             {Toast.makeText(ctx,"remarks added successfully",Toast.LENGTH_SHORT).show()
+                retailer[position].note = etRemarks.text.toString()
+
+                wordViewModel.updateRetailer(retailer[position])
+                adapter.notifyItemChanged(position)
+
                 dialogBuilderMain.dismiss()
-            callRemarksAdd(retailer,etRemarks.text.toString())
+            callRemarksAdd(retailer[position],etRemarks.text.toString())
             }
             else
             {

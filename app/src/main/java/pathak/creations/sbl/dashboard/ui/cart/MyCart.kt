@@ -33,13 +33,13 @@ import pathak.creations.sbl.common.CommonKeys
 import pathak.creations.sbl.common.CommonMethods
 import pathak.creations.sbl.common.PreferenceFile
 import pathak.creations.sbl.custom_adapter.SpinnerCustomRetailerAdapter
-import pathak.creations.sbl.data_classes.Cart
-import pathak.creations.sbl.data_classes.Retailer
-import pathak.creations.sbl.data_classes.WordViewModel
-import pathak.creations.sbl.data_classes.WordViewModelFactory
+import pathak.creations.sbl.data_classes.*
 import pathak.creations.sbl.interfaces.DataChangeListener
 import pathak.creations.sbl.retrofit.RetrofitResponse
 import pathak.creations.sbl.retrofit.RetrofitService
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>>, RetrofitResponse {
 
@@ -117,13 +117,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>>, RetrofitRes
         })
 
 
-
-
-
-
-
-
-
     }
 
     private fun callAddCart() {
@@ -138,6 +131,9 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>>, RetrofitRes
 
                 val json = JSONObject()
 
+                val dNow = Date()
+                val ft = SimpleDateFormat("yyMMddhhmmssMs")
+                val datetime = ft.format(dNow)
 
                 for(i in 0 until listCart.size) {
                     json.put("dist_code", listCart[i].distID)
@@ -155,13 +151,62 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>>, RetrofitRes
                     json.put("total_ptr_price", listCart[i].overAllPrice)
                     json.put("total_ptd_price", listCart[i].ptd_total)
 
+
+
+                    wordViewModel.insertOrders(
+                        Orders(datetime+i
+                            ,""
+                            ,""
+                            ,""
+                            ,""
+                            ,""
+                            ,""
+                            ,listCart[i].distID
+                            ,listCart[i].dist_name
+                            ,listCart[i].retailer_name
+                            ,listCart[i].retailer_code
+                            ,listCart[i].beatName
+                            ,""
+                            ,listCart[i].cat_group
+                            ,listCart[i].category
+                            ,listCart[i].cat_code
+                            ,listCart[i].name
+                            ,listCart[i].itemCount
+                            ,""
+                            ,listCart[i].overAllPrice
+                            ,""
+                            ,""
+                            ,""
+                            ,""
+                            ,""
+                            ,""
+                            ,""
+                            ,""
+                            ,""
+                            ,""
+                            ,""
+                            ,""
+                            ,""
+                            ,""
+                            ,""
+                            ,""
+                            ,""
+                            ,""
+                            ,""
+                            ,listCart[i].ptr_price
+                            ,listCart[i].ptd_price
+                            ,""
+                            ,""
+                            ,""
+                        )
+                    )
+
                 }
 
                 jsonArray.put(json)
                 jsonMain.put("items",jsonArray)
 
                 Log.e("fasdfasfdfsd",jsonMain.toString())
-
 
                 RetrofitService(
                     ctx,
@@ -447,12 +492,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>>, RetrofitRes
             e.printStackTrace()
         }
     }
-
-
-
-
-
-
     //data base work
     private val wordViewModel: WordViewModel by viewModels {
         WordViewModelFactory(((context as Activity).application as AppController).repository)

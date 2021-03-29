@@ -92,7 +92,7 @@ class MyCartAdapter(var list: List<Cart>) :
                 if(actionId== EditorInfo.IME_ACTION_DONE)
                 {
 
-                        //normal
+
                         val s = holder.itemView.etPriceEditedValue.text.toString()
                         clicked.valueChanged(position,s)
                     return  true
@@ -103,27 +103,6 @@ class MyCartAdapter(var list: List<Cart>) :
         })
 
 
-        /*holder.itemView.tvAddCart.setOnClickListener {
-            if(list[position].editMode)
-            {
-                clicked.changeEditMode(position,false)}
-        }
-
-        if(list[position].editMode)
-        {
-            //normal
-            holder.itemView.tvAddCart.text  = holder.itemView.tvAddCart.context.getString(R.string.add_to_cart)
-
-
-
-        }
-        else
-        {
-            holder.itemView.tvAddCart.text  = holder.itemView.tvAddCart.context.getString(R.string.item_added)
-
-            //editmode removed
-            ///and add cart
-        }*/
 
 
     }

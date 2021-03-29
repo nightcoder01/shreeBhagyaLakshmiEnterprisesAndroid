@@ -2,8 +2,8 @@ package pathak.creations.sbl.data_classes
 
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
-import pathak.creations.sbl.dashboard.ui.cart.MyCart
 import pathak.creations.sbl.interfaces.DataChangeListener
+import pathak.creations.sbl.interfaces.OrderDataChangeListener
 import pathak.creations.sbl.interfaces.RetailerDataChangeListener
 
 class WordViewModel(private val repository: WordRepository) : ViewModel() {
@@ -73,6 +73,9 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
     }
 
 
+    fun updateRetailer(retailer: Retailer) = viewModelScope.launch {
+        repository.updateRetailer(retailer)
+    }
     fun deleteAllRetailer() = viewModelScope.launch {
         repository.deleteAllRetailer()
     }
@@ -97,7 +100,7 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
     val allCart: LiveData<List<Cart>> = repository.allCarts.asLiveData()
 
 
-    fun getCartFromDist(retailer_code: String, listener: MyCart) {
+    fun getCartFromDist(retailer_code: String, listener: DataChangeListener<LiveData<List<Cart>>>) {
         viewModelScope.launch {
             listener.DataChange(repository.getCartFromDist(retailer_code).asLiveData())
         }
@@ -114,6 +117,29 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
 
     fun deleteAllCart() = viewModelScope.launch {
         repository.deleteAllCart()
+    }
+
+    //order
+
+    val allOrders: LiveData<List<Orders>> = repository.allOrders.asLiveData()
+
+
+    fun getOrdersFromDist(retailer_code: String, listener: OrderDataChangeListener<LiveData<List<Orders>>>) {
+        viewModelScope.launch {
+            listener.OrderDataChange(repository.getOrdersFromDist(retailer_code).asLiveData())
+        }
+    }
+
+    fun insertOrders(cart: Orders) = viewModelScope.launch {
+        repository.insertOrders(cart)
+    }
+
+    fun updateOrders(cart: Orders) = viewModelScope.launch {
+        repository.updateOrders(cart)
+    }
+
+    fun deleteAllOrders() = viewModelScope.launch {
+        repository.deleteAllOrders()
     }
 
 }
