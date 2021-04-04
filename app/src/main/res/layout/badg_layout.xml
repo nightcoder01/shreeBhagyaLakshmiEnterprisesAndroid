@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlBadge"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="48dp"
     android:layout_height="fill_parent"
-    android:layout_gravity="right">
+    android:layout_gravity="end"
+    android:clickable="true"
+    android:focusable="true"
+    >
 
-    <!-- Menu Item Image -->
+
     <ImageView
         android:layout_width="48dp"
         android:layout_height="fill_parent"
-        android:clickable="true"
         android:padding="12dp"
-        android:src="@drawable/ic_shopping_cart_black_24dp" />
+        android:src="@drawable/ic_shopping_cart_black_24dp"
+        />
 
-    <!-- Badge Count -->
+
 
 
     <androidx.cardview.widget.CardView

@@ -1,5 +1,6 @@
 package pathak.creations.sbl.dashboard.ui.sales_history
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
@@ -12,6 +13,7 @@ import android.view.*
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -22,15 +24,17 @@ import kotlinx.android.synthetic.main.logout_alert.*
 import kotlinx.android.synthetic.main.retailer_master.etSearch
 import kotlinx.android.synthetic.main.retailer_master.tvDistributor2
 import org.json.JSONObject
+import pathak.creations.sbl.AppController
 import pathak.creations.sbl.R
 import pathak.creations.sbl.common.CommonKeys
 import pathak.creations.sbl.common.CommonMethods
 import pathak.creations.sbl.common.PreferenceFile
 import pathak.creations.sbl.custom_adapter.SpinnerCustomAdapter
-import pathak.creations.sbl.custom_adapter.SpinnerCustomDistributorAdapter
 import pathak.creations.sbl.data_class.BeatRetailerData
 import pathak.creations.sbl.data_classes.Beat
 import pathak.creations.sbl.data_classes.Distributor
+import pathak.creations.sbl.data_classes.WordViewModel
+import pathak.creations.sbl.data_classes.WordViewModelFactory
 import pathak.creations.sbl.retrofit.RetrofitResponse
 import pathak.creations.sbl.retrofit.RetrofitService
 
@@ -50,9 +54,10 @@ class SalesHistory : Fragment(), RetrofitResponse {
     var listBeatsRetailer: ArrayList<BeatRetailerData> = ArrayList()
     var listBeatsRetailerFilter: ArrayList<BeatRetailerData> = ArrayList()
 
-    var listDist: ArrayList<Distributor> = ArrayList()
+    var listDistName: ArrayList<String> = ArrayList()
+    var listDistId: ArrayList<String> = ArrayList()
 
-  private lateinit var ctx: Context
+    private lateinit var ctx: Context
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -61,7 +66,7 @@ class SalesHistory : Fragment(), RetrofitResponse {
         val root = inflater.inflate(R.layout.fragment_sales_history, container, false)
         ctx = root.context
         salesHistoryVM.dateValue.observe(viewLifecycleOwner, Observer {
-        //    tvDateValue.text = it
+            //    tvDateValue.text = it
         })
         return root
     }
@@ -69,14 +74,14 @@ class SalesHistory : Fragment(), RetrofitResponse {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-      //  tvDate.setOnClickListener { salesHistoryVM.datePicker(view) }
-     //   tvDateValue.setOnClickListener { salesHistoryVM.datePicker(view) }
+        //  tvDate.setOnClickListener { salesHistoryVM.datePicker(view) }
+        //   tvDateValue.setOnClickListener { salesHistoryVM.datePicker(view) }
 //        tvAdd.setOnClickListener {
 //           Navigation.findNavController(view).navigate(R.id.action_add_shoptotal)
 //        }
 
         setSearch()
-        setDistributor()
+        //setDistributor()
 
 
         if (beat.isNotEmpty()) {
@@ -84,16 +89,28 @@ class SalesHistory : Fragment(), RetrofitResponse {
             tvBeatName2.hint = beat
             callBeatList(distributorId)
         }
+
+        wordViewModel.allDistributor.observe(viewLifecycleOwner, Observer { dist ->
+            // Update the cached copy of the words in the adapter.
+
+            dist?.let {
+
+                setDistributorAdapter(it)
+
+            }
+        })
+
+
     }
 
     private fun setSearch() {
         etSearch.addTextChangedListener(object :TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-             //   TODO("Not yet implemented")
+                //   TODO("Not yet implemented")
             }
 
             override fun afterTextChanged(s: Editable?) {
-              //  TODO("Not yet implemented")
+                //  TODO("Not yet implemented")
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if(s.isNullOrEmpty())
@@ -163,7 +180,7 @@ class SalesHistory : Fragment(), RetrofitResponse {
             callBeatList(PreferenceFile.retrieveKey(ctx,CommonKeys.NAME))
         }else
         {
-            callDistributorList()
+           // callDistributorList()
         }
     }
 
@@ -224,12 +241,16 @@ class SalesHistory : Fragment(), RetrofitResponse {
                                 if(dataObj.getString("beatname").isNotEmpty()) {
                                     listBeats.add(
                                         Beat(
-                                            dataObj.getString("areaname"),
-                                            dataObj.getString("beatname"),
+                                            dataObj.getString("id"),
                                             dataObj.getString("dist_id"),
                                             dataObj.getString("distributor"),
-                                            dataObj.getString("id"),
-                                            dataObj.getString("state")
+                                            dataObj.getString("state"),
+                                            dataObj.getString("areaname"),
+                                            dataObj.getString("beatname")
+
+
+
+
                                         )
                                     )
                                 }
@@ -344,17 +365,18 @@ class SalesHistory : Fragment(), RetrofitResponse {
 
                             val dataArray = json.getJSONArray("data")
 
-                            listDist.clear()
+                            listDistName.clear()
+                            listDistId.clear()
 
                             for(i in 0 until dataArray.length())
                             {
                                 val dataObj = dataArray.getJSONObject(i)
-                                //listDistId.add(dataObj.getString("dist_id"))
-                               // listDistName.add(dataObj.getString("name"))
-                                listDist.add(Distributor(dataObj.getString("dist_id"),dataObj.getString("name")))
+                                listDistId.add(dataObj.getString("dist_id"))
+                                listDistName.add(dataObj.getString("name"))
+
                             }
 
-                            setDistributorAdapter(listDist)
+                            //setDistributorAdapter(listDistName,listDistId)
 
                         }
 
@@ -375,16 +397,17 @@ class SalesHistory : Fragment(), RetrofitResponse {
         }
     }
 
-    private fun setDistributorAdapter(listDist: ArrayList<Distributor>) {
-        tvDistributor2.setOnClickListener {
-            openDistributorShort(tvDistributor2,listDist)
-        }
+    private fun setDistributorAdapter(
+        list: List<Distributor>
+    ) {
+
+        tvDistributor2.text =PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_DISTRIBUTOR_NAME)
+        callBeatList(PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_DISTRIBUTOR))
+
+
     }
 
-    private fun openDistributorShort(
-        view: TextView,
-        listDist: ArrayList<Distributor>
-    ) {
+    /*private fun openDistributorShort(view: TextView, listDistName: List<String>, listDistId: java.util.ArrayList<String>) {
         val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val customView = inflater.inflate(R.layout.custom_spinner, null)
 
@@ -396,14 +419,14 @@ class SalesHistory : Fragment(), RetrofitResponse {
             WindowManager.LayoutParams.WRAP_CONTENT
         )
 
-        val adapter = SpinnerCustomDistributorAdapter(listDist)
+        val adapter = SpinnerCustomDistributorAdapter(listDistName)
         customView.rvSpinner.adapter = adapter
         adapter.onClicked(object :SpinnerCustomDistributorAdapter.CardInterface{
             override fun clickedSelected(position: Int) {
 
-                view.text =listDist[position].distName
+                view.text =listDistName[position]
                 popupWindow!!.dismiss()
-                callBeatList(listDist[position].distID)
+                callBeatList(listDistId[position])
 
 
                 // callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
@@ -423,14 +446,14 @@ class SalesHistory : Fragment(), RetrofitResponse {
 
                 if(s.isNullOrBlank())
                 {
-                    val adapter2 = SpinnerCustomDistributorAdapter(listDist)
+                    val adapter2 = SpinnerCustomDistributorAdapter(listDistName)
                     customView.rvSpinner.adapter = adapter2
                     adapter2.onClicked(object :SpinnerCustomDistributorAdapter.CardInterface{
                         override fun clickedSelected(position: Int) {
 
-                            view.text =listDist[position].distName
+                            view.text =listDistName[position]
                             popupWindow!!.dismiss()
-                            callBeatList(listDist[position].distID)
+                            callBeatList(listDistId[position])
 
 
                         }
@@ -439,14 +462,15 @@ class SalesHistory : Fragment(), RetrofitResponse {
                 else
                 {
 
-                    val list : ArrayList<Distributor> = ArrayList()
+                    val list : ArrayList<String> = ArrayList()
                     val list2 : ArrayList<String> = ArrayList()
 
-                    for(i in 0 until listDist.size)
+                    for(i in listDistName.indices)
                     {
-                        if(listDist[i].distName.toLowerCase().contains(s.toString().toLowerCase(),false))
+                        if(listDistName[i].toLowerCase().contains(s.toString().toLowerCase(),false))
                         {
-                            list.add(listDist[i])
+                            list.add(listDistName[i])
+                            list2.add(listDistId[i])
                         }
                     }
 
@@ -455,7 +479,7 @@ class SalesHistory : Fragment(), RetrofitResponse {
                     adapter2.onClicked(object :SpinnerCustomDistributorAdapter.CardInterface{
                         override fun clickedSelected(position: Int) {
 
-                            view.text =list[position].distName
+                            view.text =list[position]
                             popupWindow!!.dismiss()
                             callBeatList(list2[position])
 
@@ -471,7 +495,7 @@ class SalesHistory : Fragment(), RetrofitResponse {
         popupWindow!!.isFocusable = true
         popupWindow!!.update()
 
-    }
+    }*/
 
     private fun setBeatRetailerAdapter(listBeatsRetailer: ArrayList<BeatRetailerData>) {
         adapter=SalesHistoryAdapter(listBeatsRetailer)
@@ -513,13 +537,13 @@ class SalesHistory : Fragment(), RetrofitResponse {
         }
     }
 
-    private fun setBeatAdapter(listBeats: ArrayList<Beat>) {
+    private fun setBeatAdapter(listBeats: List<Beat>) {
         tvBeatName2.setOnClickListener {
             openPopShortBy(tvBeatName2,listBeats)
         }
     }
     var popupWindow: PopupWindow? = null
-    private fun openPopShortBy(view: TextView, listBeats: ArrayList<Beat>) {
+    private fun openPopShortBy(view: TextView, listBeats: List<Beat>) {
         val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val customView = inflater.inflate(R.layout.custom_spinner, null)
 
@@ -574,16 +598,15 @@ class SalesHistory : Fragment(), RetrofitResponse {
                 else
                 {
 
+
+
                     val list : ArrayList<Beat> = ArrayList()
 
-                    for(i in 0 until listBeats.size)
+                    for(i in listBeats.indices)
                     {
                         if(listBeats[i].beatname.toLowerCase().contains(s.toString().toLowerCase(),false))
                         {
                             list.add(listBeats[i])
-
-
-
 
                         }
                     }
@@ -650,5 +673,10 @@ class SalesHistory : Fragment(), RetrofitResponse {
         }
     }
 
+
+    //data base work
+    private val wordViewModel: WordViewModel by viewModels {
+        WordViewModelFactory(((ctx as Activity).application as AppController).repository)
+    }
 
 }

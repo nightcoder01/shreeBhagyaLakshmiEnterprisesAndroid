@@ -665,7 +665,7 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
                 listCategories[i].code,listCategories[i].description,
                 listCategories[i].price,listCategories[i].weight,
                 listCategories[i].ptrflag,"0",
-                (listCategories[i].price.toFloat()+(listCategories[i].price.toFloat()*(45))/1000 ).toString(),
+                String.format("%.2f", (listCategories[i].price.toFloat()+(listCategories[i].price.toFloat()*(45))/1000 )) ,
                 "0.0",distIDMain,distIDName,retailerIDMain,retailerIDName
                 ))
         }

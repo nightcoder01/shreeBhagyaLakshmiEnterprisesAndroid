@@ -49,7 +49,7 @@ class SalesHistoryAdapter (var list: ArrayList<BeatRetailerData>): RecyclerView.
 //        holder.itemView.tvBeat.text = list[position].beatname
 //        holder.itemView.tvRetailer.text = list[position].retailer_name
 //       holder.itemView.tvDistributor2.text = list[position].distributor
-       holder.itemView.tvAdd1.setOnClickListener { clicked.clickedSelected(position,"add")}
+        holder.itemView.tvAdd1.setOnClickListener { clicked.clickedSelected(position,"add")}
     }
 
 }

@@ -55,7 +55,7 @@ class MyCartAdapter(var list: List<Cart>) :
         holder.itemView.tvPriceValue.text = list[position].price
         holder.itemView.tvCount.text = list[position].itemCount
         holder.itemView.etPriceEditedValue.text = Editable.Factory.getInstance().newEditable(list[position].customPrice)
-        holder.itemView.tvPriceOverallValue.text  = (holder.itemView.etPriceEditedValue.text.toString().toFloat()*holder.itemView.tvCount.text.toString().toFloat()).toString()
+        holder.itemView.tvPriceOverallValue.text  = String.format("%.2f",(holder.itemView.etPriceEditedValue.text.toString().toFloat()*holder.itemView.tvCount.text.toString().toFloat()))
         holder.itemView.tvAddCart.visibility = View.GONE
 
 

@@ -19,6 +19,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -61,6 +62,8 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
 
 
+    private lateinit var navController: NavController
+
 
 
 
@@ -102,7 +105,7 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
         }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         val navView: NavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
+         navController = findNavController(R.id.nav_host_fragment)
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
@@ -136,7 +139,14 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
 
         val item = menu.findItem(R.id.action_cart)
+
         MenuItemCompat.setActionView(item, R.layout.badg_layout)
+
+
+
+
+
+
 
         val logOut = menu.findItem(R.id.action_LogOut)
         val refresh = menu.findItem(R.id.action_refresh)
@@ -155,7 +165,18 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
 
         val badgeLayout = menu.findItem(R.id.action_cart).actionView as RelativeLayout
+
+
+
+            badgeLayout.setOnClickListener {
+                Log.e("badgeLayout=", "======1111=====")
+                if(navController.currentDestination!!.label!="My Cart") {
+                navController.navigate(R.id.nav_cart)
+            }
+        }
+
         val tv = badgeLayout.findViewById<View>(R.id.actionbar_notifcation_textview) as TextView
+
 
         wordViewModel.allCart.observe(this, Observer { dist ->
             // Update the cached copy of the words in the adapter.
@@ -167,10 +188,6 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
             }
         })
 
-
-
-
-
         logOut.setOnMenuItemClickListener {
 
             callLogoutDialog()
@@ -178,6 +195,7 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
             true
 
         }
+
         locationIs.setOnMenuItemClickListener {
 
             showSettingsAlert()
