@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -168,6 +169,9 @@ class AddSalesOrder : Fragment() {
                                 subList[pos].editMode = editMode
                                 adapter2.notifyItemChanged(pos)
 
+
+                                Log.e("dfdsafasfa","======${subList[pos]}")
+
                                 val dNow = Date()
                                 val ft = SimpleDateFormat("yyMMddhhmmssMs")
                                 val datetime = ft.format(dNow)
@@ -175,7 +179,7 @@ class AddSalesOrder : Fragment() {
                                     Cart(
                                         datetime,
                                         subList[pos].distIDMain,
-                                        subList[pos].category,
+                                        subList[pos].description,
                                         subList[pos].price,
                                         subList[pos].customPrice,
                                         subList[pos].overAllPrice,

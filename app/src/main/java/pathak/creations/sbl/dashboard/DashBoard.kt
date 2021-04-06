@@ -60,12 +60,7 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
      var locationClickListener : MutableLiveData<String> = MutableLiveData()
     var locationClicked : LiveData<String> = locationClickListener
 
-
-
     private lateinit var navController: NavController
-
-
-
 
 
     @ExperimentalTime
@@ -141,11 +136,6 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
         val item = menu.findItem(R.id.action_cart)
 
         MenuItemCompat.setActionView(item, R.layout.badg_layout)
-
-
-
-
-
 
 
         val logOut = menu.findItem(R.id.action_LogOut)

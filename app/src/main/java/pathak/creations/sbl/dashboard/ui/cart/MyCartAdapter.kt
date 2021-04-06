@@ -49,6 +49,8 @@ class MyCartAdapter(var list: List<Cart>) :
 
 
         Log.e("cartDate======","==========${list[position]}")
+        Log.e("cartDate======","==========${list[position].category}")
+        Log.e("cartDate======","==========${list[position].name}")
 
         holder.itemView.tvName.text = list[position].name
         holder.itemView.tvImageText.text = list[position].name
