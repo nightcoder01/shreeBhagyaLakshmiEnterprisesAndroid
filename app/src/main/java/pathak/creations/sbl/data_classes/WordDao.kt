@@ -112,6 +112,9 @@ interface WordDao {
     @Query("SELECT * FROM order_table  WHERE vendorid = :vendorId ORDER BY id ASC ")
     fun getOrdersFromDist(vendorId :String): Flow<List<Orders>>
 
+    @Query("SELECT * FROM order_table  WHERE retailerid = :retailerId ORDER BY id ASC ")
+    fun getOrdersFromRetailer(retailerId :String): Flow<List<Orders>>
+
 
 
     @Query("DELETE FROM order_table")

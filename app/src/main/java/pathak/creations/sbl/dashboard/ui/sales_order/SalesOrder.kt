@@ -95,6 +95,11 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+         distIDMain = PreferenceFile.retrieveKey(view.context,CommonKeys.SELECTED_DISTRIBUTOR)!!
+         distIDName = PreferenceFile.retrieveKey(view.context,CommonKeys.SELECTED_DISTRIBUTOR)!!
+
+
         tvDateMain.text = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
 
         setDistributor()
@@ -217,12 +222,14 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
                                     val ft = SimpleDateFormat("yyMMddhhmmssMs")
                                     val datetime = ft.format(dNow)
 
+                                    Log.e("dfasdfs0","=====${subList[pos].distIDMain}")
+                                    Log.e("dfasdfs0","=====${subList[pos].distIDMain}")
 
                                     wordViewModel.insertCart(
                                         Cart(
                                             datetime,
                                             subList[pos].distIDMain,
-                                            subList[pos].category,
+                                            subList[pos].description,
                                             subList[pos].price,
                                             subList[pos].customPrice,
                                             subList[pos].overAllPrice,
@@ -360,7 +367,7 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
                                                     Cart(
                                                         datetime,
                                                         subList[pos].distIDMain,
-                                                        subList[pos].category,
+                                                        subList[pos].description,
                                                         subList[pos].price,
                                                         subList[pos].customPrice,
                                                         subList[pos].overAllPrice,
@@ -502,7 +509,7 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
                                                     Cart(
                                                         datetime,
                                                         subList[pos].distIDMain,
-                                                        subList[pos].category,
+                                                        subList[pos].description,
                                                         subList[pos].price,
                                                         subList[pos].customPrice,
                                                         subList[pos].overAllPrice,

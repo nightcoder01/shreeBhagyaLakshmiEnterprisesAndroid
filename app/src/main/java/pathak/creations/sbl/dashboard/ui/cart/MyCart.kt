@@ -265,6 +265,7 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>>, RetrofitRes
         else
         {
             tvSubmitCart.visibility = View.VISIBLE
+
             tvNoData.visibility = View.GONE
 
             tvClearCart.visibility = View.VISIBLE

@@ -88,7 +88,7 @@
         android:text="@string/retailer2"
         android:textColor="@color/black"
         android:textSize="@dimen/_12sdp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvDistributor2" />
 
@@ -104,7 +104,7 @@
         android:maxLength="30"
         android:padding="@dimen/_7sdp"
         android:textSize="@dimen/_12sdp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/tvRetailer"
         app:layout_constraintTop_toBottomOf="@id/tvRetailer" />
@@ -126,6 +126,18 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@id/tvSubmitCart"
         app:layout_constraintTop_toBottomOf="@id/tvRetailer2"
+        />
+
+    <TextView
+        android:id="@+id/tvNoData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No data "
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintBottom_toBottomOf="@id/rvMyOrders"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/rvMyOrders"
         />
 
     <TextView

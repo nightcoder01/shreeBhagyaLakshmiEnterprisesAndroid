@@ -161,8 +161,6 @@ class AddSalesOrder : Fragment() {
                 adapter2.onClicked(object: SubCategaryAdapter.CardInterface{
                     override fun changeEditMode(pos: Int, editMode: Boolean) {
 
-
-
                         if(subList[pos].cartItem.toInt()>0) {
                             if(subList[pos].price.toDouble()<=subList[pos].customPrice.toDouble()) {
 
@@ -316,7 +314,7 @@ class AddSalesOrder : Fragment() {
                                                 Cart(
                                                     datetime,
                                                     subList[pos].distIDMain,
-                                                    subList[pos].category,
+                                                    subList[pos].description,
                                                     subList[pos].price,
                                                     subList[pos].customPrice,
                                                     subList[pos].overAllPrice,
@@ -457,7 +455,7 @@ class AddSalesOrder : Fragment() {
                                                 Cart(
                                                     datetime,
                                                     subList[pos].distIDMain,
-                                                    subList[pos].category,
+                                                    subList[pos].description,
                                                     subList[pos].price,
                                                     subList[pos].customPrice,
                                                     subList[pos].overAllPrice,

@@ -108,6 +108,7 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
 
 
     fun insertCart(cart: Cart) = viewModelScope.launch {
+
         repository.insertCart(cart)
     }
 
@@ -127,6 +128,12 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
     fun getOrdersFromDist(retailer_code: String, listener: OrderDataChangeListener<LiveData<List<Orders>>>) {
         viewModelScope.launch {
             listener.OrderDataChange(repository.getOrdersFromDist(retailer_code).asLiveData())
+        }
+    }
+
+    fun getOrdersFromRetailer(retailerId: String, listener: OrderDataChangeListener<LiveData<List<Orders>>>) {
+        viewModelScope.launch {
+            listener.OrderDataChange(repository.getOrdersFromRetailer(retailerId).asLiveData())
         }
     }
 

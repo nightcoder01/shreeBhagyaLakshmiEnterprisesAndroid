@@ -42,9 +42,9 @@ class MyOrdersAdapter(var list: List<Orders>) :
 
         holder.itemView.tvName.text = list[position].description
         holder.itemView.tvImageText.text = list[position].description
-        holder.itemView.tvPriceValue.text = list[position].price
+        holder.itemView.tvPriceValue.text = list[position].ptd
         holder.itemView.tvCount.text = list[position].quantity
-        holder.itemView.tvPriceEditedValue.text = list[position].ptd
+        holder.itemView.tvPriceEditedValue.text = list[position].price
         holder.itemView.tvPriceOverallValue.text  = (holder.itemView.tvPriceEditedValue.text.toString().toFloat()*holder.itemView.tvCount.text.toString().toFloat()).toString()
     }
 
