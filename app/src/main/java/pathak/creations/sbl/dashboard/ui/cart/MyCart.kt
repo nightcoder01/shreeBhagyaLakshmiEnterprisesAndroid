@@ -74,7 +74,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>>, RetrofitRes
         val root = inflater.inflate(R.layout.my_cart_layout , container, false)
 
         ctx = root.context
-
         return root
 
     }
@@ -85,7 +84,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>>, RetrofitRes
 
         tvClearCart.setOnClickListener {
             callDeleteAllDialog()
-
         }
 
         tvSubmitCart.setOnClickListener {
@@ -150,7 +148,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Cart>>>, RetrofitRes
                     json.put("ptd_price", listCart[i].ptd_price)
                     json.put("total_ptr_price", listCart[i].overAllPrice)
                     json.put("total_ptd_price", listCart[i].ptd_total)
-
 
 
                     wordViewModel.insertOrders(

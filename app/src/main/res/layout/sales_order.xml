@@ -9,6 +9,13 @@
 
 
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -173,13 +180,12 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvSubCategories"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_margin="@dimen/_10sdp"
             android:nestedScrollingEnabled="true"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/cvTop"
-            app:layout_constraintBottom_toBottomOf="parent"
             />
 
 
@@ -252,5 +258,7 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
