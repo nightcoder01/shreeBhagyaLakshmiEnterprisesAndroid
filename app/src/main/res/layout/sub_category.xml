@@ -9,10 +9,10 @@
         android:id="@+id/cvSubCat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_8sdp"
+        android:layout_margin="@dimen/_4sdp"
         android:padding="@dimen/_2sdp"
         app:cardCornerRadius="@dimen/_5sdp"
-        app:cardElevation="@dimen/_4sdp"
+        app:cardElevation="@dimen/_2sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -86,9 +86,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_5sdp"
-                android:maxLength="10"
+                android:maxLength="6"
                 android:singleLine="true"
                 app:layout_constraintStart_toEndOf="@id/tvPrice"
+                app:layout_constraintTop_toBottomOf="@id/tvName"/>
+            <TextView
+                android:id="@+id/tvEditedPriceValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_5sdp"
+                android:maxLength="10"
+                android:singleLine="true"
+                app:layout_constraintStart_toEndOf="@id/tvPriceValue"
                 app:layout_constraintTop_toBottomOf="@id/tvName"/>
 
 
@@ -137,7 +146,7 @@
                 android:id="@+id/clCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
                 android:background="@drawable/button_background_grey"
                 android:paddingStart="@dimen/_6sdp"
                 android:paddingTop="@dimen/_6sdp"

@@ -209,8 +209,6 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
 
                         override fun changeEditMode(pos: Int, editMode: Boolean) {
 
-
-
                             if (isValid()) {
                                 if(subList[pos].cartItem.toInt()!=0){
                                 if(subList[pos].price.toDouble()<=subList[pos].customPrice.toDouble()) {

@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.sub_category.view.*
 import pathak.creations.sbl.R
+import pathak.creations.sbl.common.CommonMethods
 
 class SubCategaryAdapter(var list: List<SubCat>) :
     RecyclerView.Adapter<SubCategaryAdapter.CardsViewHolder>() {
@@ -51,6 +52,7 @@ class SubCategaryAdapter(var list: List<SubCat>) :
         holder.itemView.tvName.text = list[position].description
         holder.itemView.tvImageText.text = list[position].description
         holder.itemView.tvPriceValue.text = list[position].price
+        holder.itemView.tvEditedPriceValue.text = "("+list[position].customPrice+")"
         holder.itemView.tvCount.text = list[position].cartItem
         holder.itemView.etPriceEditedValue.text =Editable.Factory.getInstance().newEditable(list[position].customPrice)
         holder.itemView.tvPriceOverallValue.text  = String.format("%.2f",(holder.itemView.etPriceEditedValue.text.toString().toFloat()*holder.itemView.tvCount.text.toString().toFloat()))
@@ -87,12 +89,14 @@ class SubCategaryAdapter(var list: List<SubCat>) :
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                 if(actionId==EditorInfo.IME_ACTION_DONE)
                 {
+                    CommonMethods.hideKeyboard(holder.itemView.etPriceEditedValue)
                     return if(list[position].editMode) {
                         //normal
                         val s = holder.itemView.etPriceEditedValue.text.toString()
                         clicked.valueChanged(position,s)
                         true
-                    } else {
+                    }
+                    else {
                         val s = list[position].customPrice
                         clicked.valueChanged(position, s)
                         Toast.makeText(holder.itemView.etPriceEditedValue.context,"once added can't change , go to My cart to make changes.",Toast.LENGTH_SHORT).show()
