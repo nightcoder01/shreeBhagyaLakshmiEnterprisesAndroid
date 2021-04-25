@@ -51,6 +51,14 @@
         android:label="@string/my_cart"
         tools:layout="@layout/my_cart_layout" >
 
+        <action
+            android:id="@+id/action_order_detail"
+            app:destination="@id/orderDetail"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
     </fragment>
 
     <fragment
@@ -121,6 +129,11 @@
         android:id="@+id/addSalesOrder"
         android:name="pathak.creations.sbl.dashboard.ui.sales_order.AddSalesOrder"
         android:label="Add Sales Order" />
+
+    <fragment
+        android:id="@+id/orderDetail"
+        android:name="pathak.creations.sbl.dashboard.ui.order_detail.OrderDetail"
+        android:label="Order Detail" />
 
 
     <fragment

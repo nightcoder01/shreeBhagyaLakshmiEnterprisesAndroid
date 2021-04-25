@@ -121,6 +121,10 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
         repository.deleteAllCart()
     }
 
+    fun deleteCart(cartId: String) = viewModelScope.launch {
+        repository.deleteCart(cartId)
+    }
+
     //order
 
     val allOrders: LiveData<List<Orders>> = repository.allOrders.asLiveData()

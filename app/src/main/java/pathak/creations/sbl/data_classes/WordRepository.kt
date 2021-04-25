@@ -152,6 +152,12 @@ class WordRepository(private val wordDao: WordDao) {
         wordDao.deleteAllCart()
     }
 
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun deleteCart(cartId: String) {
+        wordDao.deleteCart(cartId)
+    }
+
     //order
 
     val allOrders: Flow<List<Orders>> = wordDao.getOrdersList()

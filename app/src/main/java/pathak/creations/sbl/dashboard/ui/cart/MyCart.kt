@@ -18,12 +18,14 @@ import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AlertDialogLayout
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.custom_spinner.view.*
 import kotlinx.android.synthetic.main.my_cart_layout.*
 import org.json.JSONArray
@@ -99,6 +101,7 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
     private lateinit var myCartVM: MyCartVM
 
     lateinit var ctx: Context
+    lateinit var tvSubmit: View
      var listCart: ArrayList<Cart> = ArrayList()
 
     override fun onCreateView(
@@ -278,8 +281,9 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
             callDeleteAllDialog()
         }
 
-        tvSubmitCart.setOnClickListener {
 
+        tvSubmitCart.setOnClickListener {
+            tvSubmit = it
             if(valid()) callAddCart()
         }
 
@@ -717,11 +721,31 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
                             // listDistName.clear()
                             // listDistId.clear()
 
-                            wordViewModel.deleteAllCart()
+
+                            for(i in 0 until listCart.size)
+                            {
+                                wordViewModel.deleteCart(listCart[i].cartId)
+                            }
+
+                           // wordViewModel.deleteAllCart()
 
 
 
                             Toast.makeText(ctx,msg,Toast.LENGTH_SHORT).show()
+
+
+
+                            val bundle = bundleOf(
+                                "count" to listCart.size.toString(),
+                                "beatName" to tvBeatName.text.toString(),
+                                "retailerName" to tvDistributor2.text.toString(),
+                                "total" to tvTotalValue.text.toString(),
+                                "grandTotal" to tvGrandTotalValue.text.toString()
+                            )
+                            Navigation.findNavController(tvSubmit)
+                                .navigate(R.id.action_order_detail, bundle)
+
+
 
                         }
 
