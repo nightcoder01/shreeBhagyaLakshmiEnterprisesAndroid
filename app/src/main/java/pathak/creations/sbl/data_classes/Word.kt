@@ -6,9 +6,6 @@ import androidx.room.PrimaryKey
 
 
 
-
-
-
 @Entity(tableName = "distributor_table")
  class Distributor(@PrimaryKey @ColumnInfo(name = "dist") val distID : String, @ColumnInfo(name = "distName")val distName : String)
 

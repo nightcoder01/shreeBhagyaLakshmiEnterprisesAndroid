@@ -19,9 +19,9 @@
         android:hint="@string/search"
         android:imeOptions="actionDone"
         android:maxLength="30"
-        android:padding="@dimen/_7sdp"
+        android:padding="@dimen/_5sdp"
         android:singleLine="true"
-        android:textSize="@dimen/_12sdp"
+        android:textSize="@dimen/_10sdp"
         app:layout_constraintBottom_toBottomOf="@id/tvClearCart"
         app:layout_constraintEnd_toStartOf="@id/tvClearCart"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,18 +35,17 @@
         android:layout_marginTop="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/_5sdp"
         android:background="@drawable/button_background"
-        android:paddingStart="@dimen/_10sdp"
-        android:paddingTop="@dimen/_5sdp"
-        android:paddingEnd="@dimen/_10sdp"
-        android:paddingBottom="@dimen/_5sdp"
+        android:paddingStart="@dimen/_8sdp"
+        android:paddingTop="@dimen/_3sdp"
+        android:paddingEnd="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_3sdp"
         android:text="@string/clear_all"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="@dimen/_10sdp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <TextView
         android:id="@+id/tvDistributor"
@@ -57,28 +56,46 @@
         android:text="@string/retailer2"
         android:textColor="@color/black"
         android:textSize="@dimen/_12sdp"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/etSearch" />
 
 
 
-
+    <TextView
+        android:id="@+id/tvBeatName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:background="@drawable/round_bg"
+        android:drawableEnd="@drawable/ic_arrow_drop"
+        android:hint="@string/select_beat_name"
+        android:maxLength="30"
+        android:padding="@dimen/_5sdp"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvDistributor" />
 
     <TextView
         android:id="@+id/tvDistributor2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginStart="@dimen/_10sdp"
         android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:background="@drawable/round_bg"
         android:drawableEnd="@drawable/ic_arrow_drop"
         android:hint="@string/select_retailer_name"
         android:maxLength="30"
-        android:padding="@dimen/_7sdp"
+        android:padding="@dimen/_5sdp"
         android:textSize="@dimen/_12sdp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/tvDistributor"
-        app:layout_constraintTop_toBottomOf="@id/tvDistributor" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvBeatName" />
+
 
 
 
@@ -105,9 +122,63 @@
         android:paddingTop="@dimen/_5sdp"
         android:paddingBottom="@dimen/_5sdp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@id/tvSubmitCart"
+        app:layout_constraintBottom_toTopOf="@id/tvTotal"
         app:layout_constraintTop_toBottomOf="@id/tvDistributor2"
         />
+
+    <TextView
+        android:id="@+id/tvTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_30sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:text="Total Amount"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintBottom_toTopOf="@id/tvGrandTotal"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+    <TextView
+        android:id="@+id/tvTotalValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_60sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:text="00"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintBottom_toBottomOf="@id/tvTotal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvTotal"
+        />
+
+    <TextView
+        android:id="@+id/tvGrandTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_30sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:text="Grand Total Amount"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintBottom_toTopOf="@id/tvContinueShopping"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/tvGrandTotalValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_60sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:text="00"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintBottom_toBottomOf="@id/tvGrandTotal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvGrandTotal"
+        />
+
 
     <TextView
         android:id="@+id/tvSubmitCart"
@@ -115,16 +186,36 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/_5sdp"
         android:background="@drawable/button_background"
-        android:paddingStart="@dimen/_30sdp"
-        android:paddingTop="@dimen/_10sdp"
-        android:paddingEnd="@dimen/_30sdp"
-        android:paddingBottom="@dimen/_10sdp"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingTop="@dimen/_5sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        android:paddingBottom="@dimen/_5sdp"
         android:text="@string/submit"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="@dimen/_10sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+         />
+
+    <TextView
+        android:id="@+id/tvContinueShopping"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:background="@drawable/button_background"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingTop="@dimen/_5sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        android:paddingBottom="@dimen/_5sdp"
+        android:text="Continue Shopping"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_10sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

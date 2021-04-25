@@ -12,7 +12,12 @@ import androidx.appcompat.widget.AlertDialogLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.*
-import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.ResponseBody
 import org.json.JSONObject
 import pathak.creations.sbl.R
 import pathak.creations.sbl.common.CommonKeys
@@ -20,7 +25,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-
 
 
 class RetrofitService {
@@ -177,9 +181,10 @@ class RetrofitService {
         CoroutineScope(Dispatchers.IO+coroutineEx).launch {
             Log.e("url ", mUrl)
             when(mValue)
-            {
+            {   //mJson.toString().toRequestBody("application/json".toMediaTypeOrNull())
+
                 1->{response = retrofitApi.callGet(mUrl) }
-                2->{ response = mUrl.let { retrofitApi.callPost(it, RequestBody.create(MediaType.parse("application/json"),mJson.toString())) } }
+                2->{ response = mUrl.let { retrofitApi.callPost(it,mJson.toString().toRequestBody("application/json".toMediaTypeOrNull())) } }
                 3->{ response = mUrl.let { retrofitApi.callMultipart(it, mMap,mFiles) } }
                 4 -> {
                     response = retrofitApi.callPut(mUrl)

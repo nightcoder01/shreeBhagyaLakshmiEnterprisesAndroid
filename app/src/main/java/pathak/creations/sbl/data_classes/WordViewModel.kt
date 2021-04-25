@@ -2,6 +2,7 @@ package pathak.creations.sbl.data_classes
 
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
+import pathak.creations.sbl.interfaces.CartDataChangeListener
 import pathak.creations.sbl.interfaces.DataChangeListener
 import pathak.creations.sbl.interfaces.OrderDataChangeListener
 import pathak.creations.sbl.interfaces.RetailerDataChangeListener
@@ -100,9 +101,9 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
     val allCart: LiveData<List<Cart>> = repository.allCarts.asLiveData()
 
 
-    fun getCartFromDist(retailer_code: String, listener: DataChangeListener<LiveData<List<Cart>>>) {
+    fun getCartFromDist(retailer_code: String, listener: CartDataChangeListener<LiveData<List<Cart>>>) {
         viewModelScope.launch {
-            listener.DataChange(repository.getCartFromDist(retailer_code).asLiveData())
+            listener.CartDataChange(repository.getCartFromDist(retailer_code).asLiveData())
         }
     }
 
