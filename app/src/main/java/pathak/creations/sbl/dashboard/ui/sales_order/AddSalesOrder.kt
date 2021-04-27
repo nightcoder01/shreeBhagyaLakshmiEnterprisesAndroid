@@ -49,6 +49,10 @@ class AddSalesOrder : Fragment() {
     var retailerIDName = ""
 
 
+
+
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

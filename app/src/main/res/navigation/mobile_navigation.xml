@@ -96,9 +96,10 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
 
+
         <action
-            android:id="@+id/action_add_sales"
-            app:destination="@id/addSalesOrder"
+            android:id="@+id/retailerVisitCheckIn"
+            app:destination="@id/checkIn"
             app:enterAnim="@anim/fragment_fade_enter"
             app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
@@ -129,6 +130,21 @@
         android:id="@+id/addSalesOrder"
         android:name="pathak.creations.sbl.dashboard.ui.sales_order.AddSalesOrder"
         android:label="Add Sales Order" />
+    <fragment
+        android:id="@+id/checkIn"
+        android:name="pathak.creations.sbl.dashboard.ui.retailer_visit.CheckIn"
+        android:label="Check In" >
+
+        <action
+            android:id="@+id/action_add_sales"
+            app:destination="@id/addSalesOrder"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/nav_retailer"
+            />
+    </fragment>
 
     <fragment
         android:id="@+id/orderDetail"

@@ -45,13 +45,14 @@ class RetailerVisitAdapter(var list: List<Retailer>) :
         holder.itemView.tvBeat.text = list[position].beatname
         holder.itemView.tvDistributor.text = list[position].distributor
         holder.itemView.tvRetailer.text = list[position].retailer_name
-        holder.itemView.tvRemarks.text = list[position].note
+        holder.itemView.tvAreaName.text = list[position].areaname
+        holder.itemView.tvNumber.text = list[position].mobile
 
         holder.itemView.ivDelete.setOnClickListener { clicked.clickedSelected(position,"delete") }
         holder.itemView.ivEdit.setOnClickListener { clicked.clickedSelected(position,"edit") }
         holder.itemView.tvAdd.setOnClickListener { clicked.clickedSelected(position,"add") }
-        holder.itemView.tvRemarksTag.setOnClickListener { clicked.clickedSelected(position,"remarks") }
-        holder.itemView.tvRemarks.setOnClickListener { clicked.clickedSelected(position,"remarks") }
+       // holder.itemView.tvAreaName.setOnClickListener { clicked.clickedSelected(position,"remarks") }
+       // holder.itemView.tvRemarks.setOnClickListener { clicked.clickedSelected(position,"remarks") }
     }
 
 

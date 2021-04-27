@@ -94,7 +94,7 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
 
         tvDate.setOnClickListener { retailerVisitVM.datePicker(view) }
         tvDateValue.setOnClickListener { retailerVisitVM.datePicker(view) }
-        tvAdd.setOnClickListener { Navigation.findNavController(view).navigate(R.id.action_add_visit) }
+
 
 
         setDistributor()
@@ -323,7 +323,11 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
                             "salesman" to listBeatsRetailer[position].client,
                             "dist_id" to listBeatsRetailer[position].dist_id
                         )
-                        Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_add_sales,bundle)
+
+
+                       // Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_add_sales,bundle)
+                        Navigation.findNavController(rvRetailerVisit)
+                            .navigate(R.id.retailerVisitCheckIn, bundle)
                     }
 
                 }
@@ -733,8 +737,10 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
                 "salesman" to listBeatsRetailer[position].client,
                 "dist_id" to listBeatsRetailer[position].dist_id
             )
+            /*Navigation.findNavController(rvRetailerVisit)
+                .navigate(R.id.action_add_sales, bundle)*/
             Navigation.findNavController(rvRetailerVisit)
-                .navigate(R.id.action_add_sales, bundle)
+                .navigate(R.id.retailerVisitCheckIn, bundle)
         }
 
         alertDialog.show()
@@ -791,8 +797,10 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
                        "salesman" to listBeatsRetailer[position].client,
                        "dist_id" to listBeatsRetailer[position].dist_id
                    )
+                   /*Navigation.findNavController(rvRetailerVisit)
+                       .navigate(R.id.action_add_sales, bundle)*/
                    Navigation.findNavController(rvRetailerVisit)
-                       .navigate(R.id.action_add_sales, bundle)
+                       .navigate(R.id.retailerVisitCheckIn, bundle)
                }
                else
                {
@@ -813,7 +821,9 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
                             "salesman" to listBeatsRetailer[position].client,
                             "dist_id" to listBeatsRetailer[position].dist_id
                             )
-                        Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_add_sales,bundle)
+                       // Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_add_sales,bundle)
+            Navigation.findNavController(rvRetailerVisit)
+                .navigate(R.id.retailerVisitCheckIn, bundle)
 
         }
 
