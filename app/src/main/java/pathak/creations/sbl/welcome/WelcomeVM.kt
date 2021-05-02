@@ -20,19 +20,16 @@ class WelcomeVM(
 ) : ViewModel(), RetrofitResponse
 {
 
-
-
     var email = ""
     var password = ""
-
 
     fun loginClick(view: View) {
         if (validator.validate()) {
 
-
             callLogin(view)
 
             //   view.context.startActivity(Intent(view.context, DashBoard::class.java))
+
         }
     }
 

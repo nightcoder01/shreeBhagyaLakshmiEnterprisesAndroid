@@ -109,7 +109,8 @@
                 android:layout_marginStart="@dimen/_5sdp"
                 android:hint="@string/custom_price"
                 android:singleLine="true"
-                android:inputType="number"
+                android:editable="false"
+                android:focusable="false"
                 android:imeOptions="actionDone"
                 android:maxLength="10"
                 android:textSize="@dimen/_10sdp"
@@ -137,11 +138,6 @@
                 app:layout_constraintStart_toEndOf="@id/tvPriceOverall"
                 app:layout_constraintTop_toBottomOf="@id/etPriceEditedValue"
                 />
-
-
-
-
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clCount"
                 android:layout_width="wrap_content"
@@ -153,7 +149,7 @@
                 android:paddingEnd="@dimen/_6sdp"
                 android:paddingBottom="@dimen/_6sdp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tvPrice"
+                app:layout_constraintTop_toTopOf="@id/etPriceEditedValue"
                 >
 
 
@@ -247,14 +243,13 @@
                 android:paddingTop="@dimen/_5sdp"
                 android:paddingEnd="@dimen/_10sdp"
                 android:paddingBottom="@dimen/_5sdp"
-
+                android:visibility="gone"
                 android:text="@string/add_to_cart"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_10sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

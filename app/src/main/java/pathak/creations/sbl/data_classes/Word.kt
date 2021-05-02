@@ -3,7 +3,7 @@ package pathak.creations.sbl.data_classes
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-
+import java.io.Serializable
 
 
 @Entity(tableName = "distributor_table")
@@ -50,7 +50,7 @@ class Categories(@PrimaryKey @ColumnInfo(name = "categories_table_id") val categ
 class Word(@PrimaryKey @ColumnInfo(name = "word") val word : String)
 
 @Entity(tableName = "cart_table")
-class Cart(@PrimaryKey @ColumnInfo(name = "cartId") val cartId : String, @ColumnInfo(name = "distID")var distID : String
+class Cart(@PrimaryKey (autoGenerate = true) val cartId : Int, @ColumnInfo(name = "distID")var distID : String
            , @ColumnInfo(name = "name")var name : String, @ColumnInfo(name = "price")var price : String
            , @ColumnInfo(name = "customPrice")var customPrice : String, @ColumnInfo(name = "overAllPrice")var overAllPrice : String
            , @ColumnInfo(name = "itemCount")var itemCount : String, @ColumnInfo(name = "beatName")var beatName : String
@@ -58,7 +58,7 @@ class Cart(@PrimaryKey @ColumnInfo(name = "cartId") val cartId : String, @Column
            , @ColumnInfo(name = "dist_name")var dist_name : String, @ColumnInfo(name = "cat_group")var cat_group : String
            , @ColumnInfo(name = "category")var category : String, @ColumnInfo(name = "cat_code")var cat_code : String
            , @ColumnInfo(name = "ptr_price")var ptr_price : String, @ColumnInfo(name = "ptd_price")var ptd_price : String
-           , @ColumnInfo(name = "ptr_total")var ptr_total : String, @ColumnInfo(name = "ptd_total")var ptd_total : String)
+           , @ColumnInfo(name = "ptr_total")var ptr_total : String, @ColumnInfo(name = "ptd_total")var ptd_total : String) :Serializable
 
 
 @Entity(tableName = "order_table")

@@ -11,12 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_4sdp"
+
         app:cardElevation="@dimen/_2sdp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/_3sdp">
+            android:paddingStart="@dimen/_6sdp"
+            android:paddingTop="@dimen/_6sdp">
 
             <TextView
                 android:id="@+id/tvDate"
@@ -37,10 +39,9 @@
                 android:layout_marginTop="@dimen/_5sdp"
                 android:singleLine="true"
                 android:text=""
-                android:visibility="invisible"
+                android:visibility="gone"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_10sdp"
-                app:layout_constraintEnd_toStartOf="@id/tvDate"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -114,7 +115,7 @@
                 android:singleLine="true"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_10sdp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tvAdd"
                 app:layout_constraintStart_toEndOf="@id/tvAreaName"
                 app:layout_constraintTop_toTopOf="@id/tvAreaName" />
 
@@ -145,19 +146,24 @@
                 android:id="@+id/tvAdd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/_4sdp"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
                 android:background="@drawable/button_background"
                 android:paddingStart="@dimen/_10sdp"
                 android:paddingTop="@dimen/_2sdp"
                 android:paddingEnd="@dimen/_10sdp"
                 android:paddingBottom="@dimen/_2sdp"
                 android:text="@string/add_visit"
+                android:elevation="@dimen/_4sdp"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_10sdp"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/tvNumber" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tvNumber"
+                />
 
             <ImageView
                 android:id="@+id/ivEdit"

@@ -277,6 +277,8 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
             tvTotalValue.text = it
             tvGrandTotalValue.text = it
         })
+
+
         tvClearCart.setOnClickListener {
             callDeleteAllDialog()
         }
@@ -364,7 +366,14 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
                 val ft = SimpleDateFormat("yyMMddhhmmssMs")
                 val datetime = ft.format(dNow)
 
+
+
                 for(i in 0 until listCart.size) {
+
+                    Log.e("dsfafdasf","========${listCart[i].overAllPrice}")
+                    Log.e("dsfafdasf","========${listCart[i].overAllPrice}")
+
+
                     json.put("dist_code", listCart[i].distID)
                     json.put("dist", listCart[i].dist_name)
                     json.put("retailer_code", listCart[i].retailer_code)
@@ -489,25 +498,29 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
 
         if(list.isEmpty())
         {
-            tvSubmitCart.visibility = View.GONE
+
+            clCart.visibility = View.GONE
+            tvTransaction.visibility = View.GONE
+            tvTransactionValue.visibility = View.GONE
             tvNoData.visibility = View.VISIBLE
             tvTotal.visibility = View.GONE
             tvTotalValue.visibility = View.GONE
             tvGrandTotalValue.visibility = View.GONE
             tvGrandTotal.visibility = View.GONE
-            tvClearCart.visibility = View.INVISIBLE
+          //  tvClearCart.visibility = View.INVISIBLE
         }
         else
         {
-            tvSubmitCart.visibility = View.VISIBLE
-
+            clCart.visibility = View.VISIBLE
+            tvTransaction.visibility = View.VISIBLE
+            tvTransactionValue.visibility = View.VISIBLE
             tvNoData.visibility = View.GONE
             tvTotal.visibility = View.VISIBLE
             tvTotalValue.visibility = View.VISIBLE
             tvGrandTotalValue.visibility = View.VISIBLE
             tvGrandTotal.visibility = View.VISIBLE
 
-            tvClearCart.visibility = View.VISIBLE
+           // tvClearCart.visibility = View.VISIBLE
         }
 
         totalMute.value = setTotal(list)
@@ -740,7 +753,8 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
                                 "beatName" to tvBeatName.text.toString(),
                                 "retailerName" to tvDistributor2.text.toString(),
                                 "total" to tvTotalValue.text.toString(),
-                                "grandTotal" to tvGrandTotalValue.text.toString()
+                                "grandTotal" to tvGrandTotalValue.text.toString(),
+                                "listCart" to listCart
                             )
                             Navigation.findNavController(tvSubmit)
                                 .navigate(R.id.action_order_detail, bundle)

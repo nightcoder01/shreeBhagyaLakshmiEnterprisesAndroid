@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -39,6 +40,21 @@ class SelectDistributor : AppCompatActivity(), RetrofitResponse {
         setContentView(R.layout.activity_select_distributor)
 
         tvHeading.text = "Select Distributor"
+        fabSync.setOnClickListener {
+
+            if (PreferenceFile.retrieveKey(this, CommonKeys.SELECTED_DISTRIBUTOR) == null)
+            {
+
+                Toast.makeText(this,"Please select a distributor to Continue.",Toast.LENGTH_SHORT).show()
+            }
+            else
+            {
+
+                callRetailer()
+
+            }
+
+        }
        // if (PreferenceFile.retrieveKey(this@SelectDistributor, CommonKeys.IS_FIRST_CHECKED).equals("false", false)) {
             callAllServices()
       //  }
@@ -234,7 +250,7 @@ class SelectDistributor : AppCompatActivity(), RetrofitResponse {
                 PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.CURRENT_DATE,currentDate)
 
 
-                callRetailer()
+
 
                 /*val it = Intent(this@SelectDistributor, DashBoard::class.java)
                 it.flags =
@@ -279,7 +295,7 @@ class SelectDistributor : AppCompatActivity(), RetrofitResponse {
                                // callAllServices()
                             }*/
 
-                            callRetailer()
+                          //  callRetailer()
 
                             /*val it = Intent(this@SelectDistributor, DashBoard::class.java)
                             it.flags =
@@ -325,7 +341,7 @@ class SelectDistributor : AppCompatActivity(), RetrofitResponse {
                                 callAllServices()
                             }*/
 
-                            callRetailer()
+                           // callRetailer()
 
                             /*val it = Intent(this@SelectDistributor, DashBoard::class.java)
                             it.flags =
@@ -570,13 +586,13 @@ class SelectDistributor : AppCompatActivity(), RetrofitResponse {
                             }
 
 
-
-
-
-                            val it = Intent(this@SelectDistributor, DashBoard::class.java)
-                            it.flags =
+                            val intent = Intent(this@SelectDistributor, DashBoard::class.java)
+                            intent.flags =
                                 Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                            startActivity(it)
+                            startActivity(intent)
+
+
+
                         }
 
                         else {

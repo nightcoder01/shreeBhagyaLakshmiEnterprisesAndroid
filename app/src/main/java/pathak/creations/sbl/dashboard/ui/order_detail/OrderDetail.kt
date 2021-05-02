@@ -9,13 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.order_detail.*
 import pathak.creations.sbl.R
+import pathak.creations.sbl.data_classes.Cart
 
 
 class OrderDetail : Fragment() {
 
-    companion object {
-        fun newInstance() = OrderDetail()
-    }
+
+
+    var listOrders: ArrayList<Cart> = ArrayList()
 
     private lateinit var viewModel: OrderDetailVM
 
@@ -34,16 +35,27 @@ class OrderDetail : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         tvBeatNameValue.text = arguments?.getString("beatName")
-        tvGrandTotalValue.text = arguments?.getString("grandTotal")
-        tvTotalValue.text = arguments?.getString("total")
         tvRetailerNameValue.text = arguments?.getString("retailerName")
-        tvDetail.text ="You have successfully placed order of ${arguments?.getString("count")} items."
+        listOrders = arguments?.getSerializable("listCart") as ArrayList<Cart>
+        tvDetail.text ="You Ordered ${arguments?.getString("count")} items with total price ${arguments?.getString("grandTotal")}."
 
+        setCartAdapter(listOrders)
 
         tvDone.setOnClickListener { (view.context as Activity).onBackPressed() }
+
     }
+
+
+    private fun setCartAdapter(list: ArrayList<Cart>) {
+        val adapter  = OrderDetailAdapter(list)
+
+        rvOrderDetail.adapter = adapter
+
+    }
+
+
+
+
 
 }

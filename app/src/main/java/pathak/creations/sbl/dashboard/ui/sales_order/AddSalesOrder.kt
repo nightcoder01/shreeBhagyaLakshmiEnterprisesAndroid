@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.add_sales_order.*
 import kotlinx.android.synthetic.main.custom_spinner.view.*
 import pathak.creations.sbl.AppController
@@ -46,12 +47,10 @@ class AddSalesOrder : Fragment() {
     var distIDName = ""
 
     var retailerIDMain = ""
+    var phone = ""
     var retailerIDName = ""
 
-
-
-
-
+    var subList :ArrayList<SubCat> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,7 +73,6 @@ class AddSalesOrder : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         getArgumentedData()
 
 
@@ -86,6 +84,53 @@ class AddSalesOrder : Fragment() {
         spDistributorId.adapter = adapter
 
         tvCancel.setOnClickListener { (view.context as Activity).onBackPressed() }
+        clCart.setOnClickListener { addCart() }
+
+    }
+
+    private fun addCart() {
+        for(pos in 0 until subList.size)
+        {
+
+            if(subList[pos].cartItem != "0") {
+
+                Log.e("dfohsdfhapbnf ","===========${subList[pos].cartItem}")
+
+                val dNow = Date()
+                val ft = SimpleDateFormat("yyMMddhhmmssMs")
+                val datetime = ft.format(dNow)
+                wordViewModel.insertCart(
+                    Cart(0,
+                        subList[pos].distIDMain,
+                        subList[pos].description,
+                        subList[pos].price,
+                        subList[pos].customPrice,
+                        (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
+                        subList[pos].cartItem,
+                        etBeatName.text.toString(),
+                        subList[pos].retailerIDName,
+                        subList[pos].retailerIDMain,
+                        subList[pos].distIDName,
+                        subList[pos].catgroup,
+                        subList[pos].category,
+                        subList[pos].code,
+                        subList[pos].customPrice,
+                        subList[pos].price,
+                         (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
+                        (subList[pos].price.toFloat() * subList[pos].cartItem.toFloat()).toString()
+
+                    )
+                )
+            }
+        }
+        Toast.makeText(
+            rvSubCategories.context,
+            "Item Added to Cart Successfully.",
+            Toast.LENGTH_SHORT
+        ).show()
+
+        Navigation.findNavController(clCart).navigate(R.id.action_addCart)
+
 
     }
 
@@ -96,14 +141,16 @@ class AddSalesOrder : Fragment() {
         etBeatName.text = Editable.Factory.getInstance().newEditable(arguments?.getString("beatName"))
         etRetailerName.text = Editable.Factory.getInstance().newEditable(arguments?.getString("retailer"))
         etRetailerId.text = Editable.Factory.getInstance().newEditable(arguments?.getString("retailerId"))
+        etPhone.text = Editable.Factory.getInstance().newEditable(arguments?.getString("phone"))
 
         dist_id = arguments?.getString("dist_id")!!
         distIDName = arguments?.getString("distributorName")!!
         retailerIDMain = arguments?.getString("retailerId")!!
+        phone = arguments?.getString("phone")!!
         retailerIDName = arguments?.getString("retailer")!!
 
-        etDate.text =Editable.Factory.getInstance().newEditable(SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()))
-        tvDateMain.text =SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        etDate.text =Editable.Factory.getInstance().newEditable(SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date()))
+        tvDateMain.text =SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
 
         wordViewModel.allCategories.observe(viewLifecycleOwner, Observer { cat ->
             // Update the cached copy of the words in the adapter.
@@ -121,7 +168,6 @@ class AddSalesOrder : Fragment() {
             openCategoryShort(tvCategory2,listCategories)
         }
     }
-
 
     var popupWindow: PopupWindow? = null
 
@@ -154,10 +200,8 @@ class AddSalesOrder : Fragment() {
                 popupWindow!!.dismiss()
 
                 //setSubCategory
-
-                val subList :ArrayList<SubCat> = getSubListFiltered(listFiltered[position],listCategories)
-
-
+                subList.clear()
+                 subList = getSubListFiltered(listFiltered[position],listCategories)
 
                 val adapter2  = SubCategaryAdapter(subList)
                 rvSubCategories.adapter = adapter2
@@ -179,12 +223,12 @@ class AddSalesOrder : Fragment() {
                                 val datetime = ft.format(dNow)
                                 wordViewModel.insertCart(
                                     Cart(
-                                        datetime,
+                                        0,
                                         subList[pos].distIDMain,
                                         subList[pos].description,
                                         subList[pos].price,
                                         subList[pos].customPrice,
-                                        subList[pos].overAllPrice,
+                                        (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
                                         subList[pos].cartItem,
                                         etBeatName.text.toString(),
                                         subList[pos].retailerIDName,
@@ -195,7 +239,7 @@ class AddSalesOrder : Fragment() {
                                         subList[pos].code,
                                         subList[pos].customPrice,
                                         subList[pos].price,
-                                        subList[pos].overAllPrice,
+                                        (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
                                         (subList[pos].price.toFloat()*subList[pos].cartItem.toFloat()).toString()
 
                                     )
@@ -222,12 +266,10 @@ class AddSalesOrder : Fragment() {
 
 
                     }
-                    override fun valueChanged(pos: Int, str: String) {
+                    override fun valueChanged(pos: Int) {
 
-                        subList[pos].customPrice = str
-                        adapter2.notifyDataSetChanged()
+                        callCustomPrice(subList,adapter2,pos)
 
-                       // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                     }
 
                     override fun clickedSelected(pos: Int, str: String) {
@@ -239,8 +281,11 @@ class AddSalesOrder : Fragment() {
                             }
                             else
                             {
+
                                 subList[pos].cartItem = (subList[pos].cartItem.toInt()+1).toString()
                                 adapter2.notifyDataSetChanged()
+                                setCart()
+
                             }
                         }
                         if(str=="remove")
@@ -254,19 +299,18 @@ class AddSalesOrder : Fragment() {
                             {
                                 subList[pos].cartItem = (subList[pos].cartItem.toInt()-1).toString()
                                 adapter2.notifyDataSetChanged()
+                                setCart()
                             }
                         }
                         if(str=="long")
                         {
 
-                            callNumberList(subList,adapter2,pos)
+                            callNumberList(adapter2,pos)
 
                             Toast.makeText(ctx,"long",Toast.LENGTH_SHORT).show()
                         }
                     }
                 })
-
-
             }
         })
 
@@ -293,7 +337,8 @@ class AddSalesOrder : Fragment() {
                             view.text =listFiltered2[position]
                             popupWindow!!.dismiss()
 
-                            val subList :ArrayList<SubCat> = getSubListFiltered(listFiltered2[position],listCategories)
+                            subList.clear()
+                             subList  = getSubListFiltered(listFiltered2[position],listCategories)
 
 
 
@@ -316,12 +361,12 @@ class AddSalesOrder : Fragment() {
                                             val datetime = ft.format(dNow)
                                             wordViewModel.insertCart(
                                                 Cart(
-                                                    datetime,
+                                                    0,
                                                     subList[pos].distIDMain,
                                                     subList[pos].description,
                                                     subList[pos].price,
                                                     subList[pos].customPrice,
-                                                    subList[pos].overAllPrice,
+                                                    (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
                                                     subList[pos].cartItem,
                                                     etBeatName.text.toString(),
                                                     subList[pos].retailerIDName,
@@ -332,7 +377,7 @@ class AddSalesOrder : Fragment() {
                                                     subList[pos].code,
                                                     subList[pos].customPrice,
                                                     subList[pos].price,
-                                                    subList[pos].overAllPrice,
+                                                    (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
                                                     (subList[pos].price.toFloat()*subList[pos].cartItem.toFloat()).toString()
 
                                                 )
@@ -360,9 +405,11 @@ class AddSalesOrder : Fragment() {
                                     }
                                 }
 
-                                override fun valueChanged(pos: Int, str: String) {
-                                    subList[pos].customPrice = str
-                                    adapter3.notifyDataSetChanged()
+                                override fun valueChanged(pos: Int) {
+                                  //  subList[pos].customPrice = str
+                                   // adapter3.notifyDataSetChanged()
+                                    callCustomPrice(subList,adapter3,pos)
+
                                 }
 
                                 override fun clickedSelected(pos: Int, str: String) {
@@ -376,6 +423,7 @@ class AddSalesOrder : Fragment() {
                                         {
                                             subList[pos].cartItem = (subList[pos].cartItem.toInt()+1).toString()
                                             adapter3.notifyDataSetChanged()
+                                            setCart()
                                         }
                                     }
                                     if(str=="remove")
@@ -389,19 +437,18 @@ class AddSalesOrder : Fragment() {
                                         {
                                             subList[pos].cartItem = (subList[pos].cartItem.toInt()-1).toString()
                                             adapter3.notifyDataSetChanged()
+                                            setCart()
                                         }
                                     }
                                     if(str=="long")
                                     {
 
-                                        callNumberList(subList,adapter3,pos)
+                                        callNumberList(adapter3,pos)
 
                                         Toast.makeText(ctx,"long",Toast.LENGTH_SHORT).show()
                                     }
                                 }
                             })
-
-
 
                         }
                     })
@@ -433,8 +480,8 @@ class AddSalesOrder : Fragment() {
                             view.text =listFiltered2[position]
                             popupWindow!!.dismiss()
 
-
-                            val subList :ArrayList<SubCat> = getSubListFiltered(listFiltered2[position],list)
+                            subList.clear()
+                             subList  = getSubListFiltered(listFiltered2[position],list)
 
 
                             val adapter3  = SubCategaryAdapter(subList)
@@ -457,12 +504,12 @@ class AddSalesOrder : Fragment() {
 
                                             wordViewModel.insertCart(
                                                 Cart(
-                                                    datetime,
+                                                    0,
                                                     subList[pos].distIDMain,
                                                     subList[pos].description,
                                                     subList[pos].price,
                                                     subList[pos].customPrice,
-                                                    subList[pos].overAllPrice,
+                                                    (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
                                                     subList[pos].cartItem,
                                                     etBeatName.text.toString(),
                                                     subList[pos].retailerIDName,
@@ -473,7 +520,7 @@ class AddSalesOrder : Fragment() {
                                                     subList[pos].code,
                                                     subList[pos].customPrice,
                                                     subList[pos].price,
-                                                    subList[pos].overAllPrice,
+                                                    (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
                                                     (subList[pos].price.toFloat()*subList[pos].cartItem.toFloat()).toString()
 
                                                 )
@@ -502,10 +549,11 @@ class AddSalesOrder : Fragment() {
                                 }
 
 
-                                override fun valueChanged(pos: Int, str: String) {
+                                override fun valueChanged(pos: Int) {
                                     //
-                                    subList[pos].customPrice = str
-                                    adapter2.notifyDataSetChanged()
+                                  //  subList[pos].customPrice = str
+                                   // adapter2.notifyDataSetChanged()
+                                    callCustomPrice(subList,adapter3,pos)
                                 }
 
                                 override fun clickedSelected(pos: Int, str: String) {
@@ -519,25 +567,21 @@ class AddSalesOrder : Fragment() {
                                         {
                                             subList[pos].cartItem = (subList[pos].cartItem.toInt()+1).toString()
                                             adapter3.notifyDataSetChanged()
+                                            setCart()
                                         }
                                     }
                                     if(str=="remove")
                                     {
-                                        if(subList[pos].cartItem.toInt()<1)
-                                        {
-                                            // Toast.makeText(ctx,"minimum limit crossed",Toast.LENGTH_SHORT).show()
-                                        }
-
-                                        else
-                                        {
+                                        if (subList[pos].cartItem.toInt() >= 1) {
                                             subList[pos].cartItem = (subList[pos].cartItem.toInt()-1).toString()
                                             adapter3.notifyDataSetChanged()
+                                            setCart()
                                         }
                                     }
                                     if(str=="long")
                                     {
 
-                                        callNumberList(subList,adapter3,pos)
+                                        callNumberList(adapter3,pos)
 
                                         Toast.makeText(ctx,"long",Toast.LENGTH_SHORT).show()
                                     }
@@ -557,11 +601,34 @@ class AddSalesOrder : Fragment() {
 
     }
 
+    private fun setCart() {
+
+        var count =0
+        var price =""
+        for(i in 0 until subList.size)
+        {
+            if (subList[i].cartItem.toInt() > 0)
+            {
+                count += 1
+
+                price = if(price.isNotEmpty())
+                {  String.format("%.2f",price.toFloat()+(subList[i].customPrice.toFloat()* subList[i].cartItem.toFloat()))}
+                else{String.format("%.2f",(subList[i].customPrice.toFloat()* subList[i].cartItem.toFloat()))}
+
+            }
+        }
+        tvCountValue.text = count.toString()
+        tvTotalValue.text = price
+
+        if(count!=0)  clCart.visibility = View.VISIBLE else  clCart.visibility = View.GONE
+
+
+    }
+
 
     private lateinit var dialogBuilderMain  : AlertDialog
 
     private fun callNumberList(
-        subList: ArrayList<SubCat>,
         adapter2: SubCategaryAdapter,
         pos: Int
     ) {
@@ -585,9 +652,57 @@ class AddSalesOrder : Fragment() {
             subList[pos].cartItem = npItem.value.toString()
             adapter2.notifyItemChanged(pos)
             dialogBuilderMain.dismiss()
+            setCart()
         }
         npItem.maxValue = 9999
         npItem.minValue = 0
+
+        dialogBuilderMain.show()
+    }
+
+    private fun callCustomPrice(
+        subList: ArrayList<SubCat>,
+        adapter2: SubCategaryAdapter,
+        pos: Int
+    ) {
+
+
+        val dialogBuilder = AlertDialog.Builder(ctx)
+        val layout = AlertDialogLayout.inflate(ctx, R.layout.custom_price,null)
+        dialogBuilder.setView(layout)
+
+        val tvSubmit :TextView= layout.findViewById(R.id.tvSubmit)
+        val etEnterPrice :EditText= layout.findViewById(R.id.etEnterPrice)
+
+
+        etEnterPrice.text =   Editable.Factory.getInstance().newEditable(subList[pos].customPrice)
+
+        dialogBuilderMain = dialogBuilder.create()
+        dialogBuilderMain.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogBuilderMain.setCancelable(false)
+        dialogBuilderMain.setCanceledOnTouchOutside(true)
+
+        tvSubmit.setOnClickListener {
+
+
+            if(subList[pos].price.toDouble() <= etEnterPrice.text.toString().toDouble())
+            {
+                subList[pos].customPrice = etEnterPrice.text.toString()
+                adapter2.notifyDataSetChanged()
+                dialogBuilderMain.dismiss()
+                setCart()
+            }
+                else
+            {
+                CommonMethods.alertDialog(
+                    ctx,
+                    "Ptd price cannot be less than Ptr price"
+                )
+            }
+
+
+            //dialogBuilderMain.dismiss()
+        }
 
         dialogBuilderMain.show()
     }

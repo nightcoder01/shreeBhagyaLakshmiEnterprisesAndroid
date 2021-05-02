@@ -50,12 +50,9 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
     RetailerDataChangeListener<LiveData<List<Retailer>>> {
 
 
-
     private lateinit var retailerVisitVM: RetailerVisitVM
 
     var list : ArrayList<RetailerVisitData> = ArrayList()
-
-
 
     var distributor: String = ""
     var distributorId: String = ""
@@ -63,20 +60,18 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
     var listBeatsRetailer : ArrayList<Retailer> = ArrayList()
     var listBeatsRetailerFilter : ArrayList<Retailer> = ArrayList()
 
-
     var ctx : Context? = null
 
     lateinit var adapter : RetailerVisitAdapter
-
-    private var latitude : Double = 0.0
-    private var longitude : Double = 0.0
-    private var gpsTracker: GPSTracker? = null
+    private  var latitude : Double = 0.0
+    private  var longitude : Double = 0.0
+    private  var gpsTracker: GPSTracker? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ) : View? {
         retailerVisitVM = ViewModelProvider(this).get(RetailerVisitVM::class.java)
         val root = inflater.inflate(R.layout.retailer_visit, container, false)
 
@@ -315,10 +310,20 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
                         shareLocation(position)
                     }
                     else
+
+
+
                     {
+
+                        Log.e("dfasdasdfas","=============${listBeatsRetailer[position].retailer_name}")
+                        Log.e("dfasdasdfas","=============${listBeatsRetailer[position].mobile}")
+                        Log.e("dfasdasdfas","=============${listBeatsRetailer[position]}")
+                        Log.e("dfasdasdfas","=============${position}")
+
                         val bundle = bundleOf("distributorName" to listBeatsRetailer[position].distributor,
                             "beatName" to listBeatsRetailer[position].beatname,
                             "retailer" to listBeatsRetailer[position].retailer_name,
+                            "phone" to listBeatsRetailer[position].mobile,
                             "retailerId" to listBeatsRetailer[position].retailer_id,
                             "salesman" to listBeatsRetailer[position].client,
                             "dist_id" to listBeatsRetailer[position].dist_id
@@ -729,10 +734,15 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
                 dialog, which ->
             dialog.dismiss()
 
+
+            Log.e("dfasdasdfas","=============${listBeatsRetailer[position].phone}")
+
+
             val bundle = bundleOf(
                 "distributorName" to listBeatsRetailer[position].distributor,
                 "beatName" to listBeatsRetailer[position].beatname,
                 "retailer" to listBeatsRetailer[position].retailer_name,
+                "phone" to listBeatsRetailer[position].mobile,
                 "retailerId" to listBeatsRetailer[position].retailer_id,
                 "salesman" to listBeatsRetailer[position].client,
                 "dist_id" to listBeatsRetailer[position].dist_id
@@ -789,10 +799,14 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
                        Toast.LENGTH_SHORT
                    ).show()
 
+                   Log.e("dfasdasdfas","=============${listBeatsRetailer[position].phone}")
+
+
                    val bundle = bundleOf(
                        "distributorName" to listBeatsRetailer[position].distributor,
                        "beatName" to listBeatsRetailer[position].beatname,
                        "retailer" to listBeatsRetailer[position].retailer_name,
+                       "phone" to listBeatsRetailer[position].mobile,
                        "retailerId" to listBeatsRetailer[position].retailer_id,
                        "salesman" to listBeatsRetailer[position].client,
                        "dist_id" to listBeatsRetailer[position].dist_id
@@ -814,9 +828,13 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
                 dialog, which ->
 
                 dialog.dismiss()
-                 val bundle = bundleOf("distributorName" to listBeatsRetailer[position].distributor,
+
+            Log.e("dfasdasdfas","=============${listBeatsRetailer[position].phone}")
+
+            val bundle = bundleOf("distributorName" to listBeatsRetailer[position].distributor,
                             "beatName" to listBeatsRetailer[position].beatname,
                             "retailer" to listBeatsRetailer[position].retailer_name,
+                            "phone" to listBeatsRetailer[position].mobile,
                             "retailerId" to listBeatsRetailer[position].retailer_id,
                             "salesman" to listBeatsRetailer[position].client,
                             "dist_id" to listBeatsRetailer[position].dist_id

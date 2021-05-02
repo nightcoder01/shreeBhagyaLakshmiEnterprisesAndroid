@@ -7,10 +7,9 @@
     android:layout_height="match_parent"
     tools:context="pathak.creations.sbl.select_distributor.SelectDistributor">
 
-
     <include
         android:id="@+id/topToolbar"
-        layout="@layout/toolbar" />
+        layout="@layout/toolbar"/>
 
     <TextView
         android:id="@+id/tvDistributor"
@@ -46,6 +45,15 @@
 
 
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabSync"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_20sdp"
+        android:src="@drawable/ic_sync_blue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

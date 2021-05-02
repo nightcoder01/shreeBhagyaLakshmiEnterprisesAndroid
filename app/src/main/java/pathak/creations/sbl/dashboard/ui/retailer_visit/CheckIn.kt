@@ -79,6 +79,7 @@ class CheckIn : Fragment(), RetrofitResponse {
     var distributorName = ""
     var beatName = ""
     var retailer = ""
+    var phone = ""
     var retailerId = ""
     var dist_id = ""
     private fun getArgumentData() {
@@ -86,6 +87,7 @@ class CheckIn : Fragment(), RetrofitResponse {
         distributorName =   arguments?.getString("distributorName")!!
         beatName =   arguments?.getString("beatName")!!
         retailer =  arguments?.getString("retailer")!!
+        phone =  arguments?.getString("phone")!!
         retailerId =   arguments?.getString("retailerId")!!
         dist_id =   arguments?.getString("dist_id")!!
 
@@ -164,11 +166,13 @@ class CheckIn : Fragment(), RetrofitResponse {
                                 val bundle = bundleOf("distributorName" to distributorName,
                                     "beatName" to beatName,
                                     "retailer" to retailer,
+                                    "phone" to phone,
                                     "retailerId" to retailerId,
                                     "salesman" to "",
                                     "dist_id" to dist_id
                                 )
 
+                                CommonMethods.hideKeyboard(tvText)
                                 Navigation.findNavController(tvText).navigate(R.id.action_add_sales,bundle)
 
                                Toast.makeText(ctx,msg,Toast.LENGTH_SHORT).show()

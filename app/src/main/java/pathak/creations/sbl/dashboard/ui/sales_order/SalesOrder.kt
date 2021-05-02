@@ -12,10 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.NumberPicker
-import android.widget.PopupWindow
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AlertDialogLayout
 import androidx.fragment.app.Fragment
@@ -225,12 +222,12 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
 
                                     wordViewModel.insertCart(
                                         Cart(
-                                            datetime,
+                                            0,
                                             subList[pos].distIDMain,
                                             subList[pos].description,
                                             subList[pos].price,
                                             subList[pos].customPrice,
-                                            subList[pos].overAllPrice,
+                                            (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
                                             subList[pos].cartItem,
                                             tvBeatName2.text.toString(),
                                             subList[pos].retailerIDName,
@@ -241,7 +238,7 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
                                             subList[pos].code,
                                             subList[pos].customPrice,
                                             subList[pos].price,
-                                            subList[pos].overAllPrice,
+                                            (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
                                             (subList[pos].price.toFloat()*subList[pos].cartItem.toFloat()).toString()
 
                                         )
@@ -266,9 +263,12 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
                             }
                         }
 
-                        override fun valueChanged(pos: Int, str: String) {
-                            subList[pos].customPrice = str
-                            adapter2.notifyItemChanged(pos)                        }
+                        override fun valueChanged(pos: Int) {
+                           /* subList[pos].customPrice = str
+                            adapter2.notifyItemChanged(pos)*/
+                            callCustomPrice(subList,adapter2,pos)
+
+                        }
 
                         override fun clickedSelected(pos: Int, str: String) {
                             if(str=="add")
@@ -363,11 +363,11 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
 
                                                 wordViewModel.insertCart(
                                                     Cart(
-                                                        datetime,
+                                                        0,
                                                         subList[pos].distIDMain,
                                                         subList[pos].description,
                                                         subList[pos].price,
-                                                        subList[pos].customPrice,
+                                                        (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
                                                         subList[pos].overAllPrice,
                                                         subList[pos].cartItem,
                                                         tvBeatName2.text.toString(),
@@ -379,7 +379,7 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
                                                         subList[pos].code,
                                                         subList[pos].customPrice,
                                                         subList[pos].price,
-                                                        subList[pos].overAllPrice,
+                                                        (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
                                                         (subList[pos].price.toFloat()*subList[pos].cartItem.toFloat()).toString()
 
                                                     )
@@ -409,9 +409,11 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
 
                                 }
 
-                                override fun valueChanged(pos: Int, str: String) {
-                                    subList[pos].customPrice = str
-                                    adapter3.notifyItemChanged(pos)
+                                override fun valueChanged(pos: Int) {
+                                   /* subList[pos].customPrice = str
+                                    adapter3.notifyItemChanged(pos)*/
+
+                                    callCustomPrice(subList,adapter3,pos)
                                 }
                                 override fun clickedSelected(pos: Int, str: String) {
                                     if(str=="add")
@@ -505,12 +507,12 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
 
                                                 wordViewModel.insertCart(
                                                     Cart(
-                                                        datetime,
+                                                        0,
                                                         subList[pos].distIDMain,
                                                         subList[pos].description,
                                                         subList[pos].price,
                                                         subList[pos].customPrice,
-                                                        subList[pos].overAllPrice,
+                                                        (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
                                                         subList[pos].cartItem,
                                                         tvBeatName2.text.toString(),
                                                         subList[pos].retailerIDName,
@@ -521,7 +523,7 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
                                                         subList[pos].code,
                                                         subList[pos].customPrice,
                                                         subList[pos].price,
-                                                        subList[pos].overAllPrice,
+                                                        (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
                                                         (subList[pos].price.toFloat()*subList[pos].cartItem.toFloat()).toString()
 
                                                     )
@@ -550,9 +552,11 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
 
                                 }
 
-                                override fun valueChanged(pos: Int, str: String) {
-                                    subList[pos].customPrice = str
+                                override fun valueChanged(pos: Int) {
+                                   /* subList[pos].customPrice = str
                                     adapter3.notifyItemChanged(pos)
+*/
+                                    callCustomPrice(subList,adapter3,pos)
                                 }
 
                                 override fun clickedSelected(pos: Int, str: String) {
@@ -640,6 +644,54 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
 
         dialogBuilderMain.show()
     }
+
+
+    private fun callCustomPrice(
+        subList: ArrayList<SubCat>,
+        adapter2: SubCategaryAdapter,
+        pos: Int
+    ) {
+
+
+        val dialogBuilder = AlertDialog.Builder(ctx)
+        val layout = AlertDialogLayout.inflate(ctx, R.layout.custom_price,null)
+        dialogBuilder.setView(layout)
+
+        val tvSubmit :TextView= layout.findViewById(R.id.tvSubmit)
+        val etEnterPrice : EditText = layout.findViewById(R.id.etEnterPrice)
+
+
+        etEnterPrice.text =   Editable.Factory.getInstance().newEditable(subList[pos].customPrice)
+
+        dialogBuilderMain = dialogBuilder.create()
+        dialogBuilderMain.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialogBuilderMain.setCancelable(false)
+        dialogBuilderMain.setCanceledOnTouchOutside(true)
+
+        tvSubmit.setOnClickListener {
+
+
+            if(subList[pos].price.toDouble() <= etEnterPrice.text.toString().toDouble())
+            {
+                subList[pos].customPrice = etEnterPrice.text.toString()
+                adapter2.notifyDataSetChanged()
+                dialogBuilderMain.dismiss()
+            }
+            else
+            {
+                CommonMethods.alertDialog(
+                    ctx,
+                    "Ptd price cannot be less than Ptr price"
+                )
+            }
+
+
+            //dialogBuilderMain.dismiss()
+        }
+
+        dialogBuilderMain.show()
+    }
+
 
     private fun isValid(): Boolean {
 

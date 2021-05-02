@@ -11,7 +11,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="@dimen/_5sdp"
-            android:paddingBottom="@dimen/_5sdp">
+            >
 
 
             <androidx.cardview.widget.CardView
@@ -43,6 +43,21 @@
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvCategory2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:background="@drawable/round_bg"
+                        android:drawableEnd="@drawable/ic_arrow_drop"
+                        android:hint="@string/select_category_name"
+                        android:maxLength="30"
+                        android:padding="@dimen/_7sdp"
+                        android:textSize="@dimen/_10sdp"
+                        app:layout_constraintEnd_toStartOf="@id/tvDateMain"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
 
             <TextView
@@ -87,6 +102,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/etRetailerName"
                 app:layout_constraintTop_toTopOf="@id/tvDistributor" />
+
 
             <Spinner
                 android:id="@+id/spDistributor"
@@ -156,10 +172,11 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
                 android:text="@string/beat_name2"
+                android:visibility="gone"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/etDate" />
+                app:layout_constraintTop_toBottomOf="@id/tvCategory2" />
 
             <EditText
                 android:id="@+id/etBeatName"
@@ -169,6 +186,7 @@
                 android:background="@null"
                 android:editable="false"
                 android:hint="@string/beat_name2"
+                android:visibility="gone"
                 android:maxLength="30"
 
                 android:singleLine="true"
@@ -203,7 +221,7 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/etBeatName" />
+                app:layout_constraintTop_toBottomOf="@id/tvCategory2" />
 
 
             <EditText
@@ -217,7 +235,6 @@
                 android:hint="@string/retailer_name"
                 android:maxLength="30"
                 android:singleLine="true"
-
                 android:textSize="@dimen/_10sdp"
                 app:layout_constraintBottom_toBottomOf="@id/tvRetailerName"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -335,11 +352,11 @@
 
 
             <TextView
-                android:id="@+id/tvTotalTonnage"
+                android:id="@+id/tvPhone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
-                android:text="@string/total_tonnage"
+                android:text="@string/phone_no"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -347,7 +364,7 @@
 
 
             <EditText
-                android:id="@+id/etTotalTonnage"
+                android:id="@+id/etPhone"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_5sdp"
@@ -357,10 +374,10 @@
                 android:singleLine="true"
                 android:text="@string/_100"
                 android:textSize="@dimen/_10sdp"
-                app:layout_constraintBottom_toBottomOf="@id/tvTotalTonnage"
+                app:layout_constraintBottom_toBottomOf="@id/tvPhone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/etRetailerName"
-                app:layout_constraintTop_toTopOf="@id/tvTotalTonnage" />
+                app:layout_constraintTop_toTopOf="@id/tvPhone" />
 
 
             <TextView
@@ -371,25 +388,12 @@
                 android:text="@string/category"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12sdp"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/etTotalTonnage" />
+                app:layout_constraintTop_toBottomOf="@id/etPhone" />
 
 
-                    <TextView
-                        android:id="@+id/tvCategory2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginEnd="@dimen/_10sdp"
-                        android:background="@drawable/round_bg"
-                        android:drawableEnd="@drawable/ic_arrow_drop"
-                        android:hint="@string/select_category_name"
-                        android:maxLength="30"
-                        android:padding="@dimen/_7sdp"
-                        android:textSize="@dimen/_12sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@id/tvCategory"
-                        app:layout_constraintTop_toBottomOf="@id/tvCategory" />
+
 
 
 
@@ -410,8 +414,7 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:nestedScrollingEnabled="true"
                 app:layout_constraintTop_toBottomOf="@id/cvTop"
-                app:layout_constraintBottom_toBottomOf="parent"
-
+                app:layout_constraintBottom_toTopOf="@id/clCart"
                 />
 
 
@@ -481,6 +484,98 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvLocation" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clCart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorAccent"
+                android:paddingStart="@dimen/_10sdp"
+                android:paddingTop="@dimen/_8sdp"
+                android:paddingEnd="@dimen/_10sdp"
+                android:paddingBottom="@dimen/_8sdp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+
+                >
+
+                <TextView
+                    android:id="@+id/tvCountValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:text="20"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_14sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tvCount"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                    android:id="@+id/tvCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:text="Items"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_14sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/viewCentered"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <View
+                    android:id="@+id/viewCentered"
+                    android:layout_width="1dp"
+                    android:layout_height="0dp"
+                    android:background="@color/white"
+                    app:layout_constraintBottom_toBottomOf="@id/ivCart"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/ivCart"/>
+
+
+                <ImageView
+                    android:id="@+id/ivCart"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:src="@drawable/baseline_keyboard_arrow_right_20"
+                    android:tint="@color/white"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
+
+
+
+                <TextView
+                    android:id="@+id/tvTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_20sdp"
+                    android:text="Total:"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_14sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/tvTotalValue"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                <TextView
+                    android:id="@+id/tvTotalValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:text="1540.00"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_14sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/viewCentered"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

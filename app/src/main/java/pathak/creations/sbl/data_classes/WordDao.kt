@@ -98,7 +98,7 @@ interface WordDao {
     suspend fun deleteAllCart()
 
     @Query("DELETE  FROM cart_table WHERE cartId = :carId")
-    suspend fun deleteCart(carId :String)
+    suspend fun deleteCart(carId :Int)
 
     //@Delete()
     //void delete(Details details);

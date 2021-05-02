@@ -1,17 +1,12 @@
 package pathak.creations.sbl.data_class
 
 import android.text.Editable
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.sub_category.view.*
 import pathak.creations.sbl.R
-import pathak.creations.sbl.common.CommonMethods
 
 class SubCategaryAdapter(var list: List<SubCat>) :
     RecyclerView.Adapter<SubCategaryAdapter.CardsViewHolder>() {
@@ -21,7 +16,7 @@ class SubCategaryAdapter(var list: List<SubCat>) :
 
     interface CardInterface {
         fun clickedSelected(pos: Int,str: String)
-        fun valueChanged(pos: Int,str: String)
+        fun valueChanged(pos: Int)
         fun changeEditMode(pos: Int,editMode: Boolean)
 
     }
@@ -85,7 +80,10 @@ class SubCategaryAdapter(var list: List<SubCat>) :
             }
         }
 
-        holder.itemView.etPriceEditedValue.setOnEditorActionListener(object :TextView.OnEditorActionListener{
+        holder.itemView.etPriceEditedValue.setOnClickListener {
+            clicked.valueChanged(position)
+        }
+        /*holder.itemView.etPriceEditedValue.setOnEditorActionListener(object :TextView.OnEditorActionListener{
             override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                 if(actionId==EditorInfo.IME_ACTION_DONE)
                 {
@@ -93,19 +91,19 @@ class SubCategaryAdapter(var list: List<SubCat>) :
                     return if(list[position].editMode) {
                         //normal
                         val s = holder.itemView.etPriceEditedValue.text.toString()
-                        clicked.valueChanged(position,s)
+                        clicked.valueChanged(position)
                         true
                     }
                     else {
                         val s = list[position].customPrice
-                        clicked.valueChanged(position, s)
+                        clicked.valueChanged(position)
                         Toast.makeText(holder.itemView.etPriceEditedValue.context,"once added can't change , go to My cart to make changes.",Toast.LENGTH_SHORT).show()
                         true
                     }
                 }
                 return false
             }
-        })
+        })*/
 
 
         holder.itemView.tvAddCart.setOnClickListener {

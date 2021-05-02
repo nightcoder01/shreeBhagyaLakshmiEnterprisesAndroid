@@ -121,7 +121,7 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
         repository.deleteAllCart()
     }
 
-    fun deleteCart(cartId: String) = viewModelScope.launch {
+    fun deleteCart(cartId: Int) = viewModelScope.launch {
         repository.deleteCart(cartId)
     }
 
