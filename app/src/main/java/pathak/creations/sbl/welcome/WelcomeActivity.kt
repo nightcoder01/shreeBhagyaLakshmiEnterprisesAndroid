@@ -17,6 +17,8 @@ class WelcomeActivity:AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         welcomeBinding = DataBindingUtil.setContentView(this, R.layout.welcome)
+       
+
         validator = Validator(welcomeBinding)
         welcomeVM = WelcomeVM(this, validator)
         welcomeBinding.welcomeVM = welcomeVM

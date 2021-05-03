@@ -29,6 +29,7 @@
                 android:layout_margin="@dimen/_4sdp"
                 app:cardCornerRadius="@dimen/_25sdp"
                 app:cardElevation="@dimen/_2sdp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -42,6 +43,7 @@
                     android:id="@+id/ivImage"
                     android:layout_width="@dimen/_40sdp"
                     android:layout_height="@dimen/_40sdp"
+                    android:visibility="gone"
                     android:layout_centerInParent="true"
                     android:background="@color/colorAccent"
                     />
@@ -54,7 +56,7 @@
                         android:maxLength="1"
                         android:text=""
                         android:textColor="@color/white"
-                        android:textSize="@dimen/_16sdp"
+                        android:textSize="@dimen/_12sdp"
                         android:textStyle="bold|italic"
                         />
 
@@ -67,6 +69,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_5sdp"
                 android:singleLine="true"
+                android:textSize="@dimen/_10sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/cvImage"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -78,6 +81,7 @@
                 android:layout_margin="@dimen/_5sdp"
                 android:singleLine="true"
                 android:text="@string/price"
+                android:textSize="@dimen/_10sdp"
                 app:layout_constraintStart_toEndOf="@id/cvImage"
                 app:layout_constraintTop_toBottomOf="@id/tvName"/>
 
@@ -87,6 +91,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_5sdp"
                 android:maxLength="6"
+                android:textSize="@dimen/_10sdp"
+
                 android:singleLine="true"
                 app:layout_constraintStart_toEndOf="@id/tvPrice"
                 app:layout_constraintTop_toBottomOf="@id/tvName"/>
@@ -113,7 +119,7 @@
                 android:focusable="false"
                 android:imeOptions="actionDone"
                 android:maxLength="10"
-                android:textSize="@dimen/_10sdp"
+                android:textSize="@dimen/_8sdp"
                 app:layout_constraintStart_toEndOf="@id/cvImage"
                 app:layout_constraintTop_toBottomOf="@id/tvPrice"/>
 
@@ -124,6 +130,8 @@
                 android:layout_marginStart="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:singleLine="true"
+                android:textSize="@dimen/_10sdp"
+
                 android:text="@string/overall_price"
                 app:layout_constraintStart_toEndOf="@id/cvImage"
                 app:layout_constraintTop_toBottomOf="@id/etPriceEditedValue"/>
@@ -135,6 +143,8 @@
                 android:layout_margin="@dimen/_5sdp"
                 android:maxLength="10"
                 android:singleLine="true"
+                android:textSize="@dimen/_10sdp"
+
                 app:layout_constraintStart_toEndOf="@id/tvPriceOverall"
                 app:layout_constraintTop_toBottomOf="@id/etPriceEditedValue"
                 />
@@ -145,9 +155,9 @@
                 android:layout_marginEnd="@dimen/_5sdp"
                 android:background="@drawable/button_background_grey"
                 android:paddingStart="@dimen/_6sdp"
-                android:paddingTop="@dimen/_6sdp"
+                android:paddingTop="@dimen/_4sdp"
                 android:paddingEnd="@dimen/_6sdp"
-                android:paddingBottom="@dimen/_6sdp"
+                android:paddingBottom="@dimen/_4sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/etPriceEditedValue"
                 >
@@ -161,7 +171,7 @@
                     android:maxLength="4"
                     android:text="999"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_8sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -247,7 +257,7 @@
                 android:text="@string/add_to_cart"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_10sdp"
+                android:textSize="@dimen/_8sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 

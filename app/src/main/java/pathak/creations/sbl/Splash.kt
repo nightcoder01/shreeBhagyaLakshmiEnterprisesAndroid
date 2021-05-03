@@ -17,11 +17,7 @@ class Splash : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-
-
         Handler(Looper.getMainLooper()).postDelayed({
-
 
             if (PreferenceFile.retrieveKey(this, CommonKeys.ID) == null) {
                 startActivity(Intent(this, WelcomeActivity::class.java))
@@ -40,8 +36,6 @@ class Splash : AppCompatActivity() {
                 startActivity(Intent(this, DashBoard::class.java))
                 finish()
                     }
-
-
 
             }
 

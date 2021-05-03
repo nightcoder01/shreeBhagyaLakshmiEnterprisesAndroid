@@ -38,7 +38,7 @@ class OrderDetail : Fragment() {
         tvBeatNameValue.text = arguments?.getString("beatName")
         tvRetailerNameValue.text = arguments?.getString("retailerName")
         listOrders = arguments?.getSerializable("listCart") as ArrayList<Cart>
-        tvDetail.text ="You Ordered ${arguments?.getString("count")} items with total price ${arguments?.getString("grandTotal")}."
+        tvDetail.text ="You Ordered ${arguments?.getString("count")} items with total price ₹ ${arguments?.getString("grandTotal")}."
 
         setCartAdapter(listOrders)
 

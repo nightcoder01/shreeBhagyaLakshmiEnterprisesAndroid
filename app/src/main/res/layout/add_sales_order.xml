@@ -495,7 +495,7 @@
                 android:paddingTop="@dimen/_8sdp"
                 android:paddingEnd="@dimen/_10sdp"
                 android:paddingBottom="@dimen/_8sdp"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
 
                 >
@@ -504,24 +504,24 @@
                     android:id="@+id/tvCountValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_15sdp"
+                    android:layout_marginEnd="@dimen/_20sdp"
                     android:text="20"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_14sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/tvCount"
+                    app:layout_constraintEnd_toStartOf="@id/ivCart"
                     app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
                     android:id="@+id/tvCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_20sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
                     android:text="Items"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_14sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/viewCentered"
+                    app:layout_constraintEnd_toStartOf="@id/tvCountValue"
                     app:layout_constraintTop_toTopOf="parent"/>
 
                 <View
@@ -553,24 +553,23 @@
                     android:id="@+id/tvTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_20sdp"
                     android:text="Total:"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_14sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/tvTotalValue"
+                    app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
                     android:id="@+id/tvTotalValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/_15sdp"
+                    android:layout_marginStart="@dimen/_10sdp"
                     android:text="1540.00"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_14sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/viewCentered"
+                    app:layout_constraintStart_toEndOf="@id/tvTotal"
                     app:layout_constraintTop_toTopOf="parent"/>
 
 

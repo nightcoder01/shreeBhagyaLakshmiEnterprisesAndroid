@@ -157,7 +157,7 @@
         android:id="@+id/tvTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_30sdp"
+        android:layout_marginStart="@dimen/_10sdp"
         android:layout_marginBottom="@dimen/_5sdp"
         android:text="Total Amount"
         android:textColor="@color/black"
@@ -165,11 +165,25 @@
         app:layout_constraintBottom_toTopOf="@id/tvGrandTotal"
         app:layout_constraintStart_toStartOf="parent"
         />
+
+
+    <TextView
+        android:id="@+id/tvSymbol1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_3sdp"
+        android:text="₹"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintBottom_toBottomOf="@id/tvTotalValue"
+        app:layout_constraintEnd_toStartOf="@id/tvTotalValue"
+        app:layout_constraintTop_toTopOf="@id/tvTotalValue"
+        />
     <TextView
         android:id="@+id/tvTotalValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/_60sdp"
+        android:layout_marginEnd="@dimen/_20sdp"
         android:layout_marginBottom="@dimen/_5sdp"
         android:text="00"
         android:textColor="@color/black"
@@ -183,7 +197,7 @@
         android:id="@+id/tvGrandTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_30sdp"
+        android:layout_marginStart="@dimen/_10sdp"
         android:layout_marginBottom="@dimen/_10sdp"
         android:text="Grand Total Amount"
         android:textColor="@color/black"
@@ -193,10 +207,23 @@
         />
 
     <TextView
+        android:id="@+id/tvSymbol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_3sdp"
+        android:text="₹"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintBottom_toBottomOf="@id/tvGrandTotalValue"
+        app:layout_constraintEnd_toStartOf="@id/tvGrandTotalValue"
+        app:layout_constraintTop_toTopOf="@id/tvGrandTotalValue"
+        />
+
+    <TextView
         android:id="@+id/tvGrandTotalValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/_60sdp"
+        android:layout_marginEnd="@dimen/_20sdp"
         android:layout_marginBottom="@dimen/_5sdp"
         android:text="00"
         android:textColor="@color/black"
@@ -251,7 +278,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/_10sdp"
             android:paddingBottom="@dimen/_10sdp"
-            android:text="@string/submit"
+            android:text="Place Order"
             android:textAlignment="center"
             android:textColor="@color/white"
             android:textSize="@dimen/_12sdp"

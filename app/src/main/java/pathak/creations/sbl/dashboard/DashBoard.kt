@@ -20,6 +20,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -200,6 +201,35 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
             true
 
         }
+
+
+        navController.addOnDestinationChangedListener(object :NavController.OnDestinationChangedListener{
+            override fun onDestinationChanged(
+                controller: NavController,
+                destination: NavDestination,
+                arguments: Bundle?
+            ) {
+
+                if(destination.label=="Home"){
+                    logOut.isVisible = true
+                    refresh.isVisible = true
+                }
+                else
+                {
+                    logOut.isVisible = false
+                    refresh.isVisible = false
+
+                    if(destination.label=="Add Sales Order")
+                    {
+
+                        locationIs.isVisible = false
+                    }
+                }
+            }
+        })
+
+
+
         return true
     }
     private fun showSettingsAlert() {

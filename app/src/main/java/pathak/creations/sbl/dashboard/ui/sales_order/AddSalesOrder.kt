@@ -618,7 +618,7 @@ class AddSalesOrder : Fragment() {
             }
         }
         tvCountValue.text = count.toString()
-        tvTotalValue.text = price
+        tvTotalValue.text = "₹ $price"
 
         if(count!=0)  clCart.visibility = View.VISIBLE else  clCart.visibility = View.GONE
 
