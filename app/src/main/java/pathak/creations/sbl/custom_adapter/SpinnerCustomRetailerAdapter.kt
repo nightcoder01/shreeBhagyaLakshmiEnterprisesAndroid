@@ -3,6 +3,7 @@ package pathak.creations.sbl.custom_adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.spinner_dropdown_item2.view.*
 import pathak.creations.sbl.R
@@ -42,6 +43,15 @@ RecyclerView.Adapter<SpinnerCustomRetailerAdapter.CardsViewHolder>() {
 
         holder.itemView.tvText.text = listShort[position].retailer_name
         holder.itemView.setOnClickListener { clicked.clickedSelected(position) }
+        if(listShort[position].todayDone)
+        {
+            holder.itemView.clRetailer.setBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.selectedGreen))
+        }
+        else
+        {
+           // holder.itemView.clRetailer.setBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.white))
+        }
+
     }
 
 

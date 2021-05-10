@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.retailer_item.view.*
 import pathak.creations.sbl.R
@@ -53,6 +54,17 @@ class RetailerVisitAdapter(var list: List<Retailer>) :
         holder.itemView.tvAdd.setOnClickListener { clicked.clickedSelected(position,"add") }
        // holder.itemView.tvAreaName.setOnClickListener { clicked.clickedSelected(position,"remarks") }
        // holder.itemView.tvRemarks.setOnClickListener { clicked.clickedSelected(position,"remarks") }
+
+
+        if(list[position].todayDone)
+        {
+            holder.itemView.clRetailer.setBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.selectedGreen))
+        }
+        else
+        {
+            // holder.itemView.clRetailer.setBackgroundColor(ContextCompat.getColor(holder.itemView.context,R.color.white))
+        }
+
     }
 
 

@@ -534,6 +534,7 @@ class SelectDistributor : AppCompatActivity(), RetrofitResponse {
                                         , dataObj.getString("sno")
                                         , dataObj.getString("latitude")
                                         , dataObj.getString("longitude")
+                                        , false
                                     )
                                 )
                             }

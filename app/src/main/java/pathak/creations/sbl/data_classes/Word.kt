@@ -34,8 +34,8 @@ import java.io.Serializable
              @ColumnInfo(name = "classification")val classification : String,@ColumnInfo(name = "retailer_type")val retailer_type : String,
              @ColumnInfo(name = "dvisit")val dvisit : String,@ColumnInfo(name = "cperson")val cperson : String,
              @ColumnInfo(name = "email")val email : String,@ColumnInfo(name = "gstin")val gstin : String,
-             @ColumnInfo(name = "sno")val sno : String,@ColumnInfo(name = "latitude")val latitude : String,
-             @ColumnInfo(name = "longitude")val longitude : String
+             @ColumnInfo(name = "sno")val sno : String,@ColumnInfo(name = "latitude")val latitude : String
+                ,@ColumnInfo(name = "longitude")val longitude : String ,@ColumnInfo(name = "todayDone")val todayDone : Boolean
             )
 
 

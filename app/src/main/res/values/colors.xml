@@ -10,6 +10,7 @@
 
 
     <color name="iconBackground">#F7F7F7</color>
+    <color name="selectedGreen">#7EDA82</color>
     <color name="black">#000000</color>
     <color name="grey">#7f7f7f</color>
     <color name="grey2">#E9E8E8</color>

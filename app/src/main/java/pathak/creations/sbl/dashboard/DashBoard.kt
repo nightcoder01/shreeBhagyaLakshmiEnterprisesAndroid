@@ -576,7 +576,7 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
                                         , dataObj.getString("gstin")
                                         , dataObj.getString("sno")
                                         , dataObj.getString("latitude")
-                                        , dataObj.getString("longitude")
+                                        , dataObj.getString("longitude"),false
                                     )
                                 )
                             }

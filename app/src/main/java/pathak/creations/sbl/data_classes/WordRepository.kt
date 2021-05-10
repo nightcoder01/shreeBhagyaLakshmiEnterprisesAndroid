@@ -108,6 +108,13 @@ class WordRepository(private val wordDao: WordDao) {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
+    suspend fun updateRetailerColor(retailerName: String,retailerDone: Boolean) {
+        wordDao.updateRetailerColor(retailerName,retailerDone)
+    }
+
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
     suspend fun insertCategories(categories: Categories) {
         wordDao.insertCategories(categories)
     }

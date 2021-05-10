@@ -77,6 +77,12 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
     fun updateRetailer(retailer: Retailer) = viewModelScope.launch {
         repository.updateRetailer(retailer)
     }
+
+    fun updateRetailerColor(retailerName: String,retailerDone: Boolean) = viewModelScope.launch {
+        repository.updateRetailerColor(retailerName,retailerDone)
+    }
+
+
     fun deleteAllRetailer() = viewModelScope.launch {
         repository.deleteAllRetailer()
     }
