@@ -58,13 +58,15 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
 
     override fun RetailerDataChange(data: LiveData<List<Retailer>>) {
         data.observe(viewLifecycleOwner, Observer { retailer ->
-            // Update the cached copy of the words in the adapter.
-            Log.e("callBeatRetailer", "==33===${retailer.size}===")
 
             retailer?.let {
                 setRetailerAdapter(it)
 
             }
+
+
+
+
         })
     }
 
@@ -177,7 +179,7 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
                 view.text =listBeats[position].beatname
                 popupWindow!!.dismiss()
 
-                callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
+                callBeatRetailer(listBeats[position].beatname)
             }
 
 
@@ -204,7 +206,7 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
 
                             view.text =listBeats[position].beatname
                             popupWindow!!.dismiss()
-                            callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
+                            callBeatRetailer(listBeats[position].beatname)
                         }
                     })
                 }
@@ -229,7 +231,7 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
 
                             view.text =list[position].beatname
                             popupWindow!!.dismiss()
-                            callBeatRetailer(list[position].dist_id,list[position].beatname)
+                            callBeatRetailer(list[position].beatname)
                         }
 
                     })
@@ -249,15 +251,11 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
 
     }
 
-    private fun callBeatRetailer(distId: String, beatname: String) {
+    private fun callBeatRetailer(beatname: String) {
         try {
 
 
-            Log.e("callBeatRetailer", "=====$distId===$beatname")
             wordViewModel.getBeatRetailer(beatname, this)
-
-
-
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -269,8 +267,7 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
+        getArgumentedData()
         tvContinueShopping.setOnClickListener { (ctx as Activity).onBackPressed() }
 
         totalLive.observe(viewLifecycleOwner, Observer {
@@ -320,6 +317,35 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
         })
 */
 
+    }
+
+    private fun getArgumentedData() {
+
+        if(arguments!=null) {
+
+            tvBeatName.text =arguments?.getString("beatName")
+
+
+            Log.e("fasdfsdfdfasfa","====${arguments?.getString("beatName")}========")
+
+
+            val beatName :String= arguments?.getString("beatName")!!
+            val retailer :String= arguments?.getString("retailer")!!
+            val retailerId :String= arguments?.getString("retailerId")!!
+
+            Log.e("fasdfsdfdfasfa","====${arguments?.getString("beatName")}===$retailer===$retailerId=====")
+            Log.e("fasdfsdfdfasfa","====$beatName===$retailer===$retailerId=====")
+
+            callBeatRetailer(beatName)
+
+
+            tvDistributor2.text = retailer
+            listCart.clear()
+            wordViewModel.getCartFromDist(retailerId, this@MyCart)
+
+
+           // = Editable.Factory.getInstance().newEditable(arguments?.getString("retailer"))
+        }
     }
 
     private fun valid(): Boolean {

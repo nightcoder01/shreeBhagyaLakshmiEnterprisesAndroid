@@ -9,23 +9,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.PopupWindow
-import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
-import kotlinx.android.synthetic.main.custom_spinner.view.*
 import kotlinx.android.synthetic.main.retailer_master.*
 import pathak.creations.sbl.AppController
 import pathak.creations.sbl.R
 import pathak.creations.sbl.common.CommonKeys
 import pathak.creations.sbl.common.CommonMethods
 import pathak.creations.sbl.common.PreferenceFile
-import pathak.creations.sbl.custom_adapter.SpinnerCustomDistributorAdapter
 import pathak.creations.sbl.data_class.BeatRetailerData
 import pathak.creations.sbl.data_classes.Distributor
 import pathak.creations.sbl.data_classes.Retailer
@@ -198,96 +194,12 @@ class RetailerMaster : Fragment(){
 
         callDistRetailer(PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_DISTRIBUTOR)!!)
 
-        /*tvDistributor2.setOnClickListener {
-            openDistributorShort(tvDistributor2,list)
-        }*/
+
     }
 
     var popupWindow: PopupWindow? = null
 
-    private fun openDistributorShort(
-        view: TextView,
-        list: List<Distributor>
 
-        ) {
-        val inflater =
-            view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val customView = inflater.inflate(R.layout.custom_spinner, null)
-
-        popupWindow = PopupWindow(
-            customView,
-            view.width,
-            WindowManager.LayoutParams.WRAP_CONTENT
-        )
-
-        val adapter = SpinnerCustomDistributorAdapter(list)
-        customView.rvSpinner.adapter = adapter
-        adapter.onClicked(object : SpinnerCustomDistributorAdapter.CardInterface {
-            override fun clickedSelected(position: Int) {
-
-                view.hint = list[position].distName
-                popupWindow!!.dismiss()
-                // callBeatList(listDistId[position])
-                callDistRetailer(list[position].distID)
-                // callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
-            }
-        })
-
-        customView.etSearch.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-                if (s.isNullOrBlank()) {
-                    val adapter2 = SpinnerCustomDistributorAdapter(list)
-                    customView.rvSpinner.adapter = adapter2
-                    adapter2.onClicked(object : SpinnerCustomDistributorAdapter.CardInterface {
-                        override fun clickedSelected(position: Int) {
-
-                            view.hint = list[position].distName
-                            popupWindow!!.dismiss()
-                            //callBeatList(listDistId[position])
-                            callDistRetailer(list[position].distID)
-
-                            //  callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
-                        }
-                    })
-                } else {
-
-                    val list2: ArrayList<Distributor> = ArrayList()
-
-                    for (i in list.indices) {
-                        if (list[i].distName.toLowerCase().contains(s.toString().toLowerCase(),false)) {
-                            list2.add(list[i])
-
-                        }
-                    }
-
-
-                    val adapter2 = SpinnerCustomDistributorAdapter(list2)
-                    customView.rvSpinner.adapter = adapter2
-                    adapter2.onClicked(object : SpinnerCustomDistributorAdapter.CardInterface {
-                        override fun clickedSelected(position: Int) {
-
-                            view.hint = list2[position].distName
-                            popupWindow!!.dismiss()
-                            callDistRetailer(list2[position].distID)
-
-                        } }) } }
-        })
-
-        popupWindow!!.isOutsideTouchable = true
-        popupWindow!!.showAsDropDown(view)
-        popupWindow!!.isFocusable = true
-        popupWindow!!.update()
-
-    }
 
 
     private fun setRetailerAdapter(listRetailers: List<Retailer>) {

@@ -63,28 +63,6 @@ class EditRetailer : Fragment(), RetrofitResponse {
         distId=  arguments?.getString("dist_id")!!
         distributor=  arguments?.getString("distributor")!!
 
-
-
-
-
-        /*val bundle = bundleOf("dist_id" to listRetailers[position].dist_id,
-            "distributor" to listRetailers[position].distributor,
-            "retailer_id" to listRetailers[position].retailer_id,
-            "retailer_name" to listRetailers[position].retailer_name,
-            "beatName" to listRetailers[position].beatname,
-            "address" to listRetailers[position].address,
-            "mobile" to listRetailers[position].mobile,
-            "areaname" to listRetailers[position].areaname,
-            "state" to listRetailers[position].state,
-            "gstin" to listRetailers[position].gstin,
-            "classification" to listRetailers[position].classification,
-            "retailer_type" to listRetailers[position].retailer_type
-        )*/
-
-
-
-
-
         tvDistributor2.text = distributor
         etRetailerName.text =Editable.Factory.getInstance().newEditable(arguments?.getString("retailer_name")!!)
         etRetailerId.text =Editable.Factory.getInstance().newEditable(arguments?.getString("retailer_id")!!)

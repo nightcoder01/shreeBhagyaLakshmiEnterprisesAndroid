@@ -1,9 +1,11 @@
 package pathak.creations.sbl.dashboard.ui.retailer_master
 
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.retailer_master_item.view.*
 import pathak.creations.sbl.R
@@ -39,14 +41,18 @@ class RetailerAdapter(var list: List<Retailer>) :
         return position
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: CardsViewHolder, position: Int) {
 
-        holder.tvDate.text = list[position].date
+       /// val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH)
+      //  val date = LocalDate.parse(list[position].date, formatter)
+
+        holder.tvDate.text = list[position].date  //list[position].date
         holder.itemView.tvBeat.text = list[position].beatname
         holder.itemView.tvDistributor.text = list[position].distributor
         holder.itemView.tvRetailer.text = list[position].retailer_name
-        holder.itemView.tvRemarks.text = list[position].note
-        holder.itemView.tvPhoneValue.text = list[position].phone
+        holder.itemView.tvRemarks.text =if(list[position].gstin == "null") "" else  list[position].gstin
+        holder.itemView.tvPhoneValue.text = list[position].mobile
 
         holder.itemView.ivDelete.setOnClickListener { clicked.clickedSelected(position,"delete") }
         holder.itemView.ivEdit.setOnClickListener { clicked.clickedSelected(position,"edit") }

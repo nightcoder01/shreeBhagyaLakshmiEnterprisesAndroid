@@ -148,6 +148,7 @@
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:text="@string/category"
+                    android:visibility="gone"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_12sdp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -164,6 +165,7 @@
                     android:drawableEnd="@drawable/ic_arrow_drop"
                     android:hint="@string/select_category_name"
                     android:maxLength="30"
+                    android:visibility="gone"
                     android:padding="@dimen/_7sdp"
                     android:textSize="@dimen/_12sdp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -190,6 +192,26 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/cvTop"
             />
+
+        <TextView
+            android:id="@+id/tvOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_25sdp"
+            android:layout_marginEnd="@dimen/_6sdp"
+            android:background="@drawable/button_shape"
+            android:elevation="@dimen/_10sdp"
+            android:paddingStart="@dimen/_35sdp"
+            android:paddingTop="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_35sdp"
+            android:paddingBottom="@dimen/_8sdp"
+            android:text="Order"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cvTop"/>
 
 
         <CheckBox

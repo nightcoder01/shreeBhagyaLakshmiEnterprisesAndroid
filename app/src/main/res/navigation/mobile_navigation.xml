@@ -18,7 +18,19 @@
         android:id="@+id/nav_sales_order"
         android:name="pathak.creations.sbl.dashboard.ui.sales_order.SalesOrder"
         android:label="@string/menu_sales_order"
-        tools:layout="@layout/sales_order" />
+        tools:layout="@layout/sales_order" >
+
+        <action
+            android:id="@+id/action_sales_order"
+            app:destination="@id/addSalesOrder"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/nav_sales_order"
+            />
+
+    </fragment>
 
     <fragment
         android:id="@+id/nav_retailer_master"

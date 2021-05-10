@@ -119,26 +119,6 @@ class AddRetailer : Fragment(), RetrofitResponse {
             return false
         }
 
-        if(tvClassification2.text.isEmpty())
-        {
-
-            CommonMethods.alertDialog(ctx, "Please select a Classification")
-            return false
-        }
-
-        if(tvRetailerType2.text.isEmpty())
-        {
-
-            CommonMethods.alertDialog(ctx, "Please select a Retailer Type")
-            return false
-        }
-
-        if(tvBeatName2.text.isEmpty())
-        {
-
-            CommonMethods.alertDialog(ctx, "Please select a Beat Name")
-            return false
-        }
 
         if(etRetailerName.text.isEmpty())
         {
@@ -151,6 +131,14 @@ class AddRetailer : Fragment(), RetrofitResponse {
         {
 
             CommonMethods.alertDialog(ctx, "Please enter Retailer ID")
+            return false
+        }
+
+
+        if(tvBeatName2.text.isEmpty())
+        {
+
+            CommonMethods.alertDialog(ctx, "Please select a Beat Name")
             return false
         }
 
@@ -188,6 +176,21 @@ class AddRetailer : Fragment(), RetrofitResponse {
             CommonMethods.alertDialog(ctx, "Please enter GSTIN")
             return false
         }
+
+        if(tvClassification2.text.isEmpty())
+        {
+
+            CommonMethods.alertDialog(ctx, "Please select a Classification")
+            return false
+        }
+
+        if(tvRetailerType2.text.isEmpty())
+        {
+
+            CommonMethods.alertDialog(ctx, "Please select a Retailer Type")
+            return false
+        }
+
 
         return true
     }
@@ -256,7 +259,7 @@ class AddRetailer : Fragment(), RetrofitResponse {
 
 
 
-    fun openPopRetailerType(
+    private fun openPopRetailerType(
         view: TextView,
         listRetailerType: ArrayList<String>
     ) {
@@ -268,7 +271,7 @@ class AddRetailer : Fragment(), RetrofitResponse {
         popupWindow = PopupWindow(
             customView,
             view.width,
-            WindowManager.LayoutParams.WRAP_CONTENT
+            600
         )
 
         val adapter = SpinnerCustomCategoryAdapter(listRetailerType)
@@ -351,7 +354,22 @@ class AddRetailer : Fragment(), RetrofitResponse {
 
         popupWindow!!.isOutsideTouchable = true
 
-        popupWindow!!.showAsDropDown(view)
+        val v = popupWindow!!.contentView
+
+        v.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+
+        val abc = IntArray(2)
+        view.getLocationInWindow(abc)
+
+        val height2 = view.context.resources.displayMetrics.heightPixels
+
+
+        popupWindow!!.isOutsideTouchable = true
+
+        val measureHeight = 600
+
+
+        popupWindow!!.showAsDropDown(view,0, if((height2-abc[1])<500){-(measureHeight+(view.height*2))}else{0}    )
         popupWindow!!.isFocusable = true
         popupWindow!!.update()
 

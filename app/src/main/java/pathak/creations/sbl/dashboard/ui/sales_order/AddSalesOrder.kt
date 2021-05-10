@@ -15,6 +15,7 @@ import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AlertDialogLayout
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -129,7 +130,21 @@ class AddSalesOrder : Fragment() {
             Toast.LENGTH_SHORT
         ).show()
 
-        Navigation.findNavController(clCart).navigate(R.id.action_addCart)
+
+        val bundle = bundleOf(
+            "beatName" to etBeatName.text.toString(),
+            "retailer" to etRetailerName.text.toString(),
+            "retailerId" to retailerIDMain
+        )
+
+
+
+
+        Log.e("gdfgdfsgsdfgdsfg","=====${etBeatName.text}===${etRetailerName.text}===${retailerIDMain}")
+
+
+
+        Navigation.findNavController(clCart).navigate(R.id.action_addCart,bundle)
 
 
     }

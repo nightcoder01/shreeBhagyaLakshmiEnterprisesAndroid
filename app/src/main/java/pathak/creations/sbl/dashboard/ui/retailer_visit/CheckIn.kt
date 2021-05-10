@@ -60,11 +60,6 @@ class CheckIn : Fragment(), RetrofitResponse {
     private fun valid(): Boolean {
 
         return when {
-            !rbBuySbl.isChecked && !rbNoOrder.isChecked -> {
-                CommonMethods.alertDialog(ctx,"Please select an option.")
-                false
-
-            }
 
             etRemarks.text.isEmpty() -> {
                 CommonMethods.alertDialog(ctx,"Please enter remarks.")

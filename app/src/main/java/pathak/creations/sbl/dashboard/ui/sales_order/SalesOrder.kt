@@ -15,11 +15,13 @@ import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AlertDialogLayout
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.custom_spinner.view.*
 import kotlinx.android.synthetic.main.sales_order.*
 import pathak.creations.sbl.AppController
@@ -76,6 +78,7 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
 
     var retailerIDMain = ""
     var retailerIDName = ""
+    var phone = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -97,7 +100,7 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
          distIDName = PreferenceFile.retrieveKey(view.context,CommonKeys.SELECTED_DISTRIBUTOR)!!
 
 
-        tvDateMain.text = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        tvDateMain.text = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
 
         setDistributor()
 
@@ -111,6 +114,40 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
 
             }
         })
+
+
+        tvOrder.setOnClickListener {
+            if(valid()){
+
+                val bundle = bundleOf("distributorName" to tvDistributor2.text,
+                    "beatName" to tvBeatName2.text,
+                    "retailer" to retailerIDName,
+                    "phone" to phone,
+                    "retailerId" to retailerIDMain,
+                    "salesman" to "",
+                    "dist_id" to distIDMain
+                )
+
+                CommonMethods.hideKeyboard(tvOrder)
+                Navigation.findNavController(tvOrder).navigate(R.id.action_sales_order,bundle)
+            }
+        }
+    }
+
+    private fun valid(): Boolean {
+
+        if(tvBeatName2.text.isNullOrEmpty())
+        {
+           CommonMethods.alertDialog(ctx,"please select Beat Name.")
+            return false
+        }
+       else if(tvRetailer2.text.isNullOrEmpty())
+        {
+            CommonMethods.alertDialog(ctx,"please select Retailer Name.")
+            return false
+        }
+
+        return true
     }
 
     private fun setDistributor() {
@@ -167,9 +204,9 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
 
 
     private fun setCategories(listCategories: List<Categories>) {
-        tvCategory2.setOnClickListener {
+       /* tvCategory2.setOnClickListener {
             openCategoryShort(tvCategory2,listCategories)
-        }
+        }*/
     }
 
     private fun openCategoryShort(view: TextView, listCategories: List<Categories>)
@@ -885,8 +922,8 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
 
                 retailerIDMain =listBeatsRetailer[position].retailer_id
                 retailerIDName =listBeatsRetailer[position].retailer_name
+                phone =listBeatsRetailer[position].mobile
 
-               // callCategory(listBeatsRetailer[position].retailer_id)
             }
 
 
@@ -915,9 +952,8 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
                             popupWindow!!.dismiss()
                             retailerIDMain =listBeatsRetailer[position].retailer_id
                             retailerIDName =listBeatsRetailer[position].retailer_name
+                            phone =listBeatsRetailer[position].mobile
 
-                          //  callCategory(listBeatsRetailer[position].retailer_id)
-                          //  callBeatRetailer(listBeatsRetailer[position].dist_id,listBeats[position].beatname)
                         }
 
 
@@ -928,7 +964,7 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
 
                     val list : ArrayList<Retailer> = ArrayList()
 
-                    for(i in 0 until listBeatsRetailer.size)
+                    for(i in listBeatsRetailer.indices)
                     {
                         if(listBeatsRetailer[i].retailer_name.toLowerCase().contains(s.toString().toLowerCase(),false))
                         {
@@ -948,8 +984,8 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
 
                             retailerIDMain =list[position].retailer_id
                             retailerIDName =list[position].retailer_name
-                          //  callCategory(listBeatsRetailer[position].retailer_id)
-                            //callBeatRetailer(list[position].dist_id,list[position].beatname)
+                            phone =list[position].mobile
+
                         }
 
 
