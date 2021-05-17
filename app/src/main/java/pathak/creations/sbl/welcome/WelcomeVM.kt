@@ -26,6 +26,7 @@ class WelcomeVM(
     fun loginClick(view: View) {
         if (validator.validate()) {
 
+            CommonMethods.hideKeyboard(view)
             callLogin(view)
 
             //   view.context.startActivity(Intent(view.context, DashBoard::class.java))
@@ -85,10 +86,14 @@ class WelcomeVM(
                     try {
 
                         val json = JSONObject(response)
+                        Log.e("LOGIN_CODE","======$json")
+
                         val status = json.optBoolean("status")
+
+
                         val msg = json.getString("message")
-                        val data = json.getJSONObject("data")
                         if (status) {
+                            val data = json.getJSONObject("data")
 
                             val userData = data.getJSONObject("user")
 
@@ -167,6 +172,8 @@ class WelcomeVM(
                             )
 
                         } else {
+
+
                             CommonMethods.alertDialog(context, msg)
                         }
 

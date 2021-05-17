@@ -2,10 +2,7 @@ package pathak.creations.sbl.data_classes
 
 import androidx.lifecycle.*
 import kotlinx.coroutines.launch
-import pathak.creations.sbl.interfaces.CartDataChangeListener
-import pathak.creations.sbl.interfaces.DataChangeListener
-import pathak.creations.sbl.interfaces.OrderDataChangeListener
-import pathak.creations.sbl.interfaces.RetailerDataChangeListener
+import pathak.creations.sbl.interfaces.*
 
 class WordViewModel(private val repository: WordRepository) : ViewModel() {
 
@@ -158,6 +155,35 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
 
     fun deleteAllOrders() = viewModelScope.launch {
         repository.deleteAllOrders()
+    }
+
+    //transactions
+
+    val allTransactions: LiveData<List<Transactions>> = repository.allTransactions.asLiveData()
+
+
+    fun getTransactionsFromDist(retailer_code: String, listener: TransactionsDataChangeListener<LiveData<List<Transactions>>>) {
+        viewModelScope.launch {
+            listener.TransactionDataChange(repository.getTransactionsFromDist(retailer_code).asLiveData())
+        }
+    }
+
+    fun getTransactionsFromRetailer(retailerId: String, listener: TransactionsDataChangeListener<LiveData<List<Transactions>>>) {
+        viewModelScope.launch {
+            listener.TransactionDataChange(repository.getTransactionsFromRetailer(retailerId).asLiveData())
+        }
+    }
+
+    fun insertTransactions(transactions: Transactions) = viewModelScope.launch {
+        repository.insertTransactions(transactions)
+    }
+
+    fun updateTransactions(transactions: Transactions) = viewModelScope.launch {
+        repository.updateTransactions(transactions)
+    }
+
+    fun deleteAllTransactions() = viewModelScope.launch {
+        repository.deleteAllTransactions()
     }
 
 }

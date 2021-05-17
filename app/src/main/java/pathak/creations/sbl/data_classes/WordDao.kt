@@ -132,4 +132,29 @@ interface WordDao {
     suspend fun deleteAllOrders()
 
 
+
+    //transactions
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertTransactions(trans: Transactions)
+
+
+    @Update
+    suspend fun updateTransactions(trans: Transactions)
+
+    @Query("SELECT * FROM transaction_table ORDER BY id ASC ")
+    fun getTransactionsList(): Flow<List<Transactions>>
+
+
+    @Query("SELECT * FROM transaction_table  WHERE distributorID = :vendorId ORDER BY id ASC ")
+    fun getTransactionsFromDist(vendorId :String): Flow<List<Transactions>>
+
+    @Query("SELECT * FROM transaction_table  WHERE retailerId = :retailerId ORDER BY id ASC ")
+    fun getTransactionsFromRetailer(retailerId :String): Flow<List<Transactions>>
+
+
+
+    @Query("DELETE FROM transaction_table")
+    suspend fun deleteAllTransactions()
+
+
 }

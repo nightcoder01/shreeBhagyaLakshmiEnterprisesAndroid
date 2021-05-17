@@ -51,11 +51,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
     CartDataChangeListener<LiveData<List<Cart>>>, RetrofitResponse,
     RetailerDataChangeListener<LiveData<List<Retailer>>> {
 
-
-
-
-
-
     override fun RetailerDataChange(data: LiveData<List<Retailer>>) {
         data.observe(viewLifecycleOwner, Observer { retailer ->
 
@@ -90,15 +85,13 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
         })
     }
 
-
-
     var totalMute = MutableLiveData<String>().apply {
         value = ""
     }
     val totalLive: LiveData<String> = totalMute
 
-
-
+    var size = ""
+    var transactionNo = ""
 
     private lateinit var myCartVM: MyCartVM
 
@@ -121,7 +114,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
         return root
 
     }
-
 
     private fun callBeatList(distID: String?) {
         try {
@@ -146,7 +138,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
         })
     }
 
-
     private fun setBeatAdapter(listBeats: List<Beat>) {
 
         tvBeatName.setOnClickListener {
@@ -154,7 +145,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
         }
 
     }
-
 
     fun openPopShortBy(
         view: TextView,
@@ -305,18 +295,18 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
             }
         })
 
-        //set live data observer
-       /* wordViewModel.allRetailer.observe(viewLifecycleOwner, Observer { retail ->
-            // Update the cached copy of the words in the adapter.
+        wordViewModel.allOrders.observe(viewLifecycleOwner, Observer { dist ->
+             size = (dist.size+1).toString()
 
-            retail?.let {
+            val dNow = Date()
+            val ft = SimpleDateFormat("yyyy")
+            val year = ft.format(dNow)
 
-                setRetailerAdapter(it)
+            size = if(size.length!=2){"000$size"}else{"00$size"}
+            transactionNo = "SO/${PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_DISTRIBUTOR)}/$year/$size"
+            tvTransactionValue.text = transactionNo
 
-            }
         })
-*/
-
     }
 
     private fun getArgumentedData() {
@@ -379,100 +369,117 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
     private fun callAddCart() {
         try {
 
-            if (CommonMethods.isNetworkAvailable(ctx)) {
 
-                val jsonMain = JSONObject()
+            val jsonMain = JSONObject()
+
+            val jsonArray = JSONArray()
+
+            val json = JSONObject()
+
+            val dNow = Date()
+            val ft = SimpleDateFormat("yyMMddhhmmssMs")
+            val datetime = ft.format(dNow)
+            val year = SimpleDateFormat("yyyy").format(dNow)
+
+            for(i in 0 until listCart.size) {
+
+                Log.e("sadfsdfasd","=======${listCart[i].distID}====$year===$size=")
+
+                json.put("dist_code", listCart[i].distID)
+                json.put("dist", listCart[i].dist_name)
+                json.put("retailer_code", listCart[i].retailer_code)
+                json.put("retailer", listCart[i].retailer_name)
+                json.put("beatname", listCart[i].beatName)
+                json.put("catgroup", listCart[i].cat_group)
+                json.put("category", listCart[i].category)
+                json.put("category_code", listCart[i].cat_code)
+                json.put("category_description", listCart[i].name)
+                json.put("qty", listCart[i].itemCount)
+                json.put("ptr_price", listCart[i].ptr_price)
+                json.put("ptd_price", listCart[i].ptd_price)
+                json.put("total_ptr_price", listCart[i].overAllPrice)
+                json.put("total_ptd_price", listCart[i].ptd_total)
+
+                //Ex: SO/0197/2021/0001(invoice no)
+                //
+                //SO is common for all invoice (salesOrder) and 0197 Is the distrbutor no or vendor no and 2021 is
+                // fanatical year and in last is the no that increment with last bill no.
 
 
-                val jsonArray = JSONArray()
 
-                val json = JSONObject()
-
-                val dNow = Date()
-                val ft = SimpleDateFormat("yyMMddhhmmssMs")
-                val datetime = ft.format(dNow)
-
-
-
-                for(i in 0 until listCart.size) {
-
-                    Log.e("dsfafdasf","========${listCart[i].overAllPrice}")
-                    Log.e("dsfafdasf","========${listCart[i].overAllPrice}")
-
-
-                    json.put("dist_code", listCart[i].distID)
-                    json.put("dist", listCart[i].dist_name)
-                    json.put("retailer_code", listCart[i].retailer_code)
-                    json.put("retailer", listCart[i].retailer_name)
-                    json.put("beatname", listCart[i].beatName)
-                    json.put("catgroup", listCart[i].cat_group)
-                    json.put("category", listCart[i].category)
-                    json.put("category_code", listCart[i].cat_code)
-                    json.put("category_description", listCart[i].name)
-                    json.put("qty", listCart[i].itemCount)
-                    json.put("ptr_price", listCart[i].ptr_price)
-                    json.put("ptd_price", listCart[i].ptd_price)
-                    json.put("total_ptr_price", listCart[i].overAllPrice)
-                    json.put("total_ptd_price", listCart[i].ptd_total)
-
-
-                    wordViewModel.insertOrders(
-                        Orders(datetime+i
-                            ,""
-                            ,""
-                            ,""
-                            ,""
-                            ,""
-                            ,""
-                            ,listCart[i].distID
-                            ,listCart[i].dist_name
-                            ,listCart[i].retailer_name
-                            ,listCart[i].retailer_code
-                            ,listCart[i].beatName
-                            ,""
-                            ,listCart[i].cat_group
-                            ,listCart[i].category
-                            ,listCart[i].cat_code
-                            ,listCart[i].name
-                            ,listCart[i].itemCount
-                            ,""
-                            ,listCart[i].overAllPrice
-                            ,""
-                            ,""
-                            ,""
-                            ,""
-                            ,""
-                            ,""
-                            ,""
-                            ,""
-                            ,""
-                            ,""
-                            ,""
-                            ,""
-                            ,""
-                            ,""
-                            ,""
-                            ,""
-                            ,""
-                            ,""
-                            ,""
-                            ,listCart[i].ptr_price
-                            ,listCart[i].ptd_price
-                            ,""
-                            ,""
-                            ,""
-                        )
+                wordViewModel.insertOrders(
+                    Orders(datetime+i
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,transactionNo
+                        ,""
+                        ,listCart[i].distID
+                        ,listCart[i].dist_name
+                        ,listCart[i].retailer_name
+                        ,listCart[i].retailer_code
+                        ,listCart[i].beatName
+                        ,""
+                        ,listCart[i].cat_group
+                        ,listCart[i].category
+                        ,listCart[i].cat_code
+                        ,listCart[i].name
+                        ,listCart[i].itemCount
+                        ,""
+                        ,listCart[i].overAllPrice
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,listCart[i].ptr_price
+                        ,listCart[i].ptd_price
+                        ,""
+                        ,""
+                        ,""
                     )
+                )
+            }
 
-                }
+            wordViewModel.insertTransactions(
+                Transactions(
+                0,
+                    transactionNo,
+                    PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_DISTRIBUTOR)!!,
+                    PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_DISTRIBUTOR)!!,
+                    listCart[0].retailer_code,
+                    listCart[0].retailer_name,
+                    listCart[0].beatName,
+                    listCart.size.toString(),
+                    tvTotalValue.text.toString()
+            ))
 
 
-                wordViewModel.updateRetailerColor(tvDistributor2.text.toString(),true)
 
-                jsonArray.put(json)
-                jsonMain.put("items",jsonArray)
+            wordViewModel.updateRetailerColor(tvDistributor2.text.toString(),true)
 
-                Log.e("fasdfasfdfsd",jsonMain.toString())
+            jsonArray.put(json)
+            jsonMain.put("items",jsonArray)
+
+            Log.e("fasdfasfdfsd",jsonMain.toString())
+
+
+            if (CommonMethods.isNetworkAvailable(ctx)) {
 
                 RetrofitService(
                     ctx,
@@ -482,12 +489,33 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
                     jsonMain,2
                 ).callService(true, PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!)
 
+            }
+            else {
 
-            } else {
-                CommonMethods.alertDialog(
-                    ctx,
-                    getString(R.string.checkYourConnection)
+                for(i in 0 until listCart.size)
+                {
+                    wordViewModel.deleteCart(listCart[i].cartId)
+                }
+
+                Toast.makeText(ctx,"Data submitted offline",Toast.LENGTH_SHORT).show()
+
+
+
+                val bundle = bundleOf(
+                    "count" to listCart.size.toString(),
+                    "beatName" to tvBeatName.text.toString(),
+                    "retailerName" to tvDistributor2.text.toString(),
+                    "total" to tvTotalValue.text.toString(),
+                    "grandTotal" to tvGrandTotalValue.text.toString(),
+                    "listCart" to listCart
                 )
+                Navigation.findNavController(tvSubmit)
+                    .navigate(R.id.action_order_detail, bundle)
+
+               /* CommonMethods.alertDialog(
+                    ctx,
+                    "Data submitted offline"
+                )*/
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -758,20 +786,10 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
                         val msg = json.getString("message")
                         if (status) {
 
-
-
-                            // listDistName.clear()
-                            // listDistId.clear()
-
-
                             for(i in 0 until listCart.size)
                             {
                                 wordViewModel.deleteCart(listCart[i].cartId)
                             }
-
-                           // wordViewModel.deleteAllCart()
-
-
 
                             Toast.makeText(ctx,msg,Toast.LENGTH_SHORT).show()
 
@@ -787,9 +805,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
                             )
                             Navigation.findNavController(tvSubmit)
                                 .navigate(R.id.action_order_detail, bundle)
-
-
-
                         }
 
                         else {

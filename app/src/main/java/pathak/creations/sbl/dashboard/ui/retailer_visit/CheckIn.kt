@@ -141,6 +141,7 @@ class CheckIn : Fragment(), RetrofitResponse {
             when (code) {
                 CommonKeys.ADD_VISIT_CODE -> {
                     try {
+                        CommonMethods.hideKeyboard(tvText)
 
                         Log.e("RETAILER_LIST_CODE", "=====$code==$response")
 
@@ -150,14 +151,9 @@ class CheckIn : Fragment(), RetrofitResponse {
                         if (status) {
 
 
-                            if(rbNoOrder.isChecked)
+                            if(rbBuySbl.isChecked)
                             {
-                                (ctx as Activity).onBackPressed()
-                                Toast.makeText(ctx,msg,Toast.LENGTH_SHORT).show()
 
-                            }
-                            else
-                            {
                                 val bundle = bundleOf("distributorName" to distributorName,
                                     "beatName" to beatName,
                                     "retailer" to retailer,
@@ -166,11 +162,14 @@ class CheckIn : Fragment(), RetrofitResponse {
                                     "salesman" to "",
                                     "dist_id" to dist_id
                                 )
-
-                                CommonMethods.hideKeyboard(tvText)
+                                Toast.makeText(ctx,msg,Toast.LENGTH_SHORT).show()
                                 Navigation.findNavController(tvText).navigate(R.id.action_add_sales,bundle)
 
-                               Toast.makeText(ctx,msg,Toast.LENGTH_SHORT).show()
+                            }
+                            else
+                            {
+                                (ctx as Activity).onBackPressed()
+                                Toast.makeText(ctx,msg,Toast.LENGTH_SHORT).show()
                             }
 
                         } else {

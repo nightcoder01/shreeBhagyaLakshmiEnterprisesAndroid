@@ -49,6 +49,7 @@ class Categories(@PrimaryKey @ColumnInfo(name = "categories_table_id") val categ
 @Entity(tableName = "word_table")
 class Word(@PrimaryKey @ColumnInfo(name = "word") val word : String)
 
+
 @Entity(tableName = "cart_table")
 class Cart(@PrimaryKey (autoGenerate = true) val cartId : Int, @ColumnInfo(name = "distID")var distID : String
            , @ColumnInfo(name = "name")var name : String, @ColumnInfo(name = "price")var price : String
@@ -59,6 +60,19 @@ class Cart(@PrimaryKey (autoGenerate = true) val cartId : Int, @ColumnInfo(name 
            , @ColumnInfo(name = "category")var category : String, @ColumnInfo(name = "cat_code")var cat_code : String
            , @ColumnInfo(name = "ptr_price")var ptr_price : String, @ColumnInfo(name = "ptd_price")var ptd_price : String
            , @ColumnInfo(name = "ptr_total")var ptr_total : String, @ColumnInfo(name = "ptd_total")var ptd_total : String) :Serializable
+
+
+@Entity(tableName = "transaction_table")
+class Transactions(@PrimaryKey (autoGenerate = true) val id : Int,
+                   @ColumnInfo(name = "transactionNo")var transactionNo : String,
+                   @ColumnInfo(name = "distributorID")var distributorID : String,
+                   @ColumnInfo(name = "distributorName")var distributorName : String,
+                   @ColumnInfo(name = "retailerId")var retailerId : String,
+                   @ColumnInfo(name = "retailerName")var retailerName : String,
+                   @ColumnInfo(name = "beatName")var beatName : String,
+                   @ColumnInfo(name = "itemCount")var itemCount : String,
+                   @ColumnInfo(name = "totalAmount")var totalAmount : String)
+
 
 
 @Entity(tableName = "order_table")

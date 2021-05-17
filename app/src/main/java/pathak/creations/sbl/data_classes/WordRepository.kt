@@ -200,4 +200,39 @@ class WordRepository(private val wordDao: WordDao) {
     }
 
 
+    //transactions
+
+    val allTransactions: Flow<List<Transactions>> = wordDao.getTransactionsList()
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun insertTransactions(transactions: Transactions) {
+        wordDao.insertTransactions(transactions)
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun updateTransactions(transactions: Transactions) {
+        wordDao.updateTransactions(transactions)
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun getTransactionsFromDist(retailer_code: String) : Flow<List<Transactions>>{
+        return wordDao.getTransactionsFromDist(retailer_code)
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun getTransactionsFromRetailer(retailerID: String) : Flow<List<Transactions>>{
+        return wordDao.getTransactionsFromRetailer(retailerID)
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun deleteAllTransactions() {
+        wordDao.deleteAllTransactions()
+    }
+
+
 }

@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.custom_spinner.view.*
 import kotlinx.android.synthetic.main.orders.*
 import org.json.JSONObject
@@ -28,15 +27,30 @@ import pathak.creations.sbl.common.PreferenceFile
 import pathak.creations.sbl.custom_adapter.SpinnerCustomDistributorAdapter
 import pathak.creations.sbl.custom_adapter.StringCustomAdapter
 import pathak.creations.sbl.data_classes.Distributor
+import pathak.creations.sbl.data_classes.Transactions
 import pathak.creations.sbl.data_classes.WordViewModel
 import pathak.creations.sbl.data_classes.WordViewModelFactory
 import pathak.creations.sbl.interfaces.OrderDataChangeListener
+import pathak.creations.sbl.interfaces.TransactionsDataChangeListener
 import pathak.creations.sbl.retrofit.RetrofitResponse
 import pathak.creations.sbl.retrofit.RetrofitService
 
 
-class Orders : Fragment(), OrderDataChangeListener<LiveData<List<pathak.creations.sbl.data_classes.Orders>>>,
+class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transactions>>>, OrderDataChangeListener<LiveData<List<pathak.creations.sbl.data_classes.Orders>>>,
     RetrofitResponse {
+
+
+    override fun TransactionDataChange(data: LiveData<List<Transactions>>) {
+        data.observe(viewLifecycleOwner, Observer { dist ->
+            // Update the cached copy of the words in the adapter.
+            listTransactions.clear()
+            dist?.let {
+                listTransactions.addAll(dist)
+                  setTransactionAdapter(listTransactions)
+
+            }
+        })
+    }
 
 
     override fun OrderDataChange(data: LiveData<List<pathak.creations.sbl.data_classes.Orders>>) {
@@ -45,7 +59,7 @@ class Orders : Fragment(), OrderDataChangeListener<LiveData<List<pathak.creation
             listOrders.clear()
             dist?.let {
                 listOrders.addAll(dist)
-                setCartAdapter(listOrders)
+              //  setCartAdapter(listOrders)
 
             }
         })
@@ -65,6 +79,9 @@ class Orders : Fragment(), OrderDataChangeListener<LiveData<List<pathak.creation
 
 
     var listOrders: ArrayList<pathak.creations.sbl.data_classes.Orders> = ArrayList()
+    var listTransactions: ArrayList<Transactions> = ArrayList()
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -73,11 +90,7 @@ class Orders : Fragment(), OrderDataChangeListener<LiveData<List<pathak.creation
         return inflater.inflate(R.layout.orders, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(OrdersVM::class.java)
-        // TODO: Use the ViewModel
-    }
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -100,12 +113,38 @@ class Orders : Fragment(), OrderDataChangeListener<LiveData<List<pathak.creation
             dist?.let {
 
                 listOrders.addAll(dist)
-                setCartAdapter(listOrders)
+              //  setCartAdapter(listOrders)
+            }
+        })
+        wordViewModel.allTransactions.observe(viewLifecycleOwner, Observer { trans ->
+            // Update the cached copy of the words in the adapter.
+            listTransactions.clear()
+            trans?.let {
+
+                listTransactions.addAll(trans)
+                //setCartAdapter(listTransactions)
+                setTransactionAdapter(listTransactions)
             }
         })
 
     }
 
+    private fun setTransactionAdapter(list: ArrayList<Transactions>) {
+        val adapter  = MyTransactionsAdapter(list)
+
+        if(list.isEmpty())
+        {
+            tvNoData.visibility = View.VISIBLE
+        }
+        else
+        {
+            tvNoData.visibility = View.GONE
+        }
+
+
+        rvMyOrders.adapter = adapter
+
+    }
     private fun setCartAdapter(list: List<pathak.creations.sbl.data_classes.Orders>) {
         val adapter  = MyOrdersAdapter(list)
 
@@ -233,7 +272,8 @@ class Orders : Fragment(), OrderDataChangeListener<LiveData<List<pathak.creation
 
                 view.text =list[position]
                 popupWindow!!.dismiss()
-                wordViewModel.getOrdersFromRetailer(listId[position], this@Orders)
+               // wordViewModel.getOrdersFromRetailer(listId[position], this@Orders)
+                wordViewModel.getTransactionsFromRetailer(listId[position], this@Orders)
 
                // retailerIDMain =listBeatsRetailer[position].retailer_id
                // retailerIDName =listBeatsRetailer[position].retailer_name
@@ -265,7 +305,8 @@ class Orders : Fragment(), OrderDataChangeListener<LiveData<List<pathak.creation
 
                             view.text =list[position]
                             popupWindow!!.dismiss()
-                            wordViewModel.getOrdersFromRetailer(listId[position], this@Orders)
+                           // wordViewModel.getOrdersFromRetailer(listId[position], this@Orders)
+                            wordViewModel.getTransactionsFromRetailer(listId[position], this@Orders)
 
                             //  retailerIDMain =listBeatsRetailer[position].retailer_id
                           //  retailerIDName =listBeatsRetailer[position].retailer_name
@@ -301,7 +342,8 @@ class Orders : Fragment(), OrderDataChangeListener<LiveData<List<pathak.creation
 
                             view.text =list2[position]
                             popupWindow!!.dismiss()
-                            wordViewModel.getOrdersFromRetailer(listId2[position], this@Orders)
+                          //  wordViewModel.getOrdersFromRetailer(listId2[position], this@Orders)
+                            wordViewModel.getTransactionsFromRetailer(listId2[position], this@Orders)
 
                            // retailerIDMain =list[position].retailer_id
                            // retailerIDName =list[position].retailer_name
@@ -492,6 +534,8 @@ class Orders : Fragment(), OrderDataChangeListener<LiveData<List<pathak.creation
     private val wordViewModel: WordViewModel by viewModels {
         WordViewModelFactory(((context as Activity).application as AppController).repository)
     }
+
+
 
 
 }
