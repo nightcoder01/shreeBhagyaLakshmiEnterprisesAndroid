@@ -104,6 +104,7 @@
     <string name="quantity">Quantity</string>
     <string name="total_amount">Total Amount</string>
     <string name="check_in">Check In</string>
+    <string name="transaction_detail">Transaction Detail</string>
 
     <string-array name="array_name">
         <item>Select</item>

@@ -4,12 +4,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.transaction_item.view.*
+import kotlinx.android.synthetic.main.item.view.*
 import pathak.creations.sbl.R
-import pathak.creations.sbl.data_classes.Transactions
+import pathak.creations.sbl.data_classes.Orders
+import java.util.*
 
-class MyTransactionsAdapter(var list: ArrayList<Transactions>) :
-    RecyclerView.Adapter<MyTransactionsAdapter.CardsViewHolder>() {
+class ItemsAdapter(var list: ArrayList<Orders>) :
+    RecyclerView.Adapter<ItemsAdapter.CardsViewHolder>() {
 
 
     lateinit var clicked: CardInterface
@@ -24,7 +25,7 @@ class MyTransactionsAdapter(var list: ArrayList<Transactions>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardsViewHolder {
 
-        val view  = LayoutInflater.from(parent.context).inflate(R.layout.transaction_item,parent,false)
+        val view  = LayoutInflater.from(parent.context).inflate(R.layout.item,parent,false)
 
         return CardsViewHolder(view)
     }
@@ -40,10 +41,10 @@ class MyTransactionsAdapter(var list: ArrayList<Transactions>) :
 
     override fun onBindViewHolder(holder: CardsViewHolder, position: Int) {
 
-        holder.itemView.tvTransNoValue.text = list[position].transactionNo
-        holder.itemView.tvRetailerNameValue.text = list[position].retailerName
-        holder.itemView.tvQuantityValue.text = list[position].itemCount
-        holder.itemView.tvAmountValue.text = "₹ "+list[position].totalAmount
+        holder.itemView.itemCount.text = (position+1).toString()
+        holder.itemView.itemPrice.text = "₹ "+list[position].ptd
+        holder.itemView.itemName.text = list[position].description
+        holder.itemView.itemQuantity.text = list[position].quantity
 
 
 

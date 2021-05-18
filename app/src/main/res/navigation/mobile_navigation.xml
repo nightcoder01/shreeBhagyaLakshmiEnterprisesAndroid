@@ -10,9 +10,18 @@
         android:name="pathak.creations.sbl.dashboard.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home"
+        >
 
+        <action
+            android:id="@+id/actionOrders"
+            app:destination="@id/nav_orders"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            />
 
-        />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_sales_order"
@@ -81,6 +90,17 @@
         android:label="@string/orders_summary"
         tools:layout="@layout/orders" >
 
+
+        <action
+            android:id="@+id/action_transaction_detail"
+            app:destination="@id/transactionDetail"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/nav_home"
+            />
+
     </fragment>
 
     <fragment
@@ -88,6 +108,13 @@
         android:name="pathak.creations.sbl.dashboard.ui.tools.ToolsFragment"
         android:label="@string/menu_distributor_ptr"
         tools:layout="@layout/fragment_tools" />
+
+
+    <fragment
+        android:id="@+id/transactionDetail"
+        android:name="pathak.creations.sbl.dashboard.ui.orders.TransactionDetail"
+        android:label="@string/transaction_detail"
+        tools:layout="@layout/transaction_detail" />
 
     <fragment
         android:id="@+id/nav_retailer"

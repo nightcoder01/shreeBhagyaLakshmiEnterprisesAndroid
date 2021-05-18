@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import pathak.creations.sbl.R
 
@@ -44,7 +45,15 @@ class HomeFragment : Fragment() {
         list.add("Total Item\n65")
         list.add("Total Sale\n₹212188.34")
 
-        rvHome.adapter = HomeAdapter(list)
+        val adapter  = HomeAdapter(list)
+        rvHome.adapter = adapter
+        adapter.onClicked(object :HomeAdapter.CardInterface{
+            override fun clickedSelected(pos: Int) {
+                if(pos==0)
+                {
+                Navigation.findNavController(rvHome).navigate(R.id.actionOrders)
+            }}
+        })
 
 
 

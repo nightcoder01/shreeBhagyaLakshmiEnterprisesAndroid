@@ -145,6 +145,12 @@ class WordViewModel(private val repository: WordRepository) : ViewModel() {
         }
     }
 
+    fun getOrdersFromTransaction(transactionNo: String, listener: OrderDataChangeListener<LiveData<List<Orders>>>) {
+        viewModelScope.launch {
+            listener.OrderDataChange(repository.getOrdersFromTransaction(transactionNo).asLiveData())
+        }
+    }
+
     fun insertOrders(cart: Orders) = viewModelScope.launch {
         repository.insertOrders(cart)
     }

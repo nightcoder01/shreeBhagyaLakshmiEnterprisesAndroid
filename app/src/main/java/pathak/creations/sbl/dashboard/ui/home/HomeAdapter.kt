@@ -12,6 +12,18 @@ class HomeAdapter(var list: ArrayList<String>) : RecyclerView.Adapter<HomeAdapte
 
     lateinit var context: Context
 
+    lateinit var clicked: CardInterface
+
+    interface CardInterface {
+        fun clickedSelected(pos: Int)
+
+    }
+
+    fun onClicked(clicked: CardInterface)
+    {this.clicked = clicked}
+
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         context = parent.context
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.home_item, parent, false)
@@ -26,13 +38,9 @@ class HomeAdapter(var list: ArrayList<String>) : RecyclerView.Adapter<HomeAdapte
 
 
         holder.itemView.tvText.text = list[position]
+        holder.itemView.setOnClickListener { clicked.clickedSelected(position) }
 
     }
 
-    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        // val li_book: LinearLayout = itemView.findViewById(R.id.li_book)
-        // val tv_status: TextView = itemView.findViewById(R.id.tv_status)
-
-    }
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 }

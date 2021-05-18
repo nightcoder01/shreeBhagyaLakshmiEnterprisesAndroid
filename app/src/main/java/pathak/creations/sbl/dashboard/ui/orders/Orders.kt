@@ -12,10 +12,12 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.custom_spinner.view.*
 import kotlinx.android.synthetic.main.orders.*
 import org.json.JSONObject
@@ -36,13 +38,15 @@ import pathak.creations.sbl.retrofit.RetrofitResponse
 import pathak.creations.sbl.retrofit.RetrofitService
 
 
-class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transactions>>>, OrderDataChangeListener<LiveData<List<pathak.creations.sbl.data_classes.Orders>>>,
+class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transactions>>>
+    , OrderDataChangeListener<LiveData<List<pathak.creations.sbl.data_classes.Orders>>>,
     RetrofitResponse {
 
 
     override fun TransactionDataChange(data: LiveData<List<Transactions>>) {
         data.observe(viewLifecycleOwner, Observer { dist ->
-            // Update the cached copy of the words in the adapter.
+
+            cbAllOrder.isChecked =false
             listTransactions.clear()
             dist?.let {
                 listTransactions.addAll(dist)
@@ -95,6 +99,7 @@ class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transacti
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        cbAllOrder.isChecked =true
 
         wordViewModel.allDistributor.observe(viewLifecycleOwner, Observer { dist ->
             // Update the cached copy of the words in the adapter.
@@ -127,6 +132,22 @@ class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transacti
             }
         })
 
+
+        cbAllOrder.setOnCheckedChangeListener { buttonView, isChecked ->
+            if(isChecked) {
+                tvDistributor2.text = ""
+                tvRetailer2.text = ""
+                wordViewModel.allTransactions.observe(viewLifecycleOwner, Observer { trans ->
+                    listTransactions.clear()
+                    trans?.let {
+                        listTransactions.addAll(trans)
+                        setTransactionAdapter(listTransactions)
+                    }
+                })
+
+            }
+        }
+
     }
 
     private fun setTransactionAdapter(list: ArrayList<Transactions>) {
@@ -143,6 +164,25 @@ class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transacti
 
 
         rvMyOrders.adapter = adapter
+
+        adapter.onClicked(object : MyTransactionsAdapter.CardInterface{
+            override fun clickedSelected(pos: Int) {
+
+
+
+                val bundle = bundleOf(
+                        "transactionNo" to list[pos].transactionNo,
+                    "retailerName" to list[pos].retailerName,
+                    "distributorName" to list[pos].distributorName,
+                    "total" to list[pos].totalAmount
+                )
+                Navigation.findNavController(rvMyOrders)
+                    .navigate(R.id.action_transaction_detail, bundle)
+
+
+            }
+        })
+
 
     }
     private fun setCartAdapter(list: List<pathak.creations.sbl.data_classes.Orders>) {

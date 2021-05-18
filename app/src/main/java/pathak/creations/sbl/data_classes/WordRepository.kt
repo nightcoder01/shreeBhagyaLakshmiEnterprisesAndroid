@@ -193,6 +193,13 @@ class WordRepository(private val wordDao: WordDao) {
         return wordDao.getOrdersFromRetailer(retailerID)
     }
 
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun getOrdersFromTransaction(transactionNo: String) : Flow<List<Orders>>{
+        return wordDao.getOrdersFromTransaction(transactionNo)
+    }
+
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun deleteAllOrders() {
