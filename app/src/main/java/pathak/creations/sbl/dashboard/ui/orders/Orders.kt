@@ -99,7 +99,8 @@ class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transacti
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        cbAllOrder.isChecked =true
+     //   cbAllOrder.isChecked =true
+        setDistributor()
 
         wordViewModel.allDistributor.observe(viewLifecycleOwner, Observer { dist ->
             // Update the cached copy of the words in the adapter.
@@ -147,6 +148,25 @@ class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transacti
 
             }
         }
+
+
+
+    }
+    private fun setDistributor() {
+        /*if(PreferenceFile.retrieveKey(ctx,CommonKeys.TYPE).equals("distributor"))
+        {*/
+
+            Log.e("callRetailer", "==11===${PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_DISTRIBUTOR_NAME)}")
+
+            tvDistributor2.hint = PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_DISTRIBUTOR_NAME)
+            //distributor = PreferenceFile.retrieveKey(ctx!!,CommonKeys.NAME)!!
+            //callBeatList(PreferenceFile.retrieveKey(ctx!!,CommonKeys.NAME))
+            wordViewModel.getOrdersFromDist(PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_DISTRIBUTOR_NAME)!!, this@Orders)
+            callRetailer(PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_DISTRIBUTOR)!!)
+
+         //   Log.e("callRetailer", "==22===${PreferenceFile.retrieveKey(ctx,CommonKeys.NAME)}")
+
+       // }
 
     }
 

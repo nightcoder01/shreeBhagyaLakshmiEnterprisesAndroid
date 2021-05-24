@@ -126,10 +126,34 @@ class CheckIn : Fragment(), RetrofitResponse {
 
             }
             else {
-                CommonMethods.alertDialog(
+
+
+                if(!rbNoOrder.isChecked)
+                {
+
+                    val bundle = bundleOf("distributorName" to distributorName,
+                        "beatName" to beatName,
+                        "retailer" to retailer,
+                        "phone" to phone,
+                        "retailerId" to retailerId,
+                        "salesman" to "",
+                        "dist_id" to dist_id
+                    )
+                    Toast.makeText(ctx,"remarks added successfully",Toast.LENGTH_SHORT).show()
+                    Navigation.findNavController(tvText).navigate(R.id.action_add_sales,bundle)
+
+                }
+                else
+                {
+                    (ctx as Activity).onBackPressed()
+                    Toast.makeText(ctx,"remarks added successfully",Toast.LENGTH_SHORT).show()
+                }
+
+
+                /*CommonMethods.alertDialog(
                     ctx,
                     getString(R.string.checkYourConnection)
-                )
+                )*/
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -151,7 +175,7 @@ class CheckIn : Fragment(), RetrofitResponse {
                         if (status) {
 
 
-                            if(rbBuySbl.isChecked)
+                            if(!rbNoOrder.isChecked)
                             {
 
                                 val bundle = bundleOf("distributorName" to distributorName,

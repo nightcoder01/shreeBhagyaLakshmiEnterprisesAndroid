@@ -9,7 +9,7 @@ object CommonKeys {
     const val BASE_IMAGE_Members = "http://3.13.214.27:8011/uploads/movieMembers/"
 
 
-    //http://3.13.214.27:8011/uploads/movieMembers/
+    //http://secondary.sbl1972.in/dsr/public/index.php/api/v1/add-retailer
     // http://3.13.214.27:8011/uploads/users/
 
    // const val LOGIN = "v1/login"

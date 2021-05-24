@@ -687,6 +687,7 @@ class AddSalesOrder : Fragment() {
         dialogBuilder.setView(layout)
 
         val tvSubmit :TextView= layout.findViewById(R.id.tvSubmit)
+        val tvCancel :TextView= layout.findViewById(R.id.tvCancel)
         val etEnterPrice :EditText= layout.findViewById(R.id.etEnterPrice)
 
 
@@ -717,6 +718,9 @@ class AddSalesOrder : Fragment() {
 
 
             //dialogBuilderMain.dismiss()
+        }
+        tvCancel.setOnClickListener {
+            dialogBuilderMain.dismiss()
         }
 
         dialogBuilderMain.show()

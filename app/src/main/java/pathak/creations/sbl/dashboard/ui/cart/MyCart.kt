@@ -615,7 +615,7 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
                 }
                 if(str=="remove")
                 {
-                    if(list[pos].itemCount.toInt()<1)
+                    if(list[pos].itemCount.toInt()<2)
                     {
                         //  Toast.makeText(ctx,"minimum limit crossed",Toast.LENGTH_SHORT).show()
                     }
