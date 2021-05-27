@@ -35,7 +35,6 @@ import pathak.creations.sbl.data_classes.WordViewModelFactory
 import pathak.creations.sbl.interfaces.OrderDataChangeListener
 import pathak.creations.sbl.interfaces.TransactionsDataChangeListener
 import pathak.creations.sbl.retrofit.RetrofitResponse
-import pathak.creations.sbl.retrofit.RetrofitService
 
 
 class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transactions>>>
@@ -99,7 +98,7 @@ class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transacti
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-     //   cbAllOrder.isChecked =true
+        cbAllOrder.isChecked =true
         setDistributor()
 
         wordViewModel.allDistributor.observe(viewLifecycleOwner, Observer { dist ->
@@ -153,21 +152,9 @@ class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transacti
 
     }
     private fun setDistributor() {
-        /*if(PreferenceFile.retrieveKey(ctx,CommonKeys.TYPE).equals("distributor"))
-        {*/
-
-            Log.e("callRetailer", "==11===${PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_DISTRIBUTOR_NAME)}")
-
             tvDistributor2.hint = PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_DISTRIBUTOR_NAME)
-            //distributor = PreferenceFile.retrieveKey(ctx!!,CommonKeys.NAME)!!
-            //callBeatList(PreferenceFile.retrieveKey(ctx!!,CommonKeys.NAME))
             wordViewModel.getOrdersFromDist(PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_DISTRIBUTOR_NAME)!!, this@Orders)
             callRetailer(PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_DISTRIBUTOR)!!)
-
-         //   Log.e("callRetailer", "==22===${PreferenceFile.retrieveKey(ctx,CommonKeys.NAME)}")
-
-       // }
-
     }
 
     private fun setTransactionAdapter(list: ArrayList<Transactions>) {
@@ -225,8 +212,7 @@ class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transacti
     private fun callRetailer(distID: String) {
         try {
 
-            //retailer list
-            if (CommonMethods.isNetworkAvailable(ctx)) {
+            /*if (CommonMethods.isNetworkAvailable(ctx)) {
                 val json = JSONObject()
                 json.put("dist_id", distID)
                 RetrofitService(
@@ -243,12 +229,43 @@ class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transacti
                     "=token====${PreferenceFile.retrieveKey(ctx, CommonKeys.TOKEN)!!}"
                 )
 
-            } else {
+            }
+            else {
                 CommonMethods.alertDialog(
                     ctx,
                     getString(R.string.checkYourConnection)
                 )
+            }*/
+
+            try {
+
+
+
+                wordViewModel.allRetailer.observe(viewLifecycleOwner, Observer { retail ->
+                    // Update the cached copy of the words in the adapter.
+                    listRetailerName.clear()
+                    listRetailerId.clear()
+
+                    retail?.let {
+                        for (i in it.indices) {
+                            //val dataObj = it.getJSONObject(i)
+
+                            listRetailerName.add(it[i].retailer_name)
+                            listRetailerId.add(it[i].retailer_id)
+                        }
+                       // listRetailers.addAll(it)
+                        //setRetailerAdapter(it)
+                        setRetailerAdapter(listRetailerName,listRetailerId)
+
+
+                    }
+                })
+
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
+
+
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -332,13 +349,8 @@ class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transacti
 
                 view.text =list[position]
                 popupWindow!!.dismiss()
-               // wordViewModel.getOrdersFromRetailer(listId[position], this@Orders)
                 wordViewModel.getTransactionsFromRetailer(listId[position], this@Orders)
 
-               // retailerIDMain =listBeatsRetailer[position].retailer_id
-               // retailerIDName =listBeatsRetailer[position].retailer_name
-
-                // callCategory(listBeatsRetailer[position].retailer_id)
             }
 
 
@@ -365,14 +377,8 @@ class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transacti
 
                             view.text =list[position]
                             popupWindow!!.dismiss()
-                           // wordViewModel.getOrdersFromRetailer(listId[position], this@Orders)
                             wordViewModel.getTransactionsFromRetailer(listId[position], this@Orders)
 
-                            //  retailerIDMain =listBeatsRetailer[position].retailer_id
-                          //  retailerIDName =listBeatsRetailer[position].retailer_name
-
-                            //  callCategory(listBeatsRetailer[position].retailer_id)
-                            //  callBeatRetailer(listBeatsRetailer[position].dist_id,listBeats[position].beatname)
                         }
 
 
@@ -402,13 +408,8 @@ class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transacti
 
                             view.text =list2[position]
                             popupWindow!!.dismiss()
-                          //  wordViewModel.getOrdersFromRetailer(listId2[position], this@Orders)
                             wordViewModel.getTransactionsFromRetailer(listId2[position], this@Orders)
 
-                           // retailerIDMain =list[position].retailer_id
-                           // retailerIDName =list[position].retailer_name
-                            //  callCategory(listBeatsRetailer[position].retailer_id)
-                            //callBeatRetailer(list[position].dist_id,list[position].beatname)
                         }
 
 
@@ -416,7 +417,6 @@ class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transacti
 
                 }
 
-                // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         })
 
@@ -438,7 +438,7 @@ class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transacti
 
     ) {
         tvDistributor2.setOnClickListener {
-            openDistributorShort(tvDistributor2,list)
+           // openDistributorShort(tvDistributor2,list)
         }    }
 
     var popupWindow: PopupWindow? = null
@@ -466,18 +466,6 @@ class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transacti
 
                 wordViewModel.getOrdersFromDist(listDist[position].distID, this@Orders)
                 callRetailer(listDist[position].distID)
-                // PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.SELECTED_DISTRIBUTOR,listDist[position].distID)
-                // PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.SELECTED_DISTRIBUTOR_NAME,listDist[position].distName)
-
-               //  val dNow = Date()
-               //  val ft = SimpleDateFormat("yyMMddhhmmssMs")
-               //  val currentDate = ft.format(dNow)
-               //  PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.CURRENT_DATE,currentDate)
-
-                // val it = Intent(this@SelectDistributor, DashBoard::class.java)
-                // it.flags =
-                // Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                // startActivity(it)
 
             }
         })
@@ -506,26 +494,6 @@ class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transacti
 
                             wordViewModel.getOrdersFromDist(listDist[position].distID, this@Orders)
                             callRetailer(listDist[position].distID)
-
-
-                          //  PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.SELECTED_DISTRIBUTOR,listDist[position].distID)
-                          //  PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.SELECTED_DISTRIBUTOR_NAME,listDist[position].distName)
-
-                           // val dNow = Date()
-                          //  val ft = SimpleDateFormat("yyMMddhhmmssMs")
-                           // val currentDate = ft.format(dNow)
-                          //  PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.CURRENT_DATE,currentDate)
-
-                            /*if (PreferenceFile.retrieveKey(this@SelectDistributor, CommonKeys.IS_FIRST_CHECKED).equals("false", false)) {
-                               // callAllServices()
-                            }*/
-                          //  val it = Intent(this@SelectDistributor, DashBoard::class.java)
-                           // it.flags =
-                         //       Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                          //  startActivity(it)
-
-                            //  callBeatList(listDist[position].distID)
-                            //  callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
                         }
                     })
                 }
@@ -555,27 +523,6 @@ class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transacti
                             wordViewModel.getOrdersFromDist(list[position].distID, this@Orders)
                             callRetailer(list[position].distID)
 
-
-                            //  PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.SELECTED_DISTRIBUTOR,list[position].distID)
-                          //  PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.SELECTED_DISTRIBUTOR_NAME,list[position].distName)
-
-                          //  val dNow = Date()
-                          //  val ft = SimpleDateFormat("yyMMddhhmmssMs")
-                          //  val currentDate = ft.format(dNow)
-                          //  PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.CURRENT_DATE,currentDate)
-
-                            /*if (PreferenceFile.retrieveKey(this@SelectDistributor, CommonKeys.IS_FIRST_CHECKED).equals("false", false)) {
-                                callAllServices()
-                            }*/
-
-                          //  val it = Intent(this@SelectDistributor, DashBoard::class.java)
-                          //  it.flags =
-                          //      Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                           // startActivity(it)
-
-                            //  callBeatList(list[position].distID)
-
-                            // callBeatRetailer(list[position].dist_id,list[position].beatname)
                         }
                     })
                 }

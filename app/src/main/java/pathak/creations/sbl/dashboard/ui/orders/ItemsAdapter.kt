@@ -41,8 +41,9 @@ class ItemsAdapter(var list: ArrayList<Orders>) :
 
     override fun onBindViewHolder(holder: CardsViewHolder, position: Int) {
 
+
         holder.itemView.itemCount.text = (position+1).toString()
-        holder.itemView.itemPrice.text = "₹ "+list[position].ptd
+        holder.itemView.itemPrice.text = "₹ "+list[position].price
         holder.itemView.itemName.text = list[position].description
         holder.itemView.itemQuantity.text = list[position].quantity
 
