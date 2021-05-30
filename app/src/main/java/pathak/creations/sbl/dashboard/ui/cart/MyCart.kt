@@ -614,26 +614,23 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
                 {
                     if(list[pos].itemCount.toInt()<2)
                     {
-                        //  Toast.makeText(ctx,"minimum limit crossed",Toast.LENGTH_SHORT).show()
-                       // wordViewModel.deleteCart(list[pos].cartId)
 
-                        /*if(list.size==1)
+
+                        //list.drop()
+                        //  Toast.makeText(ctx,"minimum limit crossed",Toast.LENGTH_SHORT).show()
+                        wordViewModel.deleteCart(list[pos].cartId)
+
+                        if(list.size==1)
                             {
-                            list.drop(1)
-                                clCart.visibility = View.GONE
-                                tvTransaction.visibility = View.GONE
-                                tvTransactionValue.visibility = View.GONE
-                                tvNoData.visibility = View.VISIBLE
-                                tvTotal.visibility = View.GONE
-                                tvTotalValue.visibility = View.GONE
-                                tvGrandTotalValue.visibility = View.GONE
-                                tvGrandTotal.visibility = View.GONE
+                               setCartAdapter(list.drop(1))
                         }
                         else
                             {
-                                var id = list[pos].cartId
-                                list.dropWhile { it.cartId == }
-                            }*/
+                                val id = list[pos].cartId
+
+                                setCartAdapter(list.dropWhile { it.cartId ==id })
+
+                            }
                     }
 
                     else
