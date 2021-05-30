@@ -64,6 +64,9 @@ interface WordDao {
     @Query("UPDATE retailer_table SET todayDone =:retailerDone  WHERE retailer_name = :retailerName")
     suspend fun updateRetailerColor(retailerName: String,retailerDone: Boolean)
 
+    @Query("UPDATE retailer_table SET mobile =:retailerNumber , address =:retailerAddress   WHERE retailer_name = :retailerName")
+    suspend fun updateRetailerNumber(retailerName: String,retailerNumber: String,retailerAddress: String)
+
     @Query("DELETE FROM retailer_table")
     suspend fun deleteAllRetailer()
 

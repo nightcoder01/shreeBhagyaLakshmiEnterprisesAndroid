@@ -21,6 +21,15 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
             />
 
+        <action
+            android:id="@+id/actionCustomer"
+            app:destination="@id/nav_retailer_master"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            />
+
     </fragment>
 
     <fragment

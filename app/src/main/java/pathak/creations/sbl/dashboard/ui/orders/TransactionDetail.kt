@@ -83,10 +83,7 @@ class TransactionDetail : Fragment(), OrderDataChangeListener<LiveData<List<Orde
             //tvNoData.visibility = View.GONE
         }
 
-
         rvTransaction.adapter = adapter
-
-
 
     }
 }

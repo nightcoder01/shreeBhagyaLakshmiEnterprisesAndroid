@@ -52,7 +52,12 @@ class HomeFragment : Fragment() {
                 if(pos==0)
                 {
                 Navigation.findNavController(rvHome).navigate(R.id.actionOrders)
-            }}
+            }
+                if(pos==1)
+                {
+                Navigation.findNavController(rvHome).navigate(R.id.actionCustomer)
+            }
+            }
         })
 
 

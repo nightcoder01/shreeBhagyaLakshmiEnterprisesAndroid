@@ -95,7 +95,7 @@ class AddRetailer : Fragment(), RetrofitResponse {
 
 
         //set live data observer
-        wordViewModel.allDistributor.observe(viewLifecycleOwner, Observer { dist ->
+       /* wordViewModel.allDistributor.observe(viewLifecycleOwner, Observer { dist ->
             // Update the cached copy of the words in the adapter.
 
 
@@ -106,7 +106,7 @@ class AddRetailer : Fragment(), RetrofitResponse {
             }
         })
 
-
+*/
 
     }
 
@@ -393,15 +393,19 @@ class AddRetailer : Fragment(), RetrofitResponse {
 
 
     private fun setDistributor() {
-        if(PreferenceFile.retrieveKey(ctx, CommonKeys.TYPE).equals("distributor"))
-        {
-            tvDistributor2.hint = PreferenceFile.retrieveKey(ctx,CommonKeys.NAME)
-            callBeatList(PreferenceFile.retrieveKey(ctx,CommonKeys.NAME))
-        }
-        else
-        {
-            callDistributorList()
-        }
+        //if(PreferenceFile.retrieveKey(ctx, CommonKeys.TYPE).equals("distributor"))
+      //  {
+           // tvDistributor2.hint = PreferenceFile.retrieveKey(ctx,CommonKeys.NAME)
+
+        Log.e("fasdfsfasf","==22====${PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_DISTRIBUTOR)!!}====")
+
+        tvDistributor2.text =PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_DISTRIBUTOR_NAME)
+            callBeatList(PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_DISTRIBUTOR))
+       // }
+       // else
+       // {
+       //     callDistributorList()
+       // }
     }
 
     private fun callDistributorList() {
@@ -463,20 +467,14 @@ class AddRetailer : Fragment(), RetrofitResponse {
                     getString(R.string.checkYourConnection)
                 )
             }*/
-
-
-
-
-
 //            wordViewModel.getBeatFromDist(distIDD, this)
-
-
-
             //set live data observer
             wordViewModel.allBeat.observe(viewLifecycleOwner, Observer { dist ->
                 // Update the cached copy of the words in the adapter.
 
 
+                Log.e("fasdfsfasf","===11====$distID===")
+                Log.e("fasdfsfasf","==22====$dist====")
                 dist?.let {
 
                     setBeatAdapter(it)

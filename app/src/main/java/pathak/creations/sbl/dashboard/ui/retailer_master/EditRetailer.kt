@@ -13,10 +13,12 @@ import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.custom_spinner.view.*
 import kotlinx.android.synthetic.main.edit_retailer.*
 import org.json.JSONObject
+import pathak.creations.sbl.AppController
 import pathak.creations.sbl.R
 import pathak.creations.sbl.common.CommonKeys
 import pathak.creations.sbl.common.CommonMethods
@@ -24,6 +26,8 @@ import pathak.creations.sbl.common.PreferenceFile
 import pathak.creations.sbl.custom_adapter.SpinnerCustomAdapter
 import pathak.creations.sbl.data_class.BeatData
 import pathak.creations.sbl.data_classes.Beat
+import pathak.creations.sbl.data_classes.WordViewModel
+import pathak.creations.sbl.data_classes.WordViewModelFactory
 import pathak.creations.sbl.retrofit.RetrofitResponse
 import pathak.creations.sbl.retrofit.RetrofitService
 
@@ -95,6 +99,9 @@ class EditRetailer : Fragment(), RetrofitResponse {
                 json.put("id",idd)
                 json.put("mobile",etMobile.text.toString())
                 json.put("address",etAddress.text.toString())
+                json.put("alternate_mobile",etMobile.text.toString())
+
+                wordViewModel.updateRetailerPhone(etRetailerName.text.toString(),etMobile.text.toString(),etAddress.text.toString())
 
                 RetrofitService(
                     ctx,
@@ -365,5 +372,8 @@ class EditRetailer : Fragment(), RetrofitResponse {
 
     }
 
-
+    //data base work
+    private val wordViewModel: WordViewModel by viewModels {
+        WordViewModelFactory(((context as Activity).application as AppController).repository)
+    }
 }

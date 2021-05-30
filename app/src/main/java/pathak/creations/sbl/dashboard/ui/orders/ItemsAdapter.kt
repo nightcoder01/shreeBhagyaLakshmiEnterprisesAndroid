@@ -41,13 +41,10 @@ class ItemsAdapter(var list: ArrayList<Orders>) :
 
     override fun onBindViewHolder(holder: CardsViewHolder, position: Int) {
 
-
         holder.itemView.itemCount.text = (position+1).toString()
         holder.itemView.itemPrice.text = "₹ "+list[position].price
         holder.itemView.itemName.text = list[position].description
         holder.itemView.itemQuantity.text = list[position].quantity
-
-
 
         holder.itemView.setOnClickListener {
             clicked.clickedSelected(position)
@@ -55,7 +52,5 @@ class ItemsAdapter(var list: ArrayList<Orders>) :
 
     }
 
-
     inner class CardsViewHolder(v: View) : RecyclerView.ViewHolder(v)
-
 }

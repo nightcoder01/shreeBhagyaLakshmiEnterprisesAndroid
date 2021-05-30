@@ -158,7 +158,8 @@ class RetailerMaster : Fragment(){
             tvDistributor2.hint = PreferenceFile.retrieveKey(ctx, CommonKeys.NAME)
             // callBeatList(PreferenceFile.retrieveKey(ctx,CommonKeys.NAME)!!)
             callDistRetailer(PreferenceFile.retrieveKey(ctx, CommonKeys.NAME)!!)
-        } else {
+        }
+        else {
          //   callDistributorList()
         }
     }
@@ -166,8 +167,6 @@ class RetailerMaster : Fragment(){
 
     private fun callDistRetailer(distId: String) {
         try {
-
-
 
             wordViewModel.allRetailer.observe(viewLifecycleOwner, Observer { retail ->
                 // Update the cached copy of the words in the adapter.

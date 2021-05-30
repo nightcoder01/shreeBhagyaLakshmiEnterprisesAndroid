@@ -528,12 +528,9 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
         val view1 = inflater.inflate(R.layout.logout_alert, null)
         val deleteDialo = AlertDialog.Builder(ctx).create()
 
-        val btnYes: TextView
-        val btnNo: TextView
-
         deleteDialo.setView(view1)
-        btnYes = view1.findViewById(R.id.tvYes)
-        btnNo = view1.findViewById(R.id.tvNo)
+        val btnYes: TextView = view1.findViewById(R.id.tvYes)
+        val btnNo: TextView = view1.findViewById(R.id.tvNo)
         btnYes.setOnClickListener { view2 ->
 
             deleteDialo.dismiss()
@@ -618,6 +615,25 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
                     if(list[pos].itemCount.toInt()<2)
                     {
                         //  Toast.makeText(ctx,"minimum limit crossed",Toast.LENGTH_SHORT).show()
+                       // wordViewModel.deleteCart(list[pos].cartId)
+
+                        /*if(list.size==1)
+                            {
+                            list.drop(1)
+                                clCart.visibility = View.GONE
+                                tvTransaction.visibility = View.GONE
+                                tvTransactionValue.visibility = View.GONE
+                                tvNoData.visibility = View.VISIBLE
+                                tvTotal.visibility = View.GONE
+                                tvTotalValue.visibility = View.GONE
+                                tvGrandTotalValue.visibility = View.GONE
+                                tvGrandTotal.visibility = View.GONE
+                        }
+                        else
+                            {
+                                var id = list[pos].cartId
+                                list.dropWhile { it.cartId == }
+                            }*/
                     }
 
                     else
@@ -665,16 +681,16 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
         tvSubmit.setOnClickListener {
 
             Toast.makeText(ctx,npItem.value.toString(),Toast.LENGTH_SHORT).show()
-            subList[pos].itemCount = npItem.value.toString()
-
-            wordViewModel.updateCart(subList[pos])
-            adapter2.notifyItemChanged(pos)
-            totalMute.value = setTotal(subList)
-
+            if(npItem.value.toString()!="0") {
+                subList[pos].itemCount = npItem.value.toString()
+                wordViewModel.updateCart(subList[pos])
+                adapter2.notifyItemChanged(pos)
+                totalMute.value = setTotal(subList)
+            }
             dialogBuilderMain.dismiss()
         }
         npItem.maxValue = 9999
-        npItem.minValue = 0
+        npItem.minValue = 1
 
         dialogBuilderMain.show()
     }
