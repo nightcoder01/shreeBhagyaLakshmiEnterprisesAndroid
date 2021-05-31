@@ -471,7 +471,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
 
 
 
-            wordViewModel.updateRetailerColor(tvDistributor2.text.toString(),true)
 
             jsonArray.put(json)
             jsonMain.put("items",jsonArray)

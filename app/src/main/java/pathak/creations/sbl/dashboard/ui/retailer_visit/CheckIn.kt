@@ -11,14 +11,18 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.check_in.*
 import org.json.JSONObject
+import pathak.creations.sbl.AppController
 import pathak.creations.sbl.R
 import pathak.creations.sbl.common.CommonKeys
 import pathak.creations.sbl.common.CommonMethods
 import pathak.creations.sbl.common.PreferenceFile
+import pathak.creations.sbl.data_classes.WordViewModel
+import pathak.creations.sbl.data_classes.WordViewModelFactory
 import pathak.creations.sbl.retrofit.RetrofitResponse
 import pathak.creations.sbl.retrofit.RetrofitService
 
@@ -100,6 +104,10 @@ class CheckIn : Fragment(), RetrofitResponse {
         toString: String
     ) {
         try {
+
+
+            wordViewModel.updateRetailerColor(retailer,true)
+
 
             if (CommonMethods.isNetworkAvailable(ctx)) {
                 val json = JSONObject()
@@ -211,5 +219,10 @@ class CheckIn : Fragment(), RetrofitResponse {
         }
     }
 
+
+    //data base work
+    private val wordViewModel: WordViewModel by viewModels {
+        WordViewModelFactory(((context as Activity).application as AppController).repository)
+    }
 
 }
