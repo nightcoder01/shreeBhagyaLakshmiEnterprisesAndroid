@@ -137,12 +137,7 @@ class AddSalesOrder : Fragment() {
             "retailerId" to retailerIDMain
         )
 
-
-
-
         Log.e("gdfgdfsgsdfgdsfg","=====${etBeatName.text}===${etRetailerName.text}===${retailerIDMain}")
-
-
 
         Navigation.findNavController(clCart).navigate(R.id.action_addCart,bundle)
 
@@ -681,7 +676,6 @@ class AddSalesOrder : Fragment() {
         pos: Int
     ) {
 
-
         val dialogBuilder = AlertDialog.Builder(ctx)
         val layout = AlertDialogLayout.inflate(ctx, R.layout.custom_price,null)
         dialogBuilder.setView(layout)
@@ -689,7 +683,6 @@ class AddSalesOrder : Fragment() {
         val tvSubmit :TextView= layout.findViewById(R.id.tvSubmit)
         val tvCancel :TextView= layout.findViewById(R.id.tvCancel)
         val etEnterPrice :EditText= layout.findViewById(R.id.etEnterPrice)
-
 
         etEnterPrice.text =   Editable.Factory.getInstance().newEditable(subList[pos].customPrice)
 
@@ -699,7 +692,6 @@ class AddSalesOrder : Fragment() {
         dialogBuilderMain.setCanceledOnTouchOutside(true)
 
         tvSubmit.setOnClickListener {
-
 
             if(subList[pos].price.toDouble() <= etEnterPrice.text.toString().toDouble())
             {

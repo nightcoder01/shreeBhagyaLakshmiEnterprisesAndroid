@@ -189,7 +189,7 @@
             app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@id/nav_retailer"
+            app:popUpTo="@id/addSalesOrder"
             />
 
     </fragment>

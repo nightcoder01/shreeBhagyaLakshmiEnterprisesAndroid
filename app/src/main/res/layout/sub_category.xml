@@ -80,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_5sdp"
                 android:singleLine="true"
-                android:text="@string/price"
+                android:text="Mrp Rate: "
                 android:textSize="@dimen/_10sdp"
                 app:layout_constraintStart_toEndOf="@id/cvImage"
                 app:layout_constraintTop_toBottomOf="@id/tvName"/>
@@ -92,7 +92,6 @@
                 android:layout_margin="@dimen/_5sdp"
                 android:maxLength="6"
                 android:textSize="@dimen/_10sdp"
-
                 android:singleLine="true"
                 app:layout_constraintStart_toEndOf="@id/tvPrice"
                 app:layout_constraintTop_toBottomOf="@id/tvName"/>
@@ -102,10 +101,25 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_5sdp"
                 android:maxLength="10"
+                android:textSize="@dimen/_10sdp"
+
                 android:singleLine="true"
                 app:layout_constraintStart_toEndOf="@id/tvPriceValue"
                 app:layout_constraintTop_toBottomOf="@id/tvName"/>
 
+
+        <TextView
+            android:id="@+id/tvDiscountPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:singleLine="true"
+            android:text="Discount Price: "
+            android:textSize="@dimen/_10sdp"
+            app:layout_constraintBottom_toBottomOf="@id/etPriceEditedValue"
+            app:layout_constraintStart_toEndOf="@id/cvImage"
+            app:layout_constraintTop_toTopOf="@id/etPriceEditedValue"
+            />
 
 
             <EditText
@@ -120,7 +134,7 @@
                 android:imeOptions="actionDone"
                 android:maxLength="10"
                 android:textSize="@dimen/_8sdp"
-                app:layout_constraintStart_toEndOf="@id/cvImage"
+                app:layout_constraintStart_toEndOf="@id/tvDiscountPrice"
                 app:layout_constraintTop_toBottomOf="@id/tvPrice"/>
 
             <TextView

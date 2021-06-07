@@ -58,10 +58,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
                 setRetailerAdapter(it)
 
             }
-
-
-
-
         })
     }
 
@@ -92,6 +88,8 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
 
     var size = ""
     var transactionNo = ""
+    var beatName = ""
+    var retailerName = ""
 
     private lateinit var myCartVM: MyCartVM
 
@@ -112,7 +110,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
         callBeatList(PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_DISTRIBUTOR))
 
         return root
-
     }
 
     private fun callBeatList(distID: String?) {
@@ -152,8 +149,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
     ) {
         val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val customView = inflater.inflate(R.layout.custom_spinner, null)
-
-
 
         popupWindow = PopupWindow(
             customView,
@@ -232,9 +227,7 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
             }
         })
 
-
         popupWindow!!.isOutsideTouchable = true
-
         popupWindow!!.showAsDropDown(view)
         popupWindow!!.isFocusable = true
         popupWindow!!.update()
@@ -251,8 +244,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
             e.printStackTrace()
         }
     }
-
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -279,7 +270,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
         //set live data observer
         wordViewModel.allCart.observe(viewLifecycleOwner, Observer { dist ->
             // Update the cached copy of the words in the adapter.
-          //  listCart.clear()
 
             if(listCart.isEmpty())
             {
@@ -312,29 +302,17 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
     private fun getArgumentedData() {
 
         if(arguments!=null) {
-
             tvBeatName.text =arguments?.getString("beatName")
-
-
-            Log.e("fasdfsdfdfasfa","====${arguments?.getString("beatName")}========")
-
 
             val beatName :String= arguments?.getString("beatName")!!
             val retailer :String= arguments?.getString("retailer")!!
             val retailerId :String= arguments?.getString("retailerId")!!
 
-            Log.e("fasdfsdfdfasfa","====${arguments?.getString("beatName")}===$retailer===$retailerId=====")
-            Log.e("fasdfsdfdfasfa","====$beatName===$retailer===$retailerId=====")
-
             callBeatRetailer(beatName)
-
 
             tvDistributor2.text = retailer
             listCart.clear()
             wordViewModel.getCartFromDist(retailerId, this@MyCart)
-
-
-           // = Editable.Factory.getInstance().newEditable(arguments?.getString("retailer"))
         }
     }
 
@@ -353,15 +331,13 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
         }
     }
 
-    private fun setTotal(listCart: List<Cart>): String? {
+    private fun setTotal(listCart: List<Cart>): String {
 
         var str = "0"
 
         for(element in listCart)
         {
             str =  String.format("%.2f",str.toFloat()+(element.customPrice.toFloat()* element.itemCount.toFloat()))
-            // (str.toFloat()+ element.overAllPrice.toFloat()).toString()
-
         }
         return str
     }
@@ -399,11 +375,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
                 json.put("ptd_price", listCart[i].ptd_price)
                 json.put("total_ptr_price", listCart[i].overAllPrice)
                 json.put("total_ptd_price", listCart[i].ptd_total)
-
-                //Ex: SO/0197/2021/0001(invoice no)
-                //
-                //SO is common for all invoice (salesOrder) and 0197 Is the distrbutor no or vendor no and 2021 is
-                // fanatical year and in last is the no that increment with last bill no.
 
 
 
@@ -511,10 +482,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
                 Navigation.findNavController(tvSubmit)
                     .navigate(R.id.action_order_detail, bundle)
 
-               /* CommonMethods.alertDialog(
-                    ctx,
-                    "Data submitted offline"
-                )*/
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -544,10 +511,10 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
 
     private fun setCartAdapter(listt: List<Cart>) {
 
-        val list :List<Cart> = listt
+        val list :MutableList<Cart> = mutableListOf()
+         list.addAll(listt)
 
         val adapter  = MyCartAdapter(list)
-
 
         if(list.isEmpty())
         {
@@ -560,7 +527,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
             tvTotalValue.visibility = View.GONE
             tvGrandTotalValue.visibility = View.GONE
             tvGrandTotal.visibility = View.GONE
-          //  tvClearCart.visibility = View.INVISIBLE
         }
         else
         {
@@ -572,8 +538,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
             tvTotalValue.visibility = View.VISIBLE
             tvGrandTotalValue.visibility = View.VISIBLE
             tvGrandTotal.visibility = View.VISIBLE
-
-           // tvClearCart.visibility = View.VISIBLE
         }
 
         totalMute.value = setTotal(list)
@@ -602,7 +566,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
                     else
                     {
                         list[pos].itemCount = (list[pos].itemCount.toInt()+1).toString()
-
                         wordViewModel.updateCart(list[pos])
                         adapter.notifyItemChanged(pos)
                         totalMute.value = setTotal(list)
@@ -614,22 +577,20 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
                     if(list[pos].itemCount.toInt()<2)
                     {
 
-
-                        //list.drop()
-                        //  Toast.makeText(ctx,"minimum limit crossed",Toast.LENGTH_SHORT).show()
                         wordViewModel.deleteCart(list[pos].cartId)
 
                         if(list.size==1)
                             {
-                               setCartAdapter(list.drop(1))
+                                list.clear()
+                               setCartAdapter(list)
                         }
                         else
                             {
-                                val id = list[pos].cartId
-
-                                setCartAdapter(list.dropWhile { it.cartId ==id })
-
+                                list.removeAt(pos)
+                                setCartAdapter(list)
                             }
+
+
                     }
 
                     else
