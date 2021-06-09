@@ -28,6 +28,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.custom_spinner.view.*
 import kotlinx.android.synthetic.main.my_cart_layout.*
+import kotlinx.android.synthetic.main.my_cart_layout.tvBeatName
+import kotlinx.android.synthetic.main.my_cart_layout.tvDistributor2
+import kotlinx.android.synthetic.main.sales_order.*
 import org.json.JSONArray
 import org.json.JSONObject
 import pathak.creations.sbl.AppController
@@ -45,7 +48,7 @@ import pathak.creations.sbl.retrofit.RetrofitResponse
 import pathak.creations.sbl.retrofit.RetrofitService
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
     CartDataChangeListener<LiveData<List<Cart>>>, RetrofitResponse,
@@ -139,6 +142,13 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
 
         tvBeatName.setOnClickListener {
             openPopShortBy(tvBeatName,listBeats)
+        }
+
+        if(PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_BEATNAME)!=null)
+        {
+            tvBeatName.text =PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_BEATNAME)
+
+            callBeatRetailer(PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_BEATNAME)!!)
         }
 
     }
@@ -655,6 +665,28 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
     private fun setRetailerAdapter(list: List<Retailer>) {
         tvDistributor2.setOnClickListener {
             openDistributorShort(tvDistributor2,list)
+        }
+
+
+
+        if(PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_RETAILERNAME)!=null)
+        {
+
+            for(i in 0 until list.size)
+            {
+                if(list[i].retailer_name==PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_RETAILERNAME))
+                {
+                    tvDistributor2.text =list[i].retailer_name
+                    listCart.clear()
+                    wordViewModel.getCartFromDist(list[i].retailer_id, this@MyCart)
+
+                }
+            }
+
+
+
+
+            //  callBeatRetailer(listBeats[0].dist_id,PreferenceFile.retrieveKey(ctx!!,CommonKeys.SELECTED_BEATNAME)!!)
         }
     }
 

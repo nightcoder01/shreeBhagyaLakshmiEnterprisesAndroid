@@ -132,7 +132,6 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
 
                 if(s.isNullOrEmpty())
                 {
-                   // setBeatRetailerAdapter(listBeatsRetailer)
                 }
                 else
                 {
@@ -329,8 +328,9 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
                             "dist_id" to listBeatsRetailer[position].dist_id
                         )
 
+                        PreferenceFile.storeKey(ctx!!,CommonKeys.SELECTED_RETAILERNAME,listBeatsRetailer[position].retailer_name)
 
-                       // Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_add_sales,bundle)
+                        // Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_add_sales,bundle)
                         Navigation.findNavController(rvRetailerVisit)
                             .navigate(R.id.retailerVisitCheckIn, bundle)
                     }
@@ -450,6 +450,16 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
             openPopShortBy(tvBeatName2,listBeats)
         }
 
+
+        if(PreferenceFile.retrieveKey(ctx!!,CommonKeys.SELECTED_BEATNAME)!=null)
+        {
+            tvBeatName2.text =PreferenceFile.retrieveKey(ctx!!,CommonKeys.SELECTED_BEATNAME)
+
+            callBeatRetailer(listBeats[0].dist_id,PreferenceFile.retrieveKey(ctx!!,CommonKeys.SELECTED_BEATNAME)!!)
+        }
+
+
+
     }
 
     var popupWindow: PopupWindow? = null
@@ -553,6 +563,8 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
         try {
 
             Log.e("callBeatRetailer", "=====$distId===$beatname")
+            PreferenceFile.storeKey(ctx!!,CommonKeys.SELECTED_BEATNAME,beatname)
+
             wordViewModel.getBeatRetailer(beatname, this)
 
 
@@ -565,12 +577,8 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
         list: List<Distributor>
 
     ) {
-
         tvDistributor2.text =PreferenceFile.retrieveKey(ctx!!,CommonKeys.SELECTED_DISTRIBUTOR_NAME)
         callBeatList(PreferenceFile.retrieveKey(ctx!!,CommonKeys.SELECTED_DISTRIBUTOR))
-        /*tvDistributor2.setOnClickListener {
-            openDistributorShort(tvDistributor2,list)
-        }*/
 
     }
 
@@ -651,7 +659,6 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
                             popupWindow!!.dismiss()
                             callBeatList(list[position].distID)
 
-                            // callBeatRetailer(list[position].dist_id,list[position].beatname)
                         }
                     })
                 }
@@ -747,8 +754,8 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
                 "salesman" to listBeatsRetailer[position].client,
                 "dist_id" to listBeatsRetailer[position].dist_id
             )
-            /*Navigation.findNavController(rvRetailerVisit)
-                .navigate(R.id.action_add_sales, bundle)*/
+            PreferenceFile.storeKey(ctx!!,CommonKeys.SELECTED_RETAILERNAME,listBeatsRetailer[position].retailer_name)
+
             Navigation.findNavController(rvRetailerVisit)
                 .navigate(R.id.retailerVisitCheckIn, bundle)
         }
@@ -811,8 +818,8 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
                        "salesman" to listBeatsRetailer[position].client,
                        "dist_id" to listBeatsRetailer[position].dist_id
                    )
-                   /*Navigation.findNavController(rvRetailerVisit)
-                       .navigate(R.id.action_add_sales, bundle)*/
+                   PreferenceFile.storeKey(ctx!!,CommonKeys.SELECTED_RETAILERNAME,listBeatsRetailer[position].retailer_name)
+
                    Navigation.findNavController(rvRetailerVisit)
                        .navigate(R.id.retailerVisitCheckIn, bundle)
                }
@@ -839,7 +846,7 @@ class RetailerVisit : Fragment(), RetrofitResponse, DataChangeListener<LiveData<
                             "salesman" to listBeatsRetailer[position].client,
                             "dist_id" to listBeatsRetailer[position].dist_id
                             )
-                       // Navigation.findNavController(rvRetailerVisit).navigate(R.id.action_add_sales,bundle)
+            PreferenceFile.storeKey(ctx!!,CommonKeys.SELECTED_RETAILERNAME,listBeatsRetailer[position].retailer_name)
             Navigation.findNavController(rvRetailerVisit)
                 .navigate(R.id.retailerVisitCheckIn, bundle)
 

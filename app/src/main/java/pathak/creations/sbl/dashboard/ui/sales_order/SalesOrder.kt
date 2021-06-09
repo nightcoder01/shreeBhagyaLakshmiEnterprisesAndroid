@@ -23,7 +23,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.custom_spinner.view.*
+import kotlinx.android.synthetic.main.retailer_visit.*
 import kotlinx.android.synthetic.main.sales_order.*
+import kotlinx.android.synthetic.main.sales_order.tvBeatName2
+import kotlinx.android.synthetic.main.sales_order.tvDistributor2
 import pathak.creations.sbl.AppController
 import pathak.creations.sbl.R
 import pathak.creations.sbl.common.CommonKeys
@@ -41,7 +44,6 @@ import pathak.creations.sbl.interfaces.DataChangeListener
 import pathak.creations.sbl.interfaces.RetailerDataChangeListener
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
@@ -127,6 +129,10 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
                     "salesman" to "",
                     "dist_id" to distIDMain
                 )
+
+
+                PreferenceFile.storeKey(ctx,CommonKeys.SELECTED_RETAILERNAME,retailerIDName)
+
 
                 CommonMethods.hideKeyboard(tvOrder)
                 Navigation.findNavController(tvOrder).navigate(R.id.action_sales_order,bundle)
@@ -904,6 +910,27 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
         tvRetailer2.setOnClickListener {
             openRetailerSpinner(tvRetailer2,listBeatsRetailer)
         }
+
+        if(PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_RETAILERNAME)!=null)
+        {
+
+           for(i in 0 until listBeatsRetailer.size)
+           {
+               if(listBeatsRetailer[i].retailer_name==PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_RETAILERNAME))
+               {
+                   tvRetailer2.text =listBeatsRetailer[i].retailer_name
+                   retailerIDMain =listBeatsRetailer[i].retailer_id
+                   retailerIDName =listBeatsRetailer[i].retailer_name
+                   phone =listBeatsRetailer[i].mobile
+               }
+           }
+
+
+
+
+          //  callBeatRetailer(listBeats[0].dist_id,PreferenceFile.retrieveKey(ctx!!,CommonKeys.SELECTED_BEATNAME)!!)
+        }
+
     }
 
     private fun openRetailerSpinner(view: TextView, listBeatsRetailer: List<Retailer>) {
@@ -1017,6 +1044,12 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
         tvBeatName2.setOnClickListener {
             openPopShortBy(tvBeatName2,listBeats)
         }
+        if(PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_BEATNAME)!=null)
+        {
+            tvBeatName2.text =PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_BEATNAME)
+
+            callBeatRetailer(listBeats[0].dist_id,PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_BEATNAME)!!)
+        }
     }
 
     var popupWindow: PopupWindow? = null
@@ -1123,7 +1156,7 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
 
             Log.e("callBeatRetailer", "=====$distId===$beatname")
             wordViewModel.getBeatRetailer(beatname, this)
-
+            PreferenceFile.storeKey(ctx,CommonKeys.SELECTED_BEATNAME,beatname)
 
 
 

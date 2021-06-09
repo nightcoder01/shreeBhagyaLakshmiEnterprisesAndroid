@@ -22,7 +22,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.add_sales_order.*
+import kotlinx.android.synthetic.main.add_sales_order.etSearch
 import kotlinx.android.synthetic.main.custom_spinner.view.*
+import kotlinx.android.synthetic.main.retailer_visit.*
 import pathak.creations.sbl.AppController
 import pathak.creations.sbl.R
 import pathak.creations.sbl.common.CommonMethods
@@ -35,7 +37,6 @@ import pathak.creations.sbl.data_classes.WordViewModel
 import pathak.creations.sbl.data_classes.WordViewModelFactory
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class AddSalesOrder : Fragment() {
@@ -52,6 +53,7 @@ class AddSalesOrder : Fragment() {
     var retailerIDName = ""
 
     var subList :ArrayList<SubCat> = ArrayList()
+    var subFilterList :ArrayList<SubCat> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -86,8 +88,149 @@ class AddSalesOrder : Fragment() {
 
         tvCancel.setOnClickListener { (view.context as Activity).onBackPressed() }
         clCart.setOnClickListener { addCart() }
-
+        setSearch()
     }
+
+
+    private fun setSearch() {
+        etSearch.addTextChangedListener(object :TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+
+                if(s.isNullOrEmpty())
+                {
+                    subFilterList.clear()
+                    subFilterList.addAll(subList)
+                }
+                else
+                {
+                    Log.e("=============","==========$s++++++")
+                    subFilterList.clear()
+                    subFilterList.addAll(subList.filter
+                    { it.description.toLowerCase().contains(s.toString().toLowerCase()) })
+                }
+                    val adapter2  = SubCategaryAdapter(subFilterList)
+                    rvSubCategories.adapter = adapter2
+
+                    adapter2.onClicked(object: SubCategaryAdapter.CardInterface{
+                        override fun changeEditMode(pos: Int, editMode: Boolean) {
+
+                            if(subFilterList[pos].cartItem.toInt()>0) {
+                                if(subFilterList[pos].price.toDouble()<=subFilterList[pos].customPrice.toDouble()) {
+
+                                    subFilterList[pos].editMode = editMode
+                                    adapter2.notifyItemChanged(pos)
+
+
+                                    Log.e("dfdsafasfa","======${subFilterList[pos]}")
+
+                                    val dNow = Date()
+                                    val ft = SimpleDateFormat("yyMMddhhmmssMs")
+                                    val datetime = ft.format(dNow)
+                                    wordViewModel.insertCart(
+                                        Cart(
+                                            0,
+                                            subFilterList[pos].distIDMain,
+                                            subFilterList[pos].description,
+                                            subFilterList[pos].price,
+                                            subFilterList[pos].customPrice,
+                                            (subFilterList[pos].customPrice.toFloat() * subFilterList[pos].cartItem.toFloat()).toString(),
+                                            subFilterList[pos].cartItem,
+                                            etBeatName.text.toString(),
+                                            subFilterList[pos].retailerIDName,
+                                            subFilterList[pos].retailerIDMain,
+                                            subFilterList[pos].distIDName,
+                                            subFilterList[pos].catgroup,
+                                            subFilterList[pos].category,
+                                            subFilterList[pos].code,
+                                            subFilterList[pos].customPrice,
+                                            subFilterList[pos].price,
+                                            (subFilterList[pos].customPrice.toFloat() * subFilterList[pos].cartItem.toFloat()).toString(),
+                                            (subFilterList[pos].price.toFloat()*subFilterList[pos].cartItem.toFloat()).toString()
+
+                                        )
+                                    )
+
+                                    Toast.makeText(
+                                        rvSubCategories.context,
+                                        "Item Added to Cart Successfully.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                else
+                                {
+                                    CommonMethods.alertDialog(ctx,"Ptd price cannot be less than Ptr price")
+
+                                }}
+                            else
+                            {
+                                CommonMethods.alertDialog(
+                                    ctx,
+                                    "Count cannot be 0"
+                                )
+                            }
+
+
+                        }
+                        override fun valueChanged(pos: Int) {
+
+                            callCustomPrice(subFilterList,adapter2,pos)
+
+                        }
+
+                        override fun clickedSelected(pos: Int, str: String) {
+                            if(str=="add")
+                            {
+                                if(subFilterList[pos].cartItem.toInt()>9999)
+                                {
+                                    Toast.makeText(ctx,"max limit crossed", Toast.LENGTH_SHORT).show()
+                                }
+                                else
+                                {
+
+                                    subFilterList[pos].cartItem = (subFilterList[pos].cartItem.toInt()+1).toString()
+                                    adapter2.notifyDataSetChanged()
+                                    setCart()
+
+                                }
+                            }
+                            if(str=="remove")
+                            {
+                                if(subFilterList[pos].cartItem.toInt()<1)
+                                {
+                                    //  Toast.makeText(ctx,"minimum limit crossed",Toast.LENGTH_SHORT).show()
+                                }
+
+                                else
+                                {
+                                    subFilterList[pos].cartItem = (subFilterList[pos].cartItem.toInt()-1).toString()
+                                    adapter2.notifyDataSetChanged()
+                                    setCart()
+                                }
+                            }
+                            if(str=="long")
+                            {
+
+                                callNumberList(adapter2,pos)
+
+                                Toast.makeText(ctx,"long",Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    })
+
+
+            }
+        })
+    }
+
 
     private fun addCart() {
         for(pos in 0 until subList.size)
