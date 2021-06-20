@@ -52,7 +52,6 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
         locationClickListener.value = "true"
     }
 
-
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     var isLocChecked: ObservableBoolean = ObservableBoolean(false)

@@ -60,6 +60,7 @@ class TransactionDetail : Fragment(), OrderDataChangeListener<LiveData<List<Orde
 
         data.observe(viewLifecycleOwner, androidx.lifecycle.Observer { dist ->
             // Update the cached copy of the words in the adapter.
+           // Log.e("sdafdfaf","=========$dist")
             listOrders.clear()
             dist?.let {
                 listOrders.addAll(dist)

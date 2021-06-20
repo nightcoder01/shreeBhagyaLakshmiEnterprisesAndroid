@@ -239,27 +239,13 @@ class SelectDistributor : AppCompatActivity(), RetrofitResponse {
                 view.text =listDist[position].distName
                 popupWindow!!.dismiss()
 
-
                 PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.SELECTED_DISTRIBUTOR,listDist[position].distID)
                 PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.SELECTED_DISTRIBUTOR_NAME,listDist[position].distName)
-
 
                 val dNow = Date()
                 val ft = SimpleDateFormat("yyMMddhhmmssMs")
                 val currentDate = ft.format(dNow)
                 PreferenceFile.storeKey(this@SelectDistributor,CommonKeys.CURRENT_DATE,currentDate)
-
-
-
-
-                /*val it = Intent(this@SelectDistributor, DashBoard::class.java)
-                it.flags =
-                    Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                startActivity(it)*/
-
-
-
-
             }
         })
 
@@ -483,10 +469,8 @@ class SelectDistributor : AppCompatActivity(), RetrofitResponse {
                         val msg = json.getString("message")
                         if (status) {
 
-                            val data = json.getJSONObject("data")
-                            val dataArray = data.getJSONArray("data")
-
-
+                            val dataArray = json.getJSONArray("data")
+                            //val dataArray = data.getJSONArray("data")
 
                             wordViewModel.deleteAllRetailer()
 

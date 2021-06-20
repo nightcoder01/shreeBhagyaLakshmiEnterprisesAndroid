@@ -1,4 +1,4 @@
-package pathak.creations.sbl.dashboard.ui.sales_history
+ package pathak.creations.sbl.dashboard.ui.sales_history
 
 import android.app.Activity
 import android.app.Dialog
@@ -61,12 +61,10 @@ class SalesHistory : Fragment(), RetrofitResponse {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         salesHistoryVM = ViewModelProvider(this).get(SalesHistoryVM::class.java)
         val root = inflater.inflate(R.layout.fragment_sales_history, container, false)
         ctx = root.context
         salesHistoryVM.dateValue.observe(viewLifecycleOwner, Observer {
-            //    tvDateValue.text = it
         })
         return root
     }
@@ -74,14 +72,8 @@ class SalesHistory : Fragment(), RetrofitResponse {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //  tvDate.setOnClickListener { salesHistoryVM.datePicker(view) }
-        //   tvDateValue.setOnClickListener { salesHistoryVM.datePicker(view) }
-//        tvAdd.setOnClickListener {
-//           Navigation.findNavController(view).navigate(R.id.action_add_shoptotal)
-//        }
 
         setSearch()
-        //setDistributor()
 
 
         if (beat.isNotEmpty()) {
@@ -407,95 +399,6 @@ class SalesHistory : Fragment(), RetrofitResponse {
 
     }
 
-    /*private fun openDistributorShort(view: TextView, listDistName: List<String>, listDistId: java.util.ArrayList<String>) {
-        val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val customView = inflater.inflate(R.layout.custom_spinner, null)
-
-
-
-        popupWindow = PopupWindow(
-            customView,
-            view.width,
-            WindowManager.LayoutParams.WRAP_CONTENT
-        )
-
-        val adapter = SpinnerCustomDistributorAdapter(listDistName)
-        customView.rvSpinner.adapter = adapter
-        adapter.onClicked(object :SpinnerCustomDistributorAdapter.CardInterface{
-            override fun clickedSelected(position: Int) {
-
-                view.text =listDistName[position]
-                popupWindow!!.dismiss()
-                callBeatList(listDistId[position])
-
-
-                // callBeatRetailer(listBeats[position].dist_id,listBeats[position].beatname)
-            }
-        })
-
-        customView.etSearch.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-                if(s.isNullOrBlank())
-                {
-                    val adapter2 = SpinnerCustomDistributorAdapter(listDistName)
-                    customView.rvSpinner.adapter = adapter2
-                    adapter2.onClicked(object :SpinnerCustomDistributorAdapter.CardInterface{
-                        override fun clickedSelected(position: Int) {
-
-                            view.text =listDistName[position]
-                            popupWindow!!.dismiss()
-                            callBeatList(listDistId[position])
-
-
-                        }
-                    })
-                }
-                else
-                {
-
-                    val list : ArrayList<String> = ArrayList()
-                    val list2 : ArrayList<String> = ArrayList()
-
-                    for(i in listDistName.indices)
-                    {
-                        if(listDistName[i].toLowerCase().contains(s.toString().toLowerCase(),false))
-                        {
-                            list.add(listDistName[i])
-                            list2.add(listDistId[i])
-                        }
-                    }
-
-                    val adapter2 = SpinnerCustomDistributorAdapter(list)
-                    customView.rvSpinner.adapter = adapter2
-                    adapter2.onClicked(object :SpinnerCustomDistributorAdapter.CardInterface{
-                        override fun clickedSelected(position: Int) {
-
-                            view.text =list[position]
-                            popupWindow!!.dismiss()
-                            callBeatList(list2[position])
-
-                        }
-                    })
-                }
-            }
-        })
-
-        popupWindow!!.isOutsideTouchable = true
-
-        popupWindow!!.showAsDropDown(view)
-        popupWindow!!.isFocusable = true
-        popupWindow!!.update()
-
-    }*/
 
     private fun setBeatRetailerAdapter(listBeatsRetailer: ArrayList<BeatRetailerData>) {
         adapter=SalesHistoryAdapter(listBeatsRetailer)
@@ -626,10 +529,6 @@ class SalesHistory : Fragment(), RetrofitResponse {
                     })
 
                 }
-
-
-
-                // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         })
 
