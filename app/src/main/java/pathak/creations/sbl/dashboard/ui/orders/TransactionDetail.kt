@@ -3,6 +3,7 @@ package pathak.creations.sbl.dashboard.ui.orders
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,7 +61,7 @@ class TransactionDetail : Fragment(), OrderDataChangeListener<LiveData<List<Orde
 
         data.observe(viewLifecycleOwner, androidx.lifecycle.Observer { dist ->
             // Update the cached copy of the words in the adapter.
-           // Log.e("sdafdfaf","=========$dist")
+            Log.e("sdafdfaf","=========$dist")
             listOrders.clear()
             dist?.let {
                 listOrders.addAll(dist)
@@ -74,15 +75,6 @@ class TransactionDetail : Fragment(), OrderDataChangeListener<LiveData<List<Orde
     private fun setItemsAdapter(listOrders: ArrayList<Orders>) {
 
         val adapter  = ItemsAdapter(listOrders)
-
-        if(listOrders.isEmpty())
-        {
-           // tvNoData.visibility = View.VISIBLE
-        }
-        else
-        {
-            //tvNoData.visibility = View.GONE
-        }
 
         rvTransaction.adapter = adapter
 

@@ -114,6 +114,9 @@ class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transacti
         //set live data observer
         wordViewModel.allOrders.observe(viewLifecycleOwner, Observer { dist ->
             // Update the cached copy of the words in the adapter.
+
+            Log.e("sdafdfaf","====11=====$dist")
+
             listOrders.clear()
             dist?.let {
 
@@ -124,6 +127,9 @@ class Orders : Fragment(),TransactionsDataChangeListener<LiveData<List<Transacti
         wordViewModel.allTransactions.observe(viewLifecycleOwner, Observer { trans ->
             // Update the cached copy of the words in the adapter.
             listTransactions.clear()
+
+            Log.e("sdafdfaf","====22=====$trans")
+
             trans?.let {
 
                 listTransactions.addAll(trans)

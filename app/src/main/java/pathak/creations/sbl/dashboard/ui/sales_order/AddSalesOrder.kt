@@ -187,7 +187,10 @@ class AddSalesOrder : Fragment() {
                         }
 
                         override fun clickedSelected(pos: Int, str: String) {
-                            if(str=="add")
+
+                            callNumberList(adapter2,pos)
+
+                            /*if(str=="add")
                             {
                                 if(subFilterList[pos].cartItem.toInt()>9999)
                                 {
@@ -221,8 +224,8 @@ class AddSalesOrder : Fragment() {
 
                                 callNumberList(adapter2,pos)
 
-                                Toast.makeText(ctx,"long",Toast.LENGTH_SHORT).show()
-                            }
+                               /// Toast.makeText(ctx,"long",Toast.LENGTH_SHORT).show()
+                            }*/
                         }
                     })
 
@@ -426,7 +429,10 @@ class AddSalesOrder : Fragment() {
                     }
 
                     override fun clickedSelected(pos: Int, str: String) {
-                        if(str=="add")
+
+                        callNumberList(adapter2,pos)
+
+                       /* if(str=="add")
                         {
                             if(subList[pos].cartItem.toInt()>9999)
                             {
@@ -461,7 +467,7 @@ class AddSalesOrder : Fragment() {
                             callNumberList(adapter2,pos)
 
                             Toast.makeText(ctx,"long",Toast.LENGTH_SHORT).show()
-                        }
+                        }*/
                     }
                 })
             }
@@ -566,7 +572,10 @@ class AddSalesOrder : Fragment() {
                                 }
 
                                 override fun clickedSelected(pos: Int, str: String) {
-                                    if(str=="add")
+
+                                    callNumberList(adapter3,pos)
+
+                                    /*if(str=="add")
                                     {
                                         if(subList[pos].cartItem.toInt()>9999)
                                         {
@@ -599,7 +608,7 @@ class AddSalesOrder : Fragment() {
                                         callNumberList(adapter3,pos)
 
                                         Toast.makeText(ctx,"long",Toast.LENGTH_SHORT).show()
-                                    }
+                                    }*/
                                 }
                             })
 
@@ -710,7 +719,10 @@ class AddSalesOrder : Fragment() {
                                 }
 
                                 override fun clickedSelected(pos: Int, str: String) {
-                                    if(str=="add")
+
+                                    callNumberList(adapter3,pos)
+
+                                   /* if(str=="add")
                                     {
                                         if(subList[pos].cartItem.toInt()>9999)
                                         {
@@ -737,7 +749,7 @@ class AddSalesOrder : Fragment() {
                                         callNumberList(adapter3,pos)
 
                                         Toast.makeText(ctx,"long",Toast.LENGTH_SHORT).show()
-                                    }
+                                    }*/
                                 }
                             })
                         }

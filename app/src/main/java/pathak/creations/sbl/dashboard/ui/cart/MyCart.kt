@@ -567,7 +567,10 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
             }
 
             override fun clickedSelected(pos: Int, str: String) {
-                if(str=="add")
+
+                callNumberList(list,adapter,pos)
+
+               /* if(str=="add")
                 {
                     if(list[pos].itemCount.toInt()>9999)
                     {
@@ -619,7 +622,8 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
                     callNumberList(list,adapter,pos)
 
                     Toast.makeText(ctx,"long",Toast.LENGTH_SHORT).show()
-                }
+                }*/
+
             }
         })
 

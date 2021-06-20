@@ -412,6 +412,7 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
         wordViewModel.deleteAllCart()
         wordViewModel.deleteAllOrders()
+        wordViewModel.deleteAllTransactions()
 
 
         PreferenceFile.removeAll(this)
