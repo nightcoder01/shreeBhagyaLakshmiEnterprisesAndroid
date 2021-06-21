@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_select_distributor.*
 import kotlinx.android.synthetic.main.custom_spinner.view.*
-import kotlinx.android.synthetic.main.toolbar.*
 import org.json.JSONObject
 import pathak.creations.sbl.AppController
 import pathak.creations.sbl.R
@@ -31,6 +30,9 @@ import pathak.creations.sbl.retrofit.RetrofitService
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import pathak.creations.sbl.welcome.WelcomeActivity
+import androidx.appcompat.app.AlertDialog
+
 
 class SelectDistributor : AppCompatActivity(), RetrofitResponse {
 
@@ -55,6 +57,9 @@ class SelectDistributor : AppCompatActivity(), RetrofitResponse {
             }
 
         }
+        ivLogOut.setOnClickListener {
+            callLogoutDialog()
+        }
        // if (PreferenceFile.retrieveKey(this@SelectDistributor, CommonKeys.IS_FIRST_CHECKED).equals("false", false)) {
             callAllServices()
       //  }
@@ -71,6 +76,47 @@ class SelectDistributor : AppCompatActivity(), RetrofitResponse {
         })
 
     }
+
+
+    private fun callLogoutDialog() {
+        val inflater = LayoutInflater.from(this)
+        val view1 = inflater.inflate(R.layout.logout_alert, null)
+        val deleteDialo = AlertDialog.Builder(this).create()
+
+        val btnYes: TextView
+        val btnNo: TextView
+        val tvText: TextView
+
+        deleteDialo.setView(view1)
+        btnYes = view1.findViewById(R.id.tvYes)
+        btnNo = view1.findViewById(R.id.tvNo)
+        tvText = view1.findViewById(R.id.tvLogoutMsg)
+        tvText.text = "Are you sure to logout?"
+        btnYes.setOnClickListener { view2 ->
+
+            deleteDialo.dismiss()
+            callLogout()
+        }
+        btnNo.setOnClickListener { view22 -> deleteDialo.dismiss() }
+
+        deleteDialo.show()
+
+    }
+
+    private fun callLogout() {
+
+
+        wordViewModel.deleteAllCart()
+        wordViewModel.deleteAllOrders()
+        wordViewModel.deleteAllTransactions()
+
+
+        PreferenceFile.removeAll(this)
+        startActivity(Intent(this, WelcomeActivity::class.java))
+        finishAffinity()
+
+    }
+
 
 
     private fun callAllServices() {

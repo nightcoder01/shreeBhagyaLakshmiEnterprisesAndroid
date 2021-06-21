@@ -7,9 +7,57 @@
     android:layout_height="match_parent"
     tools:context="pathak.creations.sbl.select_distributor.SelectDistributor">
 
-    <include
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topToolbar"
-        layout="@layout/toolbar"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_15sdp"
+            android:layout_marginStart="@dimen/_15sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:scaleType="fitXY"
+            android:visibility="gone"
+            />
+
+        <TextView
+            android:id="@+id/tvHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="?actionBarSize"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/log_in"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_15sdp"
+            android:textStyle="bold"
+            android:gravity="center"
+            />
+
+        <ImageView
+            android:id="@+id/ivLogOut"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="0dp"
+            android:padding="@dimen/_5sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="visible"
+            android:src="@drawable/ic_exit"
+            app:tint="@color/black" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/tvDistributor"

@@ -10,7 +10,6 @@ interface WordDao {
     /*@Query("SELECT * FROM word_table ORDER BY word ASC")
     fun getAlphabetizedWords(): List<Word>*/
 
-
     @Query("SELECT * FROM word_table ORDER BY word ASC")
     fun getAlphabetizedWords(): Flow<List<Word>>
 
