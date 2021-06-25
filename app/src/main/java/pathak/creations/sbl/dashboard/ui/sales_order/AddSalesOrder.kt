@@ -22,9 +22,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.add_sales_order.*
-import kotlinx.android.synthetic.main.add_sales_order.etSearch
 import kotlinx.android.synthetic.main.custom_spinner.view.*
-import kotlinx.android.synthetic.main.retailer_visit.*
 import pathak.creations.sbl.AppController
 import pathak.creations.sbl.R
 import pathak.creations.sbl.common.CommonMethods
@@ -188,7 +186,10 @@ class AddSalesOrder : Fragment() {
 
                         override fun clickedSelected(pos: Int, str: String) {
 
-                            callNumberList(adapter2,pos)
+                            Log.e("adfdsfasfa","dasfdsfasdfadsf")
+                            Log.e("adfdsfasfa","======$pos========")
+                            Log.e("adfdsfasfa","======${subFilterList.size}========")
+                            callNumberList(adapter2,pos,subFilterList)
 
                             /*if(str=="add")
                             {
@@ -344,9 +345,6 @@ class AddSalesOrder : Fragment() {
 
         val listFiltered : ArrayList<String> = getListFiltered(listCategories)
 
-
-
-
         val adapter = SpinnerCustomCategoryAdapter(listFiltered)
         customView.rvSpinner.adapter = adapter
         adapter.onClicked(object :SpinnerCustomCategoryAdapter.CardInterface{
@@ -430,7 +428,7 @@ class AddSalesOrder : Fragment() {
 
                     override fun clickedSelected(pos: Int, str: String) {
 
-                        callNumberList(adapter2,pos)
+                        callNumberList(adapter2,pos,subList)
 
                        /* if(str=="add")
                         {
@@ -498,8 +496,6 @@ class AddSalesOrder : Fragment() {
 
                             subList.clear()
                              subList  = getSubListFiltered(listFiltered2[position],listCategories)
-
-
 
                             val adapter3  = SubCategaryAdapter(subList)
                             rvSubCategories.adapter = adapter3
@@ -573,7 +569,7 @@ class AddSalesOrder : Fragment() {
 
                                 override fun clickedSelected(pos: Int, str: String) {
 
-                                    callNumberList(adapter3,pos)
+                                    callNumberList(adapter3,pos,subList)
 
                                     /*if(str=="add")
                                     {
@@ -617,22 +613,16 @@ class AddSalesOrder : Fragment() {
                 }
                 else
                 {
+                    val listFiltered2 : ArrayList<String> = ArrayList()
 
-                    val list : List<Categories> = ArrayList()
-
-                    for(i in listCategories.indices)
+                    for(i in 0 until listFiltered.size)
                     {
-                        if(listCategories[i].catgroup.toLowerCase().contains(s.toString().toLowerCase(),false))
+
+                        if(listFiltered[i].toString().toLowerCase().contains(s.toString().toLowerCase(),false))
                         {
-
-                            list.plus(listCategories[i])
-
-                            //list.add(listCategories[i])
-
+                            listFiltered2.add(listFiltered[i])
                         }
                     }
-
-                    val listFiltered2 : ArrayList<String> = getListFiltered(list)
 
                     val adapter2 = SpinnerCustomCategoryAdapter(listFiltered2)
                     customView.rvSpinner.adapter = adapter2
@@ -643,7 +633,7 @@ class AddSalesOrder : Fragment() {
                             popupWindow!!.dismiss()
 
                             subList.clear()
-                             subList  = getSubListFiltered(listFiltered2[position],list)
+                             subList  = getSubListFiltered(listFiltered2[position],listCategories)
 
 
                             val adapter3  = SubCategaryAdapter(subList)
@@ -720,7 +710,7 @@ class AddSalesOrder : Fragment() {
 
                                 override fun clickedSelected(pos: Int, str: String) {
 
-                                    callNumberList(adapter3,pos)
+                                    callNumberList(adapter3,pos,subList)
 
                                    /* if(str=="add")
                                     {
@@ -795,7 +785,8 @@ class AddSalesOrder : Fragment() {
 
     private fun callNumberList(
         adapter2: SubCategaryAdapter,
-        pos: Int
+        pos: Int,
+        list: ArrayList<SubCat>
     ) {
 
 
@@ -814,7 +805,7 @@ class AddSalesOrder : Fragment() {
         tvSubmit.setOnClickListener {
 
             Toast.makeText(ctx,npItem.value.toString(),Toast.LENGTH_SHORT).show()
-            subList[pos].cartItem = npItem.value.toString()
+            list[pos].cartItem = npItem.value.toString()
             adapter2.notifyItemChanged(pos)
             dialogBuilderMain.dismiss()
             setCart()
@@ -906,7 +897,8 @@ class AddSalesOrder : Fragment() {
             list = list.distinct() as ArrayList<String>
         }
 
-      // list =  list.distinct() as ArrayList<String>
+        Collections.sort(list)
+
 
         return list
 

@@ -114,6 +114,7 @@ class SalesHistory : Fragment(), RetrofitResponse {
                     listBeatsRetailerFilter.clear()
 
 
+
                     listBeatsRetailerFilter.addAll(listBeatsRetailer.filter
                     { it.retailer_name.toLowerCase().contains(s.toString().toLowerCase())
                             ||

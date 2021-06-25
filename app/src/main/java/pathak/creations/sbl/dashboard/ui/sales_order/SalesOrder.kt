@@ -504,9 +504,11 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
 
                     val list : List<Categories> = ArrayList()
 
+
+
                     for(i in listCategories.indices)
                     {
-                        if(listCategories[i].catgroup.toLowerCase().contains(s.toString().toLowerCase(),false))
+                        if(listCategories[i].catgroup.toString().toLowerCase().contains(s.toString().toLowerCase(),false))
                         {
                             list.plus(listCategories[i])
 
