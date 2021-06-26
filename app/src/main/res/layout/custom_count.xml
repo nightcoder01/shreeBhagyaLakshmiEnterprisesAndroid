@@ -2,13 +2,73 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/white_background"
     android:padding="@dimen/_20sdp"
     >
 
 
+
+    <TextView
+        android:id="@+id/tvEnterPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Custom Item Count"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_14sdp"
+        android:textStyle="italic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <EditText
+        android:id="@+id/etEnterPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:inputType="number"
+        android:maxLength="5"
+        android:textSize="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@id/tvEnterPrice"
+        />
+
+
+    <TextView
+        android:id="@+id/tvSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_6sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:background="@drawable/button_shape"
+        android:paddingStart="@dimen/_20sdp"
+        android:paddingTop="@dimen/_3sdp"
+        android:paddingEnd="@dimen/_20sdp"
+        android:paddingBottom="@dimen/_3sdp"
+        android:text="@string/submit"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etEnterPrice" />
+
+
+
+    <TextView
+        android:id="@+id/tvCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_6sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:background="@drawable/button_shape"
+        android:paddingStart="@dimen/_20sdp"
+        android:paddingTop="@dimen/_3sdp"
+        android:paddingEnd="@dimen/_20sdp"
+        android:paddingBottom="@dimen/_3sdp"
+        android:text="@string/cancel"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etEnterPrice" />
 
 
 
@@ -20,10 +80,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
         />
 
 
-    <TextView
+    <!--<TextView
         android:id="@+id/tvSubmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,8 +98,9 @@
         android:text="@string/submit"
         android:textColor="@color/white"
         android:textSize="@dimen/_12sdp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/npItem" />
+        app:layout_constraintTop_toBottomOf="@id/npItem" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

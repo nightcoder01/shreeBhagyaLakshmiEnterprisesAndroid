@@ -669,6 +669,9 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
 
         val tvSubmit :TextView= layout.findViewById(R.id.tvSubmit)
         val npItem :NumberPicker= layout.findViewById(R.id.npItem)
+        val tvCancel :NumberPicker= layout.findViewById(R.id.tvCancel)
+
+        val etEnterPrice : EditText = layout.findViewById(R.id.etEnterPrice)
 
         dialogBuilderMain = dialogBuilder.create()
         dialogBuilderMain.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -677,11 +680,24 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
 
         tvSubmit.setOnClickListener {
 
-            Toast.makeText(ctx,npItem.value.toString(),Toast.LENGTH_SHORT).show()
-            subList[pos].cartItem = npItem.value.toString()
-            adapter2.notifyItemChanged(pos)
-            dialogBuilderMain.dismiss()
+            if(etEnterPrice.text.toString().isEmpty())
+                        {
+                            Toast.makeText(ctx,"Item count is empty.",Toast.LENGTH_SHORT).show()
+                        }
+                        else {
+
+
+                subList[pos].cartItem = etEnterPrice.text.toString()
+                adapter2.notifyItemChanged(pos)
+                dialogBuilderMain.dismiss()
+
+            }
         }
+         tvCancel.setOnClickListener {
+
+                        dialogBuilderMain.dismiss()
+                }
+
         npItem.maxValue = 9999
         npItem.minValue = 0
 

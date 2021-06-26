@@ -13,10 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.NumberPicker
-import android.widget.PopupWindow
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.widget.AlertDialogLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -643,6 +640,8 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
 
         val tvSubmit :TextView= layout.findViewById(R.id.tvSubmit)
         val npItem : NumberPicker = layout.findViewById(R.id.npItem)
+        val etEnterPrice : EditText = layout.findViewById(R.id.etEnterPrice)
+        val tvCancel : NumberPicker = layout.findViewById(R.id.tvCancel)
 
         dialogBuilderMain = dialogBuilder.create()
         dialogBuilderMain.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -652,13 +651,15 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
         tvSubmit.setOnClickListener {
 
             Toast.makeText(ctx,npItem.value.toString(),Toast.LENGTH_SHORT).show()
-            if(npItem.value.toString()!="0") {
-                subList[pos].itemCount = npItem.value.toString()
+            if(etEnterPrice.text.toString()!="0" && etEnterPrice.text.toString().isEmpty() ) {
+                subList[pos].itemCount = etEnterPrice.text.toString()
                 wordViewModel.updateCart(subList[pos])
                 adapter2.notifyItemChanged(pos)
                 totalMute.value = setTotal(subList)
             }
             dialogBuilderMain.dismiss()
+
+
         }
         npItem.maxValue = 9999
         npItem.minValue = 1

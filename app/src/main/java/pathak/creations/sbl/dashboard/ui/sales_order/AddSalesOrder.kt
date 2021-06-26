@@ -789,13 +789,14 @@ class AddSalesOrder : Fragment() {
         list: ArrayList<SubCat>
     ) {
 
-
         val dialogBuilder = AlertDialog.Builder(ctx)
         val layout = AlertDialogLayout.inflate(ctx, R.layout.custom_count,null)
         dialogBuilder.setView(layout)
 
         val tvSubmit :TextView= layout.findViewById(R.id.tvSubmit)
+        val tvCancel :TextView= layout.findViewById(R.id.tvCancel)
         val npItem : NumberPicker = layout.findViewById(R.id.npItem)
+        val etEnterPrice : EditText = layout.findViewById(R.id.etEnterPrice)
 
         dialogBuilderMain = dialogBuilder.create()
         dialogBuilderMain.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -804,11 +805,23 @@ class AddSalesOrder : Fragment() {
 
         tvSubmit.setOnClickListener {
 
-            Toast.makeText(ctx,npItem.value.toString(),Toast.LENGTH_SHORT).show()
-            list[pos].cartItem = npItem.value.toString()
-            adapter2.notifyItemChanged(pos)
-            dialogBuilderMain.dismiss()
-            setCart()
+
+            if(etEnterPrice.text.toString().isEmpty())
+            {
+                Toast.makeText(ctx,"Item count is empty.",Toast.LENGTH_SHORT).show()
+            }
+            else
+            {
+                list[pos].cartItem = etEnterPrice.text.toString()
+                adapter2.notifyItemChanged(pos)
+                dialogBuilderMain.dismiss()
+                setCart()
+            }
+
+        }
+        tvCancel.setOnClickListener {
+
+                dialogBuilderMain.dismiss()
         }
         npItem.maxValue = 9999
         npItem.minValue = 0
