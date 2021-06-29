@@ -350,12 +350,15 @@ class AddSalesOrder : Fragment() {
         adapter.onClicked(object :SpinnerCustomCategoryAdapter.CardInterface{
             override fun clickedSelected(position: Int) {
 
+
+                ////////clickeddddddd
+
                 view.text =listFiltered[position]
                 popupWindow!!.dismiss()
 
                 //setSubCategory
                 subList.clear()
-                 subList = getSubListFiltered(listFiltered[position],listCategories)
+                 subList = getSubListFiltered(listFiltered[position],listCategories,view.text.toString())
 
                 val adapter2  = SubCategaryAdapter(subList)
                 rvSubCategories.adapter = adapter2
@@ -491,11 +494,15 @@ class AddSalesOrder : Fragment() {
                     adapter2.onClicked(object :SpinnerCustomCategoryAdapter.CardInterface{
                         override fun clickedSelected(position: Int) {
 
+
+
+                            ///////////clicked
+
                             view.text =listFiltered2[position]
                             popupWindow!!.dismiss()
 
                             subList.clear()
-                             subList  = getSubListFiltered(listFiltered2[position],listCategories)
+                             subList  =  getSubListFiltered(listFiltered2[position],listCategories,view.text.toString())
 
                             val adapter3  = SubCategaryAdapter(subList)
                             rvSubCategories.adapter = adapter3
@@ -633,7 +640,7 @@ class AddSalesOrder : Fragment() {
                             popupWindow!!.dismiss()
 
                             subList.clear()
-                             subList  = getSubListFiltered(listFiltered2[position],listCategories)
+                             subList  = getSubListFiltered(listFiltered2[position],listCategories,view.text.toString())
 
 
                             val adapter3  = SubCategaryAdapter(subList)
@@ -877,22 +884,46 @@ class AddSalesOrder : Fragment() {
         dialogBuilderMain.show()
     }
 
-    private fun getSubListFiltered(s: String, listCategories: List<Categories>): ArrayList<SubCat> {
+    private fun getSubListFiltered(s: String, listCategories: List<Categories>,all: String): ArrayList<SubCat> {
 
         val list :ArrayList<SubCat>  = ArrayList()
 
         for(i in listCategories.indices)
         {
-            if(listCategories[i].catgroup==s)
-            {
-                list.add(SubCat(listCategories[i].catgroup,listCategories[i].catgroup,
-                    listCategories[i].code,listCategories[i].description,
-                    listCategories[i].price,listCategories[i].weight,
-                    listCategories[i].ptrflag,"0",
-                    String.format("%.2f",(listCategories[i].price.toFloat()+(listCategories[i].price.toFloat()*(45))/1000 )) ,
-                    "0.0",dist_id,distIDName,retailerIDMain,retailerIDName
-                ))
+            if(all!="All") {
+                if (listCategories[i].catgroup == s) {
+                    list.add(
+                        SubCat(
+                            listCategories[i].catgroup, listCategories[i].catgroup,
+                            listCategories[i].code, listCategories[i].description,
+                            listCategories[i].price, listCategories[i].weight,
+                            listCategories[i].ptrflag, "0",
+                            String.format(
+                                "%.2f",
+                                (listCategories[i].price.toFloat() + (listCategories[i].price.toFloat() * (45)) / 1000)
+                            ),
+                            "0.0", dist_id, distIDName, retailerIDMain, retailerIDName
+                        )
+                    )
+                }
             }
+            else
+            {
+                list.add(
+                    SubCat(
+                        listCategories[i].catgroup, listCategories[i].catgroup,
+                        listCategories[i].code, listCategories[i].description,
+                        listCategories[i].price, listCategories[i].weight,
+                        listCategories[i].ptrflag, "0",
+                        String.format(
+                            "%.2f",
+                            (listCategories[i].price.toFloat() + (listCategories[i].price.toFloat() * (45)) / 1000)
+                        ),
+                        "0.0", dist_id, distIDName, retailerIDMain, retailerIDName
+                    )
+                )
+            }
+
         }
         return list
 
@@ -901,6 +932,8 @@ class AddSalesOrder : Fragment() {
     private fun getListFiltered(listCategories: List<Categories>): ArrayList<String> {
 
         var list :ArrayList<String> = ArrayList()
+
+
         for(element in listCategories)
         {
             list.add(element.catgroup)
@@ -910,7 +943,8 @@ class AddSalesOrder : Fragment() {
             list = list.distinct() as ArrayList<String>
         }
 
-        Collections.sort(list)
+        list.sort()
+        list.add(0,"All")
 
 
         return list
