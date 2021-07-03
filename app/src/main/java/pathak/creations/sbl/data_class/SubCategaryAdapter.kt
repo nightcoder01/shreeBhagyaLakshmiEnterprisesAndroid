@@ -52,6 +52,9 @@ class SubCategaryAdapter(var list: List<SubCat>) :
         holder.itemView.etPriceEditedValue.text =Editable.Factory.getInstance().newEditable(list[position].customPrice)
         holder.itemView.tvPriceOverallValue.text  = String.format("%.2f",(holder.itemView.etPriceEditedValue.text.toString().toFloat()*holder.itemView.tvCount.text.toString().toFloat()))
 
+
+
+
         holder.itemView.flAdd.setOnClickListener{
             if(list[position].editMode)
             {

@@ -77,8 +77,7 @@ class AddSalesOrder : Fragment() {
         getArgumentedData()
 
 
-        val adapter =
-            ArrayAdapter.createFromResource(view.context, R.array.array_name, R.layout.spinner_item)
+        val adapter = ArrayAdapter.createFromResource(view.context, R.array.array_name, R.layout.spinner_item)
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
         spBeatName.adapter = adapter
         spDistributor.adapter = adapter
@@ -186,7 +185,6 @@ class AddSalesOrder : Fragment() {
 
                         override fun clickedSelected(pos: Int, str: String) {
 
-                            Log.e("adfdsfasfa","dasfdsfasdfadsf")
                             Log.e("adfdsfasfa","======$pos========")
                             Log.e("adfdsfasfa","======${subFilterList.size}========")
                             callNumberList(adapter2,pos,subFilterList)
