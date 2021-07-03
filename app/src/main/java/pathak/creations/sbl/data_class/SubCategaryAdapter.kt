@@ -1,6 +1,8 @@
 package pathak.creations.sbl.data_class
 
 import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,12 +50,48 @@ class SubCategaryAdapter(var list: List<SubCat>) :
         holder.itemView.tvImageText.text = list[position].description
         holder.itemView.tvPriceValue.text = list[position].price
         holder.itemView.tvEditedPriceValue.text = "("+list[position].customPrice+")"
-        holder.itemView.tvCount.text = list[position].cartItem
+        holder.itemView.tvCount.text = Editable.Factory.getInstance().newEditable(if(list[position].cartItem.toInt()==0){""}else{list[position].cartItem})
         holder.itemView.etPriceEditedValue.text =Editable.Factory.getInstance().newEditable(list[position].customPrice)
-        holder.itemView.tvPriceOverallValue.text  = String.format("%.2f",(holder.itemView.etPriceEditedValue.text.toString().toFloat()*holder.itemView.tvCount.text.toString().toFloat()))
+        if(holder.itemView.tvCount
+                .text.toString().isNotEmpty()) {
+            holder.itemView.tvPriceOverallValue.text = String.format(
+                "%.2f",
+                (holder.itemView.etPriceEditedValue.text.toString()
+                    .toFloat() * holder.itemView.tvCount.text.toString().toFloat())
+            )
+        }
+
+        holder.itemView.tvCount.addTextChangedListener(object :TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun afterTextChanged(s: Editable?) {
 
 
 
+                if(!s.isNullOrBlank() && s.toString().toInt()!=0)
+                {
+                    list[position].cartItem = s.toString()
+                    holder.itemView.tvPriceOverallValue.text = String.format("%.2f", (holder.itemView.etPriceEditedValue.text.toString().toFloat() * holder.itemView.tvCount.text.toString().toFloat()))
+                    clicked.clickedSelected(position,"add")
+                }
+                else
+                {
+                    list[position].cartItem = "0"
+                    holder.itemView.tvPriceOverallValue.text = ""
+                    clicked.clickedSelected(position,"add")
+                }
+
+                //TODO("Not yet implemented")
+            }
+        })
+
+/*
 
         holder.itemView.flAdd.setOnClickListener{
             if(list[position].editMode)
@@ -82,6 +120,7 @@ class SubCategaryAdapter(var list: List<SubCat>) :
                 clicked.clickedSelected(position, "remove")
             }
         }
+*/
 
         holder.itemView.etPriceEditedValue.setOnClickListener {
             clicked.valueChanged(position)

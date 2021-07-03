@@ -83,6 +83,8 @@ class AddSalesOrder : Fragment() {
         spDistributor.adapter = adapter
         spDistributorId.adapter = adapter
 
+
+
         tvCancel.setOnClickListener { (view.context as Activity).onBackPressed() }
         clCart.setOnClickListener { addCart() }
         setSearch()
@@ -187,7 +189,8 @@ class AddSalesOrder : Fragment() {
 
                             Log.e("adfdsfasfa","======$pos========")
                             Log.e("adfdsfasfa","======${subFilterList.size}========")
-                            callNumberList(adapter2,pos,subFilterList)
+                            setCart()
+                           // callNumberList(adapter2,pos,subFilterList)
 
                             /*if(str=="add")
                             {
@@ -429,7 +432,8 @@ class AddSalesOrder : Fragment() {
 
                     override fun clickedSelected(pos: Int, str: String) {
 
-                        callNumberList(adapter2,pos,subList)
+                        setCart()
+                       //  (adapter2,pos,subList)
 
                        /* if(str=="add")
                         {
@@ -573,8 +577,8 @@ class AddSalesOrder : Fragment() {
                                 }
 
                                 override fun clickedSelected(pos: Int, str: String) {
-
-                                    callNumberList(adapter3,pos,subList)
+                                    setCart()
+                                   // callNumberList(adapter3,pos,subList)
 
                                     /*if(str=="add")
                                     {
@@ -714,8 +718,8 @@ class AddSalesOrder : Fragment() {
                                 }
 
                                 override fun clickedSelected(pos: Int, str: String) {
-
-                                    callNumberList(adapter3,pos,subList)
+                                    setCart()
+                                   // callNumberList(adapter3,pos,subList)
 
                                    /* if(str=="add")
                                     {

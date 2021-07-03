@@ -184,6 +184,7 @@
                     android:hint="QTY"
                     android:gravity="center"
                     android:textColor="@color/black"
+                    android:inputType="number"
                     android:textSize="@dimen/_8sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -565,7 +565,27 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
 
             override fun clickedSelected(pos: Int, str: String) {
 
-                callNumberList(list,adapter,pos)
+                wordViewModel.updateCart(list[pos])
+                totalMute.value = setTotal(list)
+
+                if(list[pos].itemCount=="0")
+                {
+                    wordViewModel.deleteCart(list[pos].cartId)
+                    if(list.size==1)
+                    {
+                        list.clear()
+                        setCartAdapter(list)
+                    }
+                    else
+                    {
+                        list.removeAt(pos)
+                        setCartAdapter(list)
+                    }
+                }
+
+
+
+                //callNumberList(list,adapter,pos)
 
                /* if(str=="add")
                 {
@@ -641,7 +661,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
         val tvSubmit :TextView= layout.findViewById(R.id.tvSubmit)
         val npItem : NumberPicker = layout.findViewById(R.id.npItem)
         val etEnterPrice : EditText = layout.findViewById(R.id.etEnterPrice)
-        val tvCancel : NumberPicker = layout.findViewById(R.id.tvCancel)
 
         dialogBuilderMain = dialogBuilder.create()
         dialogBuilderMain.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
