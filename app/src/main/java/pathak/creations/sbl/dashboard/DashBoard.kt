@@ -74,9 +74,10 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
         val currentDate = ft.format(dNow)
 
 
+        //210706122328728
+        //210706123413713
         val diff = CommonMethods.getDateDiff(ft,currentDate,PreferenceFile.retrieveKey(this,CommonKeys.CURRENT_DATE)!!)
         Log.e("dfadsfafd","======${PreferenceFile.retrieveKey(this,CommonKeys.CURRENT_DATE)!!}===$dNow==$currentDate==$diff")
-
 
 
         if(diff>0)

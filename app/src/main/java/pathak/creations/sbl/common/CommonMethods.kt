@@ -122,7 +122,7 @@ object CommonMethods  {
 
 
     @ExperimentalTime
-    fun getDateDiff(format: SimpleDateFormat, oldDate: String, newDate: String): Long {
+    fun getDateDiff(format: SimpleDateFormat, newDate: String, oldDate: String): Long {
         return try {
             DurationUnit.DAYS.convert(
                 format.parse(newDate).time - format.parse(oldDate).time,
