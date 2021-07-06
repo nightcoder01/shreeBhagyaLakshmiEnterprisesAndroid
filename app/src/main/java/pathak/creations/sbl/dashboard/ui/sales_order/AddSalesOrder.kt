@@ -131,9 +131,7 @@ class AddSalesOrder : Fragment() {
 
                                     Log.e("dfdsafasfa","======${subFilterList[pos]}")
 
-                                    val dNow = Date()
-                                    val ft = SimpleDateFormat("yyMMddhhmmssMs")
-                                    val datetime = ft.format(dNow)
+
                                     wordViewModel.insertCart(
                                         Cart(
                                             0,
@@ -154,7 +152,7 @@ class AddSalesOrder : Fragment() {
                                             subFilterList[pos].price,
                                             (subFilterList[pos].customPrice.toFloat() * subFilterList[pos].cartItem.toFloat()).toString(),
                                             (subFilterList[pos].price.toFloat()*subFilterList[pos].cartItem.toFloat()).toString()
-
+                                        ,"online"
                                         )
                                     )
 
@@ -245,9 +243,6 @@ class AddSalesOrder : Fragment() {
 
                 Log.e("dfohsdfhapbnf ","===========${subList[pos].cartItem}")
 
-                val dNow = Date()
-                val ft = SimpleDateFormat("yyMMddhhmmssMs")
-                val datetime = ft.format(dNow)
                 wordViewModel.insertCart(
                     Cart(0,
                         subList[pos].distIDMain,
@@ -267,7 +262,7 @@ class AddSalesOrder : Fragment() {
                         subList[pos].price,
                          (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
                         (subList[pos].price.toFloat() * subList[pos].cartItem.toFloat()).toString()
-
+                    ,"online"
                     )
                 )
             }
@@ -376,9 +371,6 @@ class AddSalesOrder : Fragment() {
 
                                 Log.e("dfdsafasfa","======${subList[pos]}")
 
-                                val dNow = Date()
-                                val ft = SimpleDateFormat("yyMMddhhmmssMs")
-                                val datetime = ft.format(dNow)
                                 wordViewModel.insertCart(
                                     Cart(
                                         0,
@@ -399,7 +391,7 @@ class AddSalesOrder : Fragment() {
                                         subList[pos].price,
                                         (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
                                         (subList[pos].price.toFloat()*subList[pos].cartItem.toFloat()).toString()
-
+                                    ,"online"
                                     )
                                 )
 
@@ -520,9 +512,6 @@ class AddSalesOrder : Fragment() {
                                             subList[pos].editMode = editMode
                                             adapter3.notifyItemChanged(pos)
 
-                                            val dNow = Date()
-                                            val ft = SimpleDateFormat("yyMMddhhmmssMs")
-                                            val datetime = ft.format(dNow)
                                             wordViewModel.insertCart(
                                                 Cart(
                                                     0,
@@ -543,7 +532,7 @@ class AddSalesOrder : Fragment() {
                                                     subList[pos].price,
                                                     (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
                                                     (subList[pos].price.toFloat()*subList[pos].cartItem.toFloat()).toString()
-
+                                                ,"online"
                                                 )
                                             )
 
@@ -658,11 +647,6 @@ class AddSalesOrder : Fragment() {
                                             subList[pos].editMode = editMode
                                             adapter3.notifyItemChanged(pos)
 
-                                            val dNow = Date()
-                                            val ft = SimpleDateFormat("yyMMddhhmmssMs")
-                                            val datetime = ft.format(dNow)
-
-
                                             wordViewModel.insertCart(
                                                 Cart(
                                                     0,
@@ -683,7 +667,7 @@ class AddSalesOrder : Fragment() {
                                                     subList[pos].price,
                                                     (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
                                                     (subList[pos].price.toFloat()*subList[pos].cartItem.toFloat()).toString()
-
+                                                ,"online"
                                                 )
                                             )
 

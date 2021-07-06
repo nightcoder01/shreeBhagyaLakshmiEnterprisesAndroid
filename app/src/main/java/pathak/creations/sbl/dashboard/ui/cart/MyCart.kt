@@ -70,7 +70,15 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
             if(listCart.isEmpty())
             {
             dist?.let {
-                listCart.addAll(dist)
+
+                for(i in it.indices)
+                {
+
+                    if(it[i].offline_status=="online") listCart.add(it[i])
+
+                }
+
+                      //listCart.addAll(dist)
 
                 Log.e("dfsfdsfsdfsdfsdfs","=====${listCart.size}")
 
@@ -282,7 +290,13 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
             {
             dist?.let {
 
-                listCart.addAll(dist)
+
+                for(i in it.indices)
+                {
+                    if(it[i].offline_status=="online") listCart.add(it[i])
+                }
+
+               // listCart.addAll(dist)
                 Log.e("dsffsdfds","=====${listCart.size}")
 
 
@@ -344,7 +358,12 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
 
         for(element in listCart)
         {
-            str =  String.format("%.2f",str.toFloat()+(element.customPrice.toFloat()* element.itemCount.toFloat()))
+            if(element.offline_status=="online") {
+                str = String.format(
+                    "%.2f",
+                    str.toFloat() + (element.customPrice.toFloat() * element.itemCount.toFloat())
+                )
+            }
         }
         return str
     }
@@ -471,7 +490,11 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
 
                 for(i in 0 until listCart.size)
                 {
-                    wordViewModel.deleteCart(listCart[i].cartId)
+                   // wordViewModel.deleteCart(listCart[i].cartId)
+
+                       val cart = listCart[i]
+                    cart.offline_status = "offline"
+                    wordViewModel.updateCart(cart)
                 }
 
                 Toast.makeText(ctx,"Data submitted offline",Toast.LENGTH_SHORT).show()

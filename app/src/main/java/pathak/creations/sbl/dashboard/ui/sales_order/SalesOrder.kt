@@ -255,14 +255,6 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
                                     subList[pos].editMode = editMode
                                     adapter2.notifyItemChanged(pos)
 
-
-                                    val dNow = Date()
-                                    val ft = SimpleDateFormat("yyMMddhhmmssMs")
-                                    val datetime = ft.format(dNow)
-
-                                    Log.e("dfasdfs0","=====${subList[pos].distIDMain}")
-                                    Log.e("dfasdfs0","=====${subList[pos].distIDMain}")
-
                                     wordViewModel.insertCart(
                                         Cart(
                                             0,
@@ -283,7 +275,7 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
                                             subList[pos].price,
                                             (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
                                             (subList[pos].price.toFloat()*subList[pos].cartItem.toFloat()).toString()
-
+                                        ,"online"
                                         )
                                     )
 
@@ -400,10 +392,6 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
                                                 subList[pos].editMode = editMode
                                                 adapter3.notifyItemChanged(pos)
 
-                                                val dNow = Date()
-                                                val ft = SimpleDateFormat("yyMMddhhmmssMs")
-                                                val datetime = ft.format(dNow)
-
                                                 wordViewModel.insertCart(
                                                     Cart(
                                                         0,
@@ -424,7 +412,7 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
                                                         subList[pos].price,
                                                         (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
                                                         (subList[pos].price.toFloat()*subList[pos].cartItem.toFloat()).toString()
-
+                                                    ,"online"
                                                     )
                                                 )
 
@@ -546,10 +534,6 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
                                                 subList[pos].editMode = editMode
                                                 adapter3.notifyItemChanged(pos)
 
-                                                val dNow = Date()
-                                                val ft = SimpleDateFormat("yyMMddhhmmssMs")
-                                                val datetime = ft.format(dNow)
-
                                                 wordViewModel.insertCart(
                                                     Cart(
                                                         0,
@@ -570,7 +554,7 @@ class SalesOrder : Fragment(),  DataChangeListener<LiveData<List<Beat>>>,
                                                         subList[pos].price,
                                                         (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
                                                         (subList[pos].price.toFloat()*subList[pos].cartItem.toFloat()).toString()
-
+                                                    ,"online"
                                                     )
                                                 )
 

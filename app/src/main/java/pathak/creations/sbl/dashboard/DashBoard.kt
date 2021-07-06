@@ -133,7 +133,6 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
         menuInflater.inflate(R.menu.dash_board, menu)
 
-
         val item = menu.findItem(R.id.action_cart)
 
         MenuItemCompat.setActionView(item, R.layout.badg_layout)
@@ -174,7 +173,12 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
             dist?.let {
 
-                tv.text = dist.size.toString()
+                var count = 0
+                for(i in it.indices)
+                {
+                    if(it[i].offline_status=="online") count += 1
+                }
+                tv.text = count.toString()
 
             }
         })
@@ -390,12 +394,9 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
         val view1 = inflater.inflate(R.layout.logout_alert, null)
         val deleteDialo = AlertDialog.Builder(this).create()
 
-        val btnYes: TextView
-        val btnNo: TextView
-
         deleteDialo.setView(view1)
-        btnYes = view1.findViewById(R.id.tvYes)
-        btnNo = view1.findViewById(R.id.tvNo)
+        val btnYes: TextView = view1.findViewById(R.id.tvYes)
+        val btnNo: TextView = view1.findViewById(R.id.tvNo)
         btnYes.setOnClickListener { view2 ->
 
             deleteDialo.dismiss()

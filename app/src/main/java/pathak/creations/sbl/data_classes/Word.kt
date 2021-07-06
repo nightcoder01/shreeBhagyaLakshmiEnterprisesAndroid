@@ -59,7 +59,8 @@ class Cart(@PrimaryKey (autoGenerate = true) val cartId : Int, @ColumnInfo(name 
            , @ColumnInfo(name = "dist_name")var dist_name : String, @ColumnInfo(name = "cat_group")var cat_group : String
            , @ColumnInfo(name = "category")var category : String, @ColumnInfo(name = "cat_code")var cat_code : String
            , @ColumnInfo(name = "ptr_price")var ptr_price : String, @ColumnInfo(name = "ptd_price")var ptd_price : String
-           , @ColumnInfo(name = "ptr_total")var ptr_total : String, @ColumnInfo(name = "ptd_total")var ptd_total : String) :Serializable
+           , @ColumnInfo(name = "ptr_total")var ptr_total : String, @ColumnInfo(name = "ptd_total")var ptd_total : String
+           , @ColumnInfo(name = "offline_status")var offline_status : String) :Serializable
 
 
 @Entity(tableName = "transaction_table")
