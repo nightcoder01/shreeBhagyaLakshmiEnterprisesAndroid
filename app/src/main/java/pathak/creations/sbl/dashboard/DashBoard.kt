@@ -62,7 +62,6 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
     var isLocChecked: ObservableBoolean = ObservableBoolean(false)
 
-
      var locationClickListener : MutableLiveData<String> = MutableLiveData()
     var locationClicked : LiveData<String> = locationClickListener
 
@@ -162,8 +161,6 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
         val badgeLayout = menu.findItem(R.id.action_cart).actionView as RelativeLayout
 
-
-
             badgeLayout.setOnClickListener {
                 Log.e("badgeLayout=", "======1111=====")
                 if(navController.currentDestination!!.label!="My Cart") {
@@ -212,10 +209,12 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
                     if(cartItem>0)
                     {
-                        callPlaceOrder(listCart)
+                        callCartAlert()
                     }
                     else
-                    { callLogoutDialog() }
+                    {
+                        callLogoutDialog()
+                    }
                 }
                 else
                 {
@@ -250,30 +249,20 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
         }
 
 
-        navController.addOnDestinationChangedListener(object :NavController.OnDestinationChangedListener{
-            override fun onDestinationChanged(
-                controller: NavController,
-                destination: NavDestination,
-                arguments: Bundle?
-            ) {
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            if (destination.label == "Home") {
+                logOut.isVisible = true
+                refresh.isVisible = true
+            } else {
+                logOut.isVisible = false
+                refresh.isVisible = false
 
-                if(destination.label=="Home"){
-                    logOut.isVisible = true
-                    refresh.isVisible = true
-                }
-                else
-                {
-                    logOut.isVisible = false
-                    refresh.isVisible = false
+                if (destination.label == "Add Sales Order") {
 
-                    if(destination.label=="Add Sales Order")
-                    {
-
-                        locationIs.isVisible = false
-                    }
+                    locationIs.isVisible = false
                 }
             }
-        })
+        }
 
 
 
@@ -366,18 +355,7 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
                 )
             }
 
-            wordViewModel.insertTransactions(
-                Transactions(
-                    0,
-                    transactionNo,
-                    PreferenceFile.retrieveKey(this,CommonKeys.SELECTED_DISTRIBUTOR)!!,
-                    PreferenceFile.retrieveKey(this,CommonKeys.SELECTED_DISTRIBUTOR)!!,
-                    listCart[0].retailer_code,
-                    listCart[0].retailer_name,
-                    listCart[0].beatName,
-                    listCart.size.toString(),
-                    tvTotalValue.text.toString()
-                ))
+
 
             jsonArray.put(json)
             jsonMain.put("items",jsonArray)
@@ -413,6 +391,23 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
         alertDialog.setPositiveButton("ok") { dialog, which ->
             dialog.dismiss()
 
+        }
+        alertDialog.setNegativeButton("cancel")
+        {
+                dialog, which ->
+            dialog.dismiss()
+        }
+
+        alertDialog.show()
+    }
+    private fun callCartAlert() {
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.setTitle("Sync online")
+        alertDialog.setCancelable(false)
+        alertDialog.setMessage("Please sync data before logout ..FOR TODAY.")
+        alertDialog.setPositiveButton("ok") { dialog, which ->
+            dialog.dismiss()
+            callPlaceOrder(listCart)
         }
         alertDialog.setNegativeButton("cancel")
         {
@@ -838,17 +833,17 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
                         val msg = json.getString("message")
                         if (status) {
 
-
-
                             for(i in 0 until listCart.size)
-                            {
-                                wordViewModel.deleteCart(listCart[i].cartId)
-                            }
+                            { wordViewModel.deleteCart(listCart[i].cartId) }
 
-                            Toast.makeText(this,msg, Toast.LENGTH_SHORT).show()
+                            wordViewModel.deleteAllCart()
+                            wordViewModel.deleteAllOrders()
+                            wordViewModel.deleteAllTransactions()
 
+                            PreferenceFile.removeAll(this)
+                            startActivity(Intent(this, WelcomeActivity::class.java))
+                            finishAffinity()
                         }
-
                         else {
                             CommonMethods.alertDialog(this, msg)
                         }

@@ -47,7 +47,7 @@ class ItemsAdapter(var list: ArrayList<Orders>) :
         holder.itemView.itemQuantity.text = list[position].quantity
 
         holder.itemView.setOnClickListener {
-            clicked.clickedSelected(position)
+           // clicked.clickedSelected(position)
         }
 
     }
