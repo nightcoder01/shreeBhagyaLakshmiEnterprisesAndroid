@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/ic_fiber"
         android:gravity="center"
-        android:text="99"
+        android:text="0"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="8dp" />

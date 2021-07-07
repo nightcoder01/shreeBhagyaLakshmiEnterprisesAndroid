@@ -490,7 +490,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
 
                 for(i in 0 until listCart.size)
                 {
-                   // wordViewModel.deleteCart(listCart[i].cartId)
 
                        val cart = listCart[i]
                     cart.offline_status = "offline"

@@ -9,10 +9,12 @@ import android.view.Menu
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
 import androidx.core.view.MenuItemCompat
 import androidx.databinding.ObservableBoolean
 import androidx.drawerlayout.widget.DrawerLayout
@@ -21,6 +23,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -29,6 +32,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.my_cart_layout.*
+import org.json.JSONArray
 import org.json.JSONObject
 import pathak.creations.sbl.AppController
 import pathak.creations.sbl.R
@@ -43,6 +48,7 @@ import pathak.creations.sbl.select_distributor.SelectDistributor
 import pathak.creations.sbl.welcome.WelcomeActivity
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.time.ExperimentalTime
 
 
@@ -167,29 +173,66 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
         val tv = badgeLayout.findViewById<View>(R.id.actionbar_notifcation_textview) as TextView
 
+        wordViewModel.allOrders.observe(this, Observer { dist ->
+            size = (dist.size+1).toString()
+
+            val dNow = Date()
+            val ft = SimpleDateFormat("yyyy")
+            val year = ft.format(dNow)
+
+            size = if(size.length!=2){"000$size"}else{"00$size"}
+            transactionNo = "SO/${PreferenceFile.retrieveKey(this,CommonKeys.SELECTED_DISTRIBUTOR)}/$year/$size"
+
+        })
+
+
 
         wordViewModel.allCart.observe(this, Observer { dist ->
             // Update the cached copy of the words in the adapter.
 
+            var cartItem = 0
             dist?.let {
 
+                listCart.clear()
+                cartItem = it.size
                 var count = 0
                 for(i in it.indices)
                 {
                     if(it[i].offline_status=="online") count += 1
                 }
+                listCart.addAll(it)
                 tv.text = count.toString()
 
             }
+
+            logOut.setOnMenuItemClickListener {
+
+
+                if(CommonMethods.isNetworkAvailable(this)) {
+
+                    if(cartItem>0)
+                    {
+                        callPlaceOrder(listCart)
+                    }
+                    else
+                    { callLogoutDialog() }
+                }
+                else
+                {
+                    if(cartItem>0)
+                    {
+                        callSyncAlert()
+                    }
+                    else
+                    { callLogoutDialog() }
+                }
+                true
+
+            }
+
         })
 
-        logOut.setOnMenuItemClickListener {
 
-            callLogoutDialog()
-
-            true
-
-        }
 
         locationIs.setOnMenuItemClickListener {
 
@@ -236,6 +279,150 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
         return true
     }
+
+    var transactionNo = ""
+    var size = ""
+    var listCart : ArrayList<Cart> = ArrayList()
+
+    private fun callPlaceOrder(listCart: ArrayList<Cart>) {
+        try {
+
+            val jsonMain = JSONObject()
+
+            val jsonArray = JSONArray()
+
+            val json = JSONObject()
+
+            val dNow = Date()
+            val ft = SimpleDateFormat("yyMMddhhmmssMs")
+            val datetime = ft.format(dNow)
+
+            for(i in 0 until listCart.size) {
+
+
+                json.put("dist_code", listCart[i].distID)
+                json.put("dist", listCart[i].dist_name)
+                json.put("retailer_code", listCart[i].retailer_code)
+                json.put("retailer", listCart[i].retailer_name)
+                json.put("beatname", listCart[i].beatName)
+                json.put("catgroup", listCart[i].cat_group)
+                json.put("category", listCart[i].category)
+                json.put("category_code", listCart[i].cat_code)
+                json.put("category_description", listCart[i].name)
+                json.put("qty", listCart[i].itemCount)
+                json.put("ptr_price", listCart[i].ptr_price)
+                json.put("ptd_price", listCart[i].ptd_price)
+                json.put("total_ptr_price", listCart[i].overAllPrice)
+                json.put("total_ptd_price", listCart[i].ptd_total)
+
+
+
+                wordViewModel.insertOrders(
+                    Orders(datetime+i
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,transactionNo
+                        ,""
+                        ,listCart[i].distID
+                        ,listCart[i].dist_name
+                        ,listCart[i].retailer_name
+                        ,listCart[i].retailer_code
+                        ,listCart[i].beatName
+                        ,""
+                        ,listCart[i].cat_group
+                        ,listCart[i].category
+                        ,listCart[i].cat_code
+                        ,listCart[i].name
+                        ,listCart[i].itemCount
+                        ,""
+                        ,listCart[i].overAllPrice
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,""
+                        ,listCart[i].ptr_price
+                        ,listCart[i].ptd_price
+                        ,""
+                        ,""
+                        ,""
+                    )
+                )
+            }
+
+            wordViewModel.insertTransactions(
+                Transactions(
+                    0,
+                    transactionNo,
+                    PreferenceFile.retrieveKey(this,CommonKeys.SELECTED_DISTRIBUTOR)!!,
+                    PreferenceFile.retrieveKey(this,CommonKeys.SELECTED_DISTRIBUTOR)!!,
+                    listCart[0].retailer_code,
+                    listCart[0].retailer_name,
+                    listCart[0].beatName,
+                    listCart.size.toString(),
+                    tvTotalValue.text.toString()
+                ))
+
+            jsonArray.put(json)
+            jsonMain.put("items",jsonArray)
+
+            Log.e("fasdfasfdfsd",jsonMain.toString())
+
+
+            if (CommonMethods.isNetworkAvailable(this)) {
+
+                RetrofitService(
+                    this,
+                    this,
+                    CommonKeys.ADD_CART ,
+                    CommonKeys.ADD_CART_CODE,
+                    jsonMain,2
+                ).callService(true, PreferenceFile.retrieveKey(this, CommonKeys.TOKEN)!!)
+
+            }
+            else {
+
+                CommonMethods.alertDialog(this,getString(R.string.checkYourConnection))
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun callSyncAlert() {
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.setTitle("Sync online")
+        alertDialog.setCancelable(false)
+        alertDialog.setMessage("Please go online to sync the orders..FOR TODAY.")
+        alertDialog.setPositiveButton("ok") { dialog, which ->
+            dialog.dismiss()
+
+        }
+        alertDialog.setNegativeButton("cancel")
+        {
+                dialog, which ->
+            dialog.dismiss()
+        }
+
+        alertDialog.show()
+    }
+
     private fun showSettingsAlert() {
         val alertDialog = AlertDialog.Builder(this)
         alertDialog.setTitle("Enable GPS !!")
@@ -641,7 +828,36 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
                         e.printStackTrace()
                     }
                 }
+                CommonKeys.ADD_CART_CODE -> {
+                    try {
 
+                        Log.e("ADD_CART_CODE", "=====$code==$response")
+
+                        val json = JSONObject(response)
+                        val status = json.optBoolean("status")
+                        val msg = json.getString("message")
+                        if (status) {
+
+
+
+                            for(i in 0 until listCart.size)
+                            {
+                                wordViewModel.deleteCart(listCart[i].cartId)
+                            }
+
+                            Toast.makeText(this,msg, Toast.LENGTH_SHORT).show()
+
+                        }
+
+                        else {
+                            CommonMethods.alertDialog(this, msg)
+                        }
+
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
             }
 
         } catch (e: Exception) {
