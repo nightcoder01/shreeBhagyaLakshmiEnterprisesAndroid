@@ -61,6 +61,7 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     var isLocChecked: ObservableBoolean = ObservableBoolean(false)
+    var status1 = ""
 
      var locationClickListener : MutableLiveData<String> = MutableLiveData()
     var locationClicked : LiveData<String> = locationClickListener
@@ -87,11 +88,60 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
         if(diff>0)
         {
-            PreferenceFile.removekey(this,CommonKeys.SELECTED_DISTRIBUTOR_NAME)
-            PreferenceFile.removekey(this,CommonKeys.SELECTED_DISTRIBUTOR)
-            wordViewModel.deleteAllCart()
-            startActivity(Intent(this, SelectDistributor::class.java))
-            finish()
+
+            wordViewModel.allCart.observe(this, Observer { dist ->
+                // Update the cached copy of the words in the adapter.
+
+                var cartItem = 0
+                dist?.let {
+
+                    listCart.clear()
+                    cartItem = it.size
+                    var count = 0
+                    for(i in it.indices)
+                    {
+                        if(it[i].offline_status=="online") count += 1
+                    }
+                    listCart.addAll(it)
+                }
+
+
+                    if(CommonMethods.isNetworkAvailable(this)) {
+
+                        if(cartItem>0)
+                        {
+                            status1 = "delete"
+                            callCartAlert()
+                        }
+                        else
+                        {
+                            PreferenceFile.removekey(this,CommonKeys.SELECTED_DISTRIBUTOR_NAME)
+                            PreferenceFile.removekey(this,CommonKeys.SELECTED_DISTRIBUTOR)
+                            wordViewModel.deleteAllCart()
+                            startActivity(Intent(this, SelectDistributor::class.java))
+                            finish()
+                        }
+                    }
+                    else
+                    {
+                        if(cartItem>0)
+                        {
+                            callSyncAlert()
+                        }
+                        else
+                        {
+                            PreferenceFile.removekey(this,CommonKeys.SELECTED_DISTRIBUTOR_NAME)
+                            PreferenceFile.removekey(this,CommonKeys.SELECTED_DISTRIBUTOR)
+                            wordViewModel.deleteAllCart()
+                            startActivity(Intent(this, SelectDistributor::class.java))
+                            finish()
+                        }
+                    }
+
+            })
+
+
+
         }
 
 
@@ -126,9 +176,7 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
         }
 
 
-        if (PreferenceFile.retrieveKey(this, CommonKeys.IS_FIRST_CHECKED).equals("false", false)) {
-           //callAllServices()
-        }
+
 
     }
 
@@ -209,6 +257,7 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
                     if(cartItem>0)
                     {
+                        status1 = "logout"
                         callCartAlert()
                     }
                     else
@@ -836,13 +885,27 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
                             for(i in 0 until listCart.size)
                             { wordViewModel.deleteCart(listCart[i].cartId) }
 
-                            wordViewModel.deleteAllCart()
-                            wordViewModel.deleteAllOrders()
-                            wordViewModel.deleteAllTransactions()
 
-                            PreferenceFile.removeAll(this)
-                            startActivity(Intent(this, WelcomeActivity::class.java))
-                            finishAffinity()
+                            if(status1=="logout")
+                            {
+                                wordViewModel.deleteAllCart()
+                                wordViewModel.deleteAllOrders()
+                                wordViewModel.deleteAllTransactions()
+
+                                PreferenceFile.removeAll(this)
+                                startActivity(Intent(this, WelcomeActivity::class.java))
+                                finishAffinity()
+                            }
+                            else
+                            {
+                                PreferenceFile.removekey(this,CommonKeys.SELECTED_DISTRIBUTOR_NAME)
+                                PreferenceFile.removekey(this,CommonKeys.SELECTED_DISTRIBUTOR)
+                                wordViewModel.deleteAllCart()
+                                startActivity(Intent(this, SelectDistributor::class.java))
+                                finish()
+                            }
+
+
                         }
                         else {
                             CommonMethods.alertDialog(this, msg)
