@@ -141,7 +141,6 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
             })
 
 
-
         }
 
 

@@ -123,7 +123,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:text="GSTIN :"
+                android:text="Address :"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_10sdp"
                 app:layout_constraintStart_toStartOf="@id/tvPhoneTag"

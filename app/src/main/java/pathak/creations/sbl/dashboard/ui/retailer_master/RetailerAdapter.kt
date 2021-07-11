@@ -51,7 +51,7 @@ class RetailerAdapter(var list: List<Retailer>) :
         holder.itemView.tvBeat.text = list[position].beatname
         holder.itemView.tvDistributor.text = list[position].distributor
         holder.itemView.tvRetailer.text = list[position].retailer_name
-        holder.itemView.tvRemarks.text =if(list[position].gstin == "null") "" else  list[position].gstin
+        holder.itemView.tvRemarks.text =if(list[position].address == "null") "" else  list[position].address
         holder.itemView.tvPhoneValue.text = list[position].mobile
 
         holder.itemView.ivDelete.setOnClickListener { clicked.clickedSelected(position,"delete") }

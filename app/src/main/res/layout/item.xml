@@ -22,6 +22,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/_2sdp"
+        android:paddingEnd="@dimen/_15sdp"
         android:textSize="@dimen/_10sdp"
         app:layout_constraintEnd_toStartOf="@id/itemQuantity"
         app:layout_constraintStart_toEndOf="@id/itemCount"

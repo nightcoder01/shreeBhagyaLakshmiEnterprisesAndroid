@@ -94,6 +94,7 @@
     <string name="classification">Classification</string>
     <string name="retailer_type">Retailer Type</string>
     <string name="overall_price">Overall Price:</string>
+    <string name="net_amount">Net Amount:</string>
     <string name="add_to_cart">Add to Cart</string>
     <string name="item_added">Item Added</string>
     <string name="custom_price">Custom Price</string>

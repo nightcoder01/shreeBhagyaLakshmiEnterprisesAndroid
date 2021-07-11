@@ -376,7 +376,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
 
             val jsonArray = JSONArray()
 
-            val json = JSONObject()
 
             val dNow = Date()
             val ft = SimpleDateFormat("yyMMddhhmmssMs")
@@ -386,6 +385,7 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
             for(i in 0 until listCart.size) {
 
                 Log.e("sadfsdfasd","=======${listCart[i].distID}====$year===$size=")
+                val json = JSONObject()
 
                 json.put("dist_code", listCart[i].distID)
                 json.put("dist", listCart[i].dist_name)
@@ -451,6 +451,10 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
                         ,""
                     )
                 )
+
+
+                jsonArray.put(json)
+
             }
 
             wordViewModel.insertTransactions(
@@ -469,7 +473,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
 
 
 
-            jsonArray.put(json)
             jsonMain.put("items",jsonArray)
 
             Log.e("fasdfasfdfsd",jsonMain.toString())
