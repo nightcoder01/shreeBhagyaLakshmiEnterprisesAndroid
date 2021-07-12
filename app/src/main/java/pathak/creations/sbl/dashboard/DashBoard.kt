@@ -328,7 +328,7 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
             val jsonArray = JSONArray()
 
-            val json = JSONObject()
+
 
             val dNow = Date()
             val ft = SimpleDateFormat("yyMMddhhmmssMs")
@@ -336,7 +336,7 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
             for(i in 0 until listCart.size) {
 
-
+                val json = JSONObject()
                 json.put("dist_code", listCart[i].distID)
                 json.put("dist", listCart[i].dist_name)
                 json.put("retailer_code", listCart[i].retailer_code)
@@ -352,7 +352,7 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
                 json.put("total_ptr_price", listCart[i].overAllPrice)
                 json.put("total_ptd_price", listCart[i].ptd_total)
 
-
+                jsonArray.put(json)
 
                 wordViewModel.insertOrders(
                     Orders(datetime+i
@@ -405,7 +405,7 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
 
 
-            jsonArray.put(json)
+
             jsonMain.put("items",jsonArray)
 
             Log.e("fasdfasfdfsd",jsonMain.toString())

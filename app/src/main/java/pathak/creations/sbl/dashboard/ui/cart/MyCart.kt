@@ -721,7 +721,7 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
         if(PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_RETAILERNAME)!=null)
         {
 
-            for(i in 0 until list.size)
+            for(i in list.indices)
             {
                 if(list[i].retailer_name==PreferenceFile.retrieveKey(ctx,CommonKeys.SELECTED_RETAILERNAME))
                 {
