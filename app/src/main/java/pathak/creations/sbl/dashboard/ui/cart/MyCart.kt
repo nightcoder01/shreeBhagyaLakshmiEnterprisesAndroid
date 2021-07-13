@@ -181,8 +181,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
 
                 callBeatRetailer(listBeats[position].beatname)
             }
-
-
         })
 
 
@@ -385,76 +383,78 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
             for(i in 0 until listCart.size) {
 
                 Log.e("sadfsdfasd","=======${listCart[i].distID}====$year===$size=")
-                val json = JSONObject()
 
-                json.put("dist_code", listCart[i].distID)
-                json.put("dist", listCart[i].dist_name)
-                json.put("retailer_code", listCart[i].retailer_code)
-                json.put("retailer", listCart[i].retailer_name)
-                json.put("beatname", listCart[i].beatName)
-                json.put("catgroup", listCart[i].cat_group)
-                json.put("category", listCart[i].category)
-                json.put("category_code", listCart[i].cat_code)
-                json.put("category_description", listCart[i].name)
-                json.put("qty", listCart[i].itemCount)
-                json.put("ptr_price", listCart[i].ptr_price)
-                json.put("ptd_price", listCart[i].ptd_price)
-                json.put("total_ptr_price", listCart[i].overAllPrice)
-                json.put("total_ptd_price", listCart[i].ptd_total)
+                if(listCart[i].itemCount!="0") {
+                    val json = JSONObject()
+
+                    json.put("dist_code", listCart[i].distID)
+                    json.put("dist", listCart[i].dist_name)
+                    json.put("retailer_code", listCart[i].retailer_code)
+                    json.put("retailer", listCart[i].retailer_name)
+                    json.put("beatname", listCart[i].beatName)
+                    json.put("catgroup", listCart[i].cat_group)
+                    json.put("category", listCart[i].category)
+                    json.put("category_code", listCart[i].cat_code)
+                    json.put("category_description", listCart[i].name)
+                    json.put("qty", listCart[i].itemCount)
+                    json.put("ptr_price", listCart[i].ptr_price)
+                    json.put("ptd_price", listCart[i].ptd_price)
+                    json.put("total_ptr_price", listCart[i].overAllPrice)
+                    json.put("total_ptd_price", listCart[i].ptd_total)
 
 
-
-                wordViewModel.insertOrders(
-                    Orders(datetime+i
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,transactionNo
-                        ,""
-                        ,listCart[i].distID
-                        ,listCart[i].dist_name
-                        ,listCart[i].retailer_name
-                        ,listCart[i].retailer_code
-                        ,listCart[i].beatName
-                        ,""
-                        ,listCart[i].cat_group
-                        ,listCart[i].category
-                        ,listCart[i].cat_code
-                        ,listCart[i].name
-                        ,listCart[i].itemCount
-                        ,""
-                        ,listCart[i].overAllPrice
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,listCart[i].ptr_price
-                        ,listCart[i].ptd_price
-                        ,""
-                        ,""
-                        ,""
+                    wordViewModel.insertOrders(
+                        Orders(
+                            datetime + i,
+                            "",
+                            "",
+                            "",
+                            "",
+                            transactionNo,
+                            "",
+                            listCart[i].distID,
+                            listCart[i].dist_name,
+                            listCart[i].retailer_name,
+                            listCart[i].retailer_code,
+                            listCart[i].beatName,
+                            "",
+                            listCart[i].cat_group,
+                            listCart[i].category,
+                            listCart[i].cat_code,
+                            listCart[i].name,
+                            listCart[i].itemCount,
+                            "",
+                            listCart[i].overAllPrice,
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            listCart[i].ptr_price,
+                            listCart[i].ptd_price,
+                            "",
+                            "",
+                            ""
+                        )
                     )
-                )
 
 
-                jsonArray.put(json)
-
+                    jsonArray.put(json)
+                }
             }
 
             wordViewModel.insertTransactions(
@@ -466,12 +466,9 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
                     listCart[0].retailer_code,
                     listCart[0].retailer_name,
                     listCart[0].beatName,
-                    listCart.size.toString(),
+                    listCart.filter { it.itemCount !="0" }.size.toString(),
                     tvTotalValue.text.toString()
             ))
-
-
-
 
             jsonMain.put("items",jsonArray)
 
@@ -501,16 +498,15 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
 
                 Toast.makeText(ctx,"Data submitted offline",Toast.LENGTH_SHORT).show()
 
-
-
                 val bundle = bundleOf(
-                    "count" to listCart.size.toString(),
+                    "count" to listCart.filter { it.itemCount !="0" }.size.toString(),
                     "beatName" to tvBeatName.text.toString(),
                     "retailerName" to tvDistributor2.text.toString(),
                     "total" to tvTotalValue.text.toString(),
                     "grandTotal" to tvGrandTotalValue.text.toString(),
-                    "listCart" to listCart
+                    "listCart" to listCart.filter { it.itemCount !="0" }
                 )
+
                 Navigation.findNavController(tvSubmit)
                     .navigate(R.id.action_order_detail, bundle)
 
@@ -577,14 +573,12 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
         rvMyCart.adapter = adapter
         adapter.onClicked(object: MyCartAdapter.CardInterface{
 
-
             override fun valueChanged(pos: Int, str: String) {
                 list[pos].customPrice = str
 
                 wordViewModel.updateCart(list[pos])
                 adapter.notifyItemChanged(pos)
                 totalMute.value = setTotal(list)
-
 
             }
 
@@ -607,8 +601,6 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
                         setCartAdapter(list)
                     }
                 }
-
-
 
                 //callNumberList(list,adapter,pos)
 
@@ -850,12 +842,12 @@ class MyCart : Fragment(), DataChangeListener<LiveData<List<Beat>>>,
 
 
                             val bundle = bundleOf(
-                                "count" to listCart.size.toString(),
+                                "count" to listCart.filter { it.itemCount !="0" }.size.toString(),
                                 "beatName" to tvBeatName.text.toString(),
                                 "retailerName" to tvDistributor2.text.toString(),
                                 "total" to tvTotalValue.text.toString(),
                                 "grandTotal" to tvGrandTotalValue.text.toString(),
-                                "listCart" to listCart
+                                "listCart" to listCart.filter { it.itemCount !="0" }
                             )
                             Navigation.findNavController(tvSubmit)
                                 .navigate(R.id.action_order_detail, bundle)

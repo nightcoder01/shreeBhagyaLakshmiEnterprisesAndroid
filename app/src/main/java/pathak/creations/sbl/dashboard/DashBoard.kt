@@ -51,7 +51,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.time.ExperimentalTime
 
-
 class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
     override fun clicked(boolean: Boolean) {
@@ -328,82 +327,82 @@ class DashBoard : AppCompatActivity(), RetrofitResponse ,LocationClicked {
 
             val jsonArray = JSONArray()
 
-
-
             val dNow = Date()
             val ft = SimpleDateFormat("yyMMddhhmmssMs")
             val datetime = ft.format(dNow)
 
             for(i in 0 until listCart.size) {
 
-                val json = JSONObject()
-                json.put("dist_code", listCart[i].distID)
-                json.put("dist", listCart[i].dist_name)
-                json.put("retailer_code", listCart[i].retailer_code)
-                json.put("retailer", listCart[i].retailer_name)
-                json.put("beatname", listCart[i].beatName)
-                json.put("catgroup", listCart[i].cat_group)
-                json.put("category", listCart[i].category)
-                json.put("category_code", listCart[i].cat_code)
-                json.put("category_description", listCart[i].name)
-                json.put("qty", listCart[i].itemCount)
-                json.put("ptr_price", listCart[i].ptr_price)
-                json.put("ptd_price", listCart[i].ptd_price)
-                json.put("total_ptr_price", listCart[i].overAllPrice)
-                json.put("total_ptd_price", listCart[i].ptd_total)
+                if (listCart[i].itemCount != "0") {
+                    val json = JSONObject()
+                    json.put("dist_code", listCart[i].distID)
+                    json.put("dist", listCart[i].dist_name)
+                    json.put("retailer_code", listCart[i].retailer_code)
+                    json.put("retailer", listCart[i].retailer_name)
+                    json.put("beatname", listCart[i].beatName)
+                    json.put("catgroup", listCart[i].cat_group)
+                    json.put("category", listCart[i].category)
+                    json.put("category_code", listCart[i].cat_code)
+                    json.put("category_description", listCart[i].name)
+                    json.put("qty", listCart[i].itemCount)
+                    json.put("ptr_price", listCart[i].ptr_price)
+                    json.put("ptd_price", listCart[i].ptd_price)
+                    json.put("total_ptr_price", listCart[i].overAllPrice)
+                    json.put("total_ptd_price", listCart[i].ptd_total)
 
-                jsonArray.put(json)
+                    jsonArray.put(json)
 
-                wordViewModel.insertOrders(
-                    Orders(datetime+i
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,transactionNo
-                        ,""
-                        ,listCart[i].distID
-                        ,listCart[i].dist_name
-                        ,listCart[i].retailer_name
-                        ,listCart[i].retailer_code
-                        ,listCart[i].beatName
-                        ,""
-                        ,listCart[i].cat_group
-                        ,listCart[i].category
-                        ,listCart[i].cat_code
-                        ,listCart[i].name
-                        ,listCart[i].itemCount
-                        ,""
-                        ,listCart[i].overAllPrice
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,""
-                        ,listCart[i].ptr_price
-                        ,listCart[i].ptd_price
-                        ,""
-                        ,""
-                        ,""
+                    wordViewModel.insertOrders(
+                        Orders(
+                            datetime + i,
+                            "",
+                            "",
+                            "",
+                            "",
+                            transactionNo,
+                            "",
+                            listCart[i].distID,
+                            listCart[i].dist_name,
+                            listCart[i].retailer_name,
+                            listCart[i].retailer_code,
+                            listCart[i].beatName,
+                            "",
+                            listCart[i].cat_group,
+                            listCart[i].category,
+                            listCart[i].cat_code,
+                            listCart[i].name,
+                            listCart[i].itemCount,
+                            "",
+                            listCart[i].overAllPrice,
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            listCart[i].ptr_price,
+                            listCart[i].ptd_price,
+                            "",
+                            "",
+                            ""
+                        )
                     )
-                )
+                }
+
             }
-
-
 
 
             jsonMain.put("items",jsonArray)
