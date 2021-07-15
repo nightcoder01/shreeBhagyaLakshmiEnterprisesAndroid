@@ -44,12 +44,30 @@
                         android:hint="@string/search"
                         android:imeOptions="actionDone"
                         android:maxLength="30"
-                        android:padding="@dimen/_6sdp"
+                        android:paddingBottom="@dimen/_6sdp"
+                        android:paddingStart="@dimen/_6sdp"
+                        android:paddingTop="@dimen/_6sdp"
+                        android:paddingEnd="@dimen/_36sdp"
                         android:singleLine="true"
                         android:textSize="@dimen/_11sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <ImageView
+                        android:id="@+id/ivCross"
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:src="@drawable/ic_clear"
+                        app:layout_constraintTop_toTopOf="@id/etSearch"
+                        app:layout_constraintBottom_toBottomOf="@id/etSearch"
+                        app:layout_constraintEnd_toEndOf="@id/etSearch"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:padding="@dimen/_5sdp"
+                        android:visibility="gone"
+                        />
+
 
             <TextView
                 android:id="@+id/tvDateMain"
@@ -558,7 +576,7 @@
                     android:layout_width="@dimen/_25sdp"
                     android:layout_height="@dimen/_25sdp"
                     android:src="@drawable/baseline_keyboard_arrow_right_20"
-                    android:tint="@color/white"
+                    app:tint="@color/white"
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

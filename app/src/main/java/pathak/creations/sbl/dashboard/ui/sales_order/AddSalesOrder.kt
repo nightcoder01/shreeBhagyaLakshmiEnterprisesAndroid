@@ -36,7 +36,6 @@ import pathak.creations.sbl.data_classes.WordViewModelFactory
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class AddSalesOrder : Fragment() {
 
     private lateinit var addSalesOrderVM: AddSalesOrderVM
@@ -83,7 +82,7 @@ class AddSalesOrder : Fragment() {
         spDistributor.adapter = adapter
         spDistributorId.adapter = adapter
 
-
+        ivCross.setOnClickListener { etSearch.text.clear() }
 
         tvCancel.setOnClickListener { (view.context as Activity).onBackPressed() }
         clCart.setOnClickListener { addCart() }
@@ -108,10 +107,13 @@ class AddSalesOrder : Fragment() {
                 {
                     subFilterList.clear()
                     subFilterList.addAll(subList)
+                    ivCross.visibility = View.GONE
                 }
                 else
                 {
                     Log.e("=============","==========$s++++++")
+                    ivCross.visibility = View.VISIBLE
+
                     subFilterList.clear()
                     subFilterList.addAll(subList.filter
                     { it.description.toLowerCase().contains(s.toString().toLowerCase()) })
@@ -320,6 +322,126 @@ class AddSalesOrder : Fragment() {
         tvCategory2.setOnClickListener {
             openCategoryShort(tvCategory2,listCategories)
         }
+
+        setInitialAll(tvCategory2,listCategories)
+    }
+
+    private fun setInitialAll(view: TextView, listCategories: List<Categories>) {
+
+        view.text ="All"
+
+        subList.clear()
+        subList = getSubListFiltered("All",listCategories,view.text.toString())
+
+        val adapter2  = SubCategaryAdapter(subList)
+        rvSubCategories.adapter = adapter2
+
+        adapter2.onClicked(object: SubCategaryAdapter.CardInterface{
+            override fun changeEditMode(pos: Int, editMode: Boolean) {
+
+                if(subList[pos].cartItem.toInt()>0) {
+                    if(subList[pos].price.toDouble()<=subList[pos].customPrice.toDouble()) {
+
+                        subList[pos].editMode = editMode
+                        adapter2.notifyItemChanged(pos)
+
+
+                        Log.e("dfdsafasfa","======${subList[pos]}")
+
+                        wordViewModel.insertCart(
+                            Cart(
+                                0,
+                                subList[pos].distIDMain,
+                                subList[pos].description,
+                                subList[pos].price,
+                                subList[pos].customPrice,
+                                (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
+                                subList[pos].cartItem,
+                                etBeatName.text.toString(),
+                                subList[pos].retailerIDName,
+                                subList[pos].retailerIDMain,
+                                subList[pos].distIDName,
+                                subList[pos].catgroup,
+                                subList[pos].category,
+                                subList[pos].code,
+                                subList[pos].customPrice,
+                                subList[pos].price,
+                                (subList[pos].customPrice.toFloat() * subList[pos].cartItem.toFloat()).toString(),
+                                (subList[pos].price.toFloat()*subList[pos].cartItem.toFloat()).toString()
+                                ,"online"
+                            )
+                        )
+
+                        Toast.makeText(
+                            rvSubCategories.context,
+                            "Item Added to Cart Successfully.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    else
+                    {
+                        CommonMethods.alertDialog(ctx,"Ptd price cannot be less than Ptr price")
+
+                    }}
+                else
+                {
+                    CommonMethods.alertDialog(
+                        ctx,
+                        "Count cannot be 0"
+                    )
+                }
+
+
+            }
+            override fun valueChanged(pos: Int) {
+
+                callCustomPrice(subList,adapter2,pos)
+
+            }
+            override fun clickedSelected(pos: Int, str: String) {
+
+                setCart()
+                //  (adapter2,pos,subList)
+
+                /* if(str=="add")
+                 {
+                     if(subList[pos].cartItem.toInt()>9999)
+                     {
+                         Toast.makeText(ctx,"max limit crossed", Toast.LENGTH_SHORT).show()
+                     }
+                     else
+                     {
+
+                         subList[pos].cartItem = (subList[pos].cartItem.toInt()+1).toString()
+                         adapter2.notifyDataSetChanged()
+                         setCart()
+
+                     }
+                 }
+                 if(str=="remove")
+                 {
+                     if(subList[pos].cartItem.toInt()<1)
+                     {
+                         //  Toast.makeText(ctx,"minimum limit crossed",Toast.LENGTH_SHORT).show()
+                     }
+
+                     else
+                     {
+                         subList[pos].cartItem = (subList[pos].cartItem.toInt()-1).toString()
+                         adapter2.notifyDataSetChanged()
+                         setCart()
+                     }
+                 }
+                 if(str=="long")
+                 {
+
+                     callNumberList(adapter2,pos)
+
+                     Toast.makeText(ctx,"long",Toast.LENGTH_SHORT).show()
+                 }*/
+            }
+        })
+
     }
 
     var popupWindow: PopupWindow? = null
@@ -330,14 +452,10 @@ class AddSalesOrder : Fragment() {
         val inflater = view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val customView = inflater.inflate(R.layout.custom_spinner, null)
 
-
-
         popupWindow = PopupWindow(
             customView,
             view.width,
-            WindowManager.LayoutParams.WRAP_CONTENT
-        )
-
+            WindowManager.LayoutParams.WRAP_CONTENT)
 
         val listFiltered : ArrayList<String> = getListFiltered(listCategories)
 
@@ -346,13 +464,11 @@ class AddSalesOrder : Fragment() {
         adapter.onClicked(object :SpinnerCustomCategoryAdapter.CardInterface{
             override fun clickedSelected(position: Int) {
 
-
-                ////////clickeddddddd
-
                 view.text =listFiltered[position]
                 popupWindow!!.dismiss()
 
                 //setSubCategory
+
                 subList.clear()
                  subList = getSubListFiltered(listFiltered[position],listCategories,view.text.toString())
 
@@ -465,6 +581,7 @@ class AddSalesOrder : Fragment() {
                         }*/
                     }
                 })
+
             }
         })
 
